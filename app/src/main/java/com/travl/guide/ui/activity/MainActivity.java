@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import com.travl.guide.R;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.fragment.Collections.CollectionsFragment;
 
 import javax.inject.Inject;
 
@@ -40,28 +39,8 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
-    };
-    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener
-            = new NavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_collections:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, CollectionsFragment.getInstance()).commit();
-                    break;
-                case R.id.nav_map:
-                    router.navigateTo(new Screens.MapScreen());
-                    break;
-                case R.id.nav_settings:
-
-                    break;
-            }
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        }
-    };
+    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initEvents();
 
-        //TODO: это заглушка, дальше будет CiceroneModule
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (savedInstanceState == null && fragment == null) {
-            Command[] commands = {new Replace(new Screens.CollectionScreen())};
-            navigator.applyCommands(commands);
+        router.newRootScreen(new Screens.MapScreen());
+//            Command[] commands = {new Replace(new Screens.CollectionScreen())};
+//            navigator.applyCommands(commands);
         }
     }
 
@@ -102,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -117,11 +96,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case R.id.action_settings:
 
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener
+            = new NavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch(menuItem.getItemId()) {
+                case R.id.nav_collections:
+                    router.newRootScreen(new Screens.CollectionScreen());
+                    break;
+                case R.id.nav_map:
+                    router.newRootScreen(new Screens.MapScreen());
+                    break;
+                case R.id.nav_settings:
+
+                    break;
+            }
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
+    };
 }

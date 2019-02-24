@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.list.CollectionListPresenter;
+import com.travl.guide.mvp.presenter.list.CollectionPresenter;
 import com.travl.guide.mvp.view.list.CollectionsItemView;
 
 //Created by Pereved on 23.02.2019.
 public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.CollectionsViewHolder> {
 
-    private CollectionListPresenter presenter;
+    private CollectionPresenter presenter;
 
-    public CollectionsAdapter(CollectionListPresenter presenter) {
+    public CollectionsAdapter(CollectionPresenter presenter) {
         this.presenter = presenter;
     }
 

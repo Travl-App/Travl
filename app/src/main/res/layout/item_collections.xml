@@ -21,6 +21,6 @@
             android:layout_height="40dp"
             android:gravity="center"
             android:text="Text"
-            android:textSize="28sp" />
+            android:textSize="@dimen/card_text_size" />
     </LinearLayout>
 </android.support.design.card.MaterialCardView>

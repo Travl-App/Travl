@@ -6,4 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    //Token
+    <string name="mapbox_access_token">pk.eyJ1IjoicGVyZXZlZCIsImEiOiJjanM5YTkyejYwa2JnNDRxeG1uY2FvcmtwIn0.vPpjgtkaQh-YZApGJV83ww</string>
 </resources>

@@ -2,6 +2,8 @@ package com.travl.guide.ui;
 
 import android.app.Application;
 
+import com.mapbox.mapboxsdk.Mapbox;
+import com.travl.guide.R;
 import com.travl.guide.di.interfaces.AppComponent;
 import com.travl.guide.di.interfaces.DaggerAppComponent;
 import com.travl.guide.di.modules.AppModule;
@@ -27,6 +29,7 @@ public class App extends Application {
                 .builder()
                 .appModule(new AppModule(this))
                 .build();
+        Mapbox.getInstance(instance, getString(R.string.mapbox_access_token));
     }
 
     public AppComponent getAppComponent() {

@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment.Collections;
+package com.travl.guide.ui.fragment.collections;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import com.travl.guide.mvp.view.CollectionsView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.CollectionsAdapter;
 
+import javax.inject.Singleton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,17 +29,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 //Created by Pereved on 21.02.2019.
 public class CollectionsFragment extends MvpAppCompatFragment implements CollectionsView {
 
-    private static CollectionsFragment fragment;
+    private static CollectionsFragment fragment = new CollectionsFragment();
+
+    @Singleton
+    public static CollectionsFragment getInstance() {
+        return fragment;
+    }
+
     @InjectPresenter
     CollectionsPresenter presenter;
     @BindView(R.id.collection_recycler)
     RecyclerView recycler;
-
-    public static CollectionsFragment getInstance() {
-        if (fragment == null)
-            fragment = new CollectionsFragment();
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -55,7 +57,7 @@ public class CollectionsFragment extends MvpAppCompatFragment implements Collect
         else
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        CollectionsAdapter adapter = new CollectionsAdapter(presenter.collectionListPresenter);
+        CollectionsAdapter adapter = new CollectionsAdapter(presenter.collectionPresenter);
         recycler.setAdapter(adapter);
     }
 
