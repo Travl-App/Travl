@@ -8,14 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Singleton;
+
 //Created by Pereved on 21.02.2019.
 public class MapFragment extends Fragment {
 
-    private static MapFragment fragment;
+    private static MapFragment fragment = new MapFragment();
 
+    @Singleton
     public static MapFragment getInstance() {
-        if (fragment == null)
-            fragment = new MapFragment();
         return fragment;
     }
 
