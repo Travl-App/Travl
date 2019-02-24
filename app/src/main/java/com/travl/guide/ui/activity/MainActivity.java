@@ -3,6 +3,7 @@ package com.travl.guide.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +24,8 @@ import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Replace;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initEvents();
 
-        router.newRootScreen(new Screens.CollectionScreen());
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (savedInstanceState == null && fragment == null) {
+        router.newRootScreen(new Screens.MapScreen());
+//            Command[] commands = {new Replace(new Screens.CollectionScreen())};
+//            navigator.applyCommands(commands);
+        }
     }
 
     private void initEvents() {
@@ -103,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch(menuItem.getItemId()) {
                 case R.id.nav_collections:
-                    router.navigateTo(new Screens.CollectionScreen());
+                    router.newRootScreen(new Screens.CollectionScreen());
                     break;
                 case R.id.nav_map:
-                    router.navigateTo(new Screens.MapScreen());
+                    router.newRootScreen(new Screens.MapScreen());
                     break;
                 case R.id.nav_settings:
 

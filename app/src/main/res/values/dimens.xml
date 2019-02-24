@@ -7,9 +7,10 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Card dimens -->
-    <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_height">200dp</dimen>
+    <dimen name="card_text_size">28sp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
 
     <!--Toolbar dimens-->
     <dimen name="toolbar_height">47dp</dimen>

@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment.Collections;
+package com.travl.guide.ui.fragment.collections;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -57,7 +57,7 @@ public class CollectionsFragment extends MvpAppCompatFragment implements Collect
         else
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        CollectionsAdapter adapter = new CollectionsAdapter(presenter.collectionListPresenter);
+        CollectionsAdapter adapter = new CollectionsAdapter(presenter.collectionPresenter);
         recycler.setAdapter(adapter);
     }
 

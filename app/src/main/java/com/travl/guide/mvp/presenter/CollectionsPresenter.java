@@ -2,8 +2,8 @@ package com.travl.guide.mvp.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.model.MainModel;
-import com.travl.guide.mvp.presenter.list.CollectionListPresenter;
+import com.travl.guide.mvp.model.CollectionsModel;
+import com.travl.guide.mvp.presenter.list.CollectionPresenter;
 import com.travl.guide.mvp.view.CollectionsView;
 import com.travl.guide.mvp.view.list.CollectionsItemView;
 
@@ -17,16 +17,16 @@ import ru.terrakok.cicerone.Router;
 @InjectViewState
 public class CollectionsPresenter extends MvpPresenter<CollectionsView> {
 
-    public CollectionListPresenter collectionListPresenter;
     @Inject
     Router router;
-    private MainModel model;
-    private Scheduler mainThreadScheduler;
+    private Scheduler scheduler;
+    private CollectionsModel model;
+    public CollectionPresenter collectionPresenter;
 
     public CollectionsPresenter(Scheduler scheduler) {
-        this.mainThreadScheduler = scheduler;
-        if (model == null) this.model = new MainModel();
-        collectionListPresenter = new ListPresenter();
+        this.scheduler = scheduler;
+        if (model == null) this.model = new CollectionsModel();
+        collectionPresenter = new ListPresenter();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CollectionsPresenter extends MvpPresenter<CollectionsView> {
         super.onFirstViewAttach();
     }
 
-    public class ListPresenter implements CollectionListPresenter {
+    public class ListPresenter implements CollectionPresenter {
 
         PublishSubject<CollectionsItemView> clickSubject = PublishSubject.create();
 

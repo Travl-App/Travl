@@ -59,4 +59,7 @@ dependencies {
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //MapBox
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.2'
 }
