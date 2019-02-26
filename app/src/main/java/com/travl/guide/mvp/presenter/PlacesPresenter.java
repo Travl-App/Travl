@@ -2,10 +2,10 @@ package com.travl.guide.mvp.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.model.CollectionsModel;
-import com.travl.guide.mvp.presenter.list.CollectionPresenter;
-import com.travl.guide.mvp.view.CollectionsView;
-import com.travl.guide.mvp.view.list.CollectionsItemView;
+import com.travl.guide.mvp.model.repo.PlacesRepo;
+import com.travl.guide.mvp.presenter.list.PlacePresenter;
+import com.travl.guide.mvp.view.PlacesView;
+import com.travl.guide.mvp.view.list.PlacesItemView;
 
 import javax.inject.Inject;
 
@@ -15,18 +15,18 @@ import ru.terrakok.cicerone.Router;
 
 //Created by Pereved on 18.02.2019.
 @InjectViewState
-public class CollectionsPresenter extends MvpPresenter<CollectionsView> {
+public class PlacesPresenter extends MvpPresenter<PlacesView> {
 
     @Inject
     Router router;
     private Scheduler scheduler;
-    private CollectionsModel model;
-    public CollectionPresenter collectionPresenter;
+    public PlacePresenter placePresenter;
+    @Inject
+    PlacesRepo repo;
 
-    public CollectionsPresenter(Scheduler scheduler) {
+    public PlacesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        if (model == null) this.model = new CollectionsModel();
-        collectionPresenter = new ListPresenter();
+        placePresenter = new ListPresenter();
     }
 
     @Override
@@ -34,17 +34,17 @@ public class CollectionsPresenter extends MvpPresenter<CollectionsView> {
         super.onFirstViewAttach();
     }
 
-    public class ListPresenter implements CollectionPresenter {
+    public class ListPresenter implements PlacePresenter {
 
-        PublishSubject<CollectionsItemView> clickSubject = PublishSubject.create();
+        PublishSubject<PlacesItemView> clickSubject = PublishSubject.create();
 
         @Override
-        public PublishSubject<CollectionsItemView> getClickSubject() {
+        public PublishSubject<PlacesItemView> getClickSubject() {
             return clickSubject;
         }
 
         @Override
-        public void bindView(CollectionsItemView view) {
+        public void bindView(PlacesItemView view) {
             //TODO: запрос строки из БД
 //            Repository repository = user.getRepos().get(view.getPos());
 //            view.setTitle(repository.getName());

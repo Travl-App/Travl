@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment.collections;
+package com.travl.guide.ui.fragment.places;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.CollectionsPresenter;
-import com.travl.guide.mvp.view.CollectionsView;
+import com.travl.guide.mvp.presenter.PlacesPresenter;
+import com.travl.guide.mvp.view.PlacesView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.adapter.CollectionsAdapter;
+import com.travl.guide.ui.adapter.PlacesAdapter;
 
 import javax.inject.Singleton;
 
@@ -27,17 +27,16 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 //Created by Pereved on 21.02.2019.
-public class CollectionsFragment extends MvpAppCompatFragment implements CollectionsView {
+public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
 
-    private static CollectionsFragment fragment = new CollectionsFragment();
+    private static PlacesFragment fragment = new PlacesFragment();
+    @InjectPresenter
+    PlacesPresenter presenter;
 
     @Singleton
-    public static CollectionsFragment getInstance() {
+    public static PlacesFragment getInstance() {
         return fragment;
     }
-
-    @InjectPresenter
-    CollectionsPresenter presenter;
     @BindView(R.id.collection_recycler)
     RecyclerView recycler;
 
@@ -57,13 +56,13 @@ public class CollectionsFragment extends MvpAppCompatFragment implements Collect
         else
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        CollectionsAdapter adapter = new CollectionsAdapter(presenter.collectionPresenter);
+        PlacesAdapter adapter = new PlacesAdapter(presenter.placePresenter);
         recycler.setAdapter(adapter);
     }
 
     @ProvidePresenter
-    public CollectionsPresenter providePresenter() {
-        CollectionsPresenter presenter = new CollectionsPresenter(AndroidSchedulers.mainThread());
+    public PlacesPresenter providePresenter() {
+        PlacesPresenter presenter = new PlacesPresenter(AndroidSchedulers.mainThread());
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
     }

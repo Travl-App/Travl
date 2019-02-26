@@ -3,8 +3,8 @@ package com.travl.guide.navigator;
 
 import android.support.v4.app.Fragment;
 
-import com.travl.guide.ui.fragment.collections.CollectionsFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
+import com.travl.guide.ui.fragment.places.PlacesFragment;
 
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
 
@@ -14,7 +14,7 @@ public class Screens {
 
         @Override
         public Fragment getFragment() {
-            return CollectionsFragment.getInstance();
+            return PlacesFragment.getInstance();
         }
     }
 

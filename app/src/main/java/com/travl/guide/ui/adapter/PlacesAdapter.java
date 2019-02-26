@@ -8,26 +8,26 @@ import android.view.ViewGroup;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.list.CollectionPresenter;
-import com.travl.guide.mvp.view.list.CollectionsItemView;
+import com.travl.guide.mvp.presenter.list.PlacePresenter;
+import com.travl.guide.mvp.view.list.PlacesItemView;
 
 //Created by Pereved on 23.02.2019.
-public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.CollectionsViewHolder> {
+public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder> {
 
-    private CollectionPresenter presenter;
+    private PlacePresenter presenter;
 
-    public CollectionsAdapter(CollectionPresenter presenter) {
+    public PlacesAdapter(PlacePresenter presenter) {
         this.presenter = presenter;
     }
 
     @NonNull
     @Override
-    public CollectionsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new CollectionsViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_collections, viewGroup, false));
+    public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new PlacesViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_collections, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CollectionsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
         RxView.clicks(holder.itemView).map(obj -> holder).subscribe(presenter.getClickSubject());
         holder.position = position;
         presenter.bindView(holder);
@@ -39,11 +39,11 @@ public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.
         return 20;
     }
 
-    public class CollectionsViewHolder extends RecyclerView.ViewHolder implements CollectionsItemView {
+    public class PlacesViewHolder extends RecyclerView.ViewHolder implements PlacesItemView {
 
         int position = 0;
 
-        CollectionsViewHolder(@NonNull View itemView) {
+        PlacesViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
@@ -53,7 +53,7 @@ public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.
         }
 
         @Override
-        public void setTittle(String tittle) {
+        public void setTitle(String title) {
 
         }
 
