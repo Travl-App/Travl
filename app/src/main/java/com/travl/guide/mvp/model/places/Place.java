@@ -22,6 +22,36 @@ public class Place {
     public Place() {
     }
 
+    public Place(int id, String title, double[] coordinates, String imageUrl) {
+        this.id = id;
+        this.title = title;
+        this.coordinates = coordinates;
+        this.imageUrl = imageUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public double[] getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(double[] coordinates) {
+        this.coordinates = coordinates;
+    }
 
     public String getImageUrl() {
         return imageUrl;

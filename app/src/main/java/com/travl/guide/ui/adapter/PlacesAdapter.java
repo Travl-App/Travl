@@ -23,7 +23,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlacesView
     @NonNull
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new PlacesViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_collections, viewGroup, false));
+        return new PlacesViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
     }
 
     @Override

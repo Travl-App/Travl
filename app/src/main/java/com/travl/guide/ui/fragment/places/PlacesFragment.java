@@ -43,7 +43,7 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collections_fragment, container, false);
+        View view = inflater.inflate(R.layout.places_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
