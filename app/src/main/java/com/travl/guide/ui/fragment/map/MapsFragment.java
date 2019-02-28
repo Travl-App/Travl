@@ -29,14 +29,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-//Created by Pereved on 21.02.2019.
 public class MapsFragment extends MvpAppCompatFragment implements MapsView {
-
-    private static MapsFragment fragment = new MapsFragment();
 
     @Singleton
     public static MapsFragment getInstance() {
-        return fragment;
+        return new MapsFragment();
     }
 
     @InjectPresenter

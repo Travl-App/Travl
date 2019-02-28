@@ -15,23 +15,26 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.PlacesPresenter;
 import com.travl.guide.mvp.view.PlacesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.PlacesAdapter;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-//Created by Pereved on 21.02.2019.
 public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
 
     private static PlacesFragment fragment = new PlacesFragment();
     @InjectPresenter
     PlacesPresenter presenter;
+    @Inject
+    IImageLoader imageLoader;
 
     @Singleton
     public static PlacesFragment getInstance() {
@@ -47,6 +50,7 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
+        presenter.loadPlaces();
         return view;
     }
 
@@ -55,8 +59,7 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         else
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        PlacesAdapter adapter = new PlacesAdapter(presenter.placePresenter);
+        PlacesAdapter adapter = new PlacesAdapter(presenter.placePresenter, imageLoader);
         recycler.setAdapter(adapter);
     }
 
@@ -65,5 +68,12 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
         PlacesPresenter presenter = new PlacesPresenter(AndroidSchedulers.mainThread());
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
+    }
+
+    @Override
+    public void onChangedPlacesData() {
+        if (recycler != null && recycler.getAdapter() != null) {
+            recycler.getAdapter().notifyDataSetChanged();
+        }
     }
 }

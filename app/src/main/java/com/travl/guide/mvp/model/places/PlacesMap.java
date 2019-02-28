@@ -6,14 +6,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class PlacesMap {
-    @SerializedName("user")
-    @Expose
-    private String name;
     @SerializedName("places")
     @Expose
     private List<Place> places;
+    @SerializedName("user")
+    @Expose
+    private String name;
 
-    public PlacesMap(String name, List<Place> places) {
+    public PlacesMap(List<Place> places, String name) {
         this.name = name;
         this.places = places;
     }

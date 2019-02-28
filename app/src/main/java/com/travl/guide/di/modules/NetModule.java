@@ -21,7 +21,7 @@ public class NetModule {
     @Named("baseUrl")
     @Provides
     public String getApiBaseUrl() {
-        return "https://api.travl.ru//";
+        return "https://travlapp.herokuapp.com/api/";
     }
 
     @Provides
