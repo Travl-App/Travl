@@ -60,7 +60,7 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
                 Timber.e(e);
             }
         };
-        repo.loadPlaces("travl", new CoordinatesRequest(59.89432427, 30.27730692), 0.0).observeOn(scheduler).subscribe(observer);
+        repo.loadPlaces("travl", new CoordinatesRequest(59.89432427, 30.27730692), 1.0).observeOn(scheduler).subscribe(observer);
     }
 
     public class ListPresenter implements PlacePresenter {
