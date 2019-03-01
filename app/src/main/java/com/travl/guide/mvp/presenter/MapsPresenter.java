@@ -29,4 +29,11 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
     }
+
+    public void requestPermissions() {
+        getViewState().requestPermissions();
+    }
+    public void setupMapView() {
+        getViewState().setupMapBox();
+    }
 }

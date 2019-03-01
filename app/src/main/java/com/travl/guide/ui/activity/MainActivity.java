@@ -24,8 +24,6 @@ import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Replace;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (savedInstanceState == null && fragment == null) {
         router.newRootScreen(new Screens.MapScreen());
-//            Command[] commands = {new Replace(new Screens.CollectionScreen())};
+//            Command[] commands = {new Replace(new Screens.PlacesScreen())};
 //            navigator.applyCommands(commands);
         }
     }
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch(menuItem.getItemId()) {
                 case R.id.nav_collections:
-                    router.newRootScreen(new Screens.CollectionScreen());
+                    router.newRootScreen(new Screens.PlacesScreen());
                     break;
                 case R.id.nav_map:
                     router.newRootScreen(new Screens.MapScreen());

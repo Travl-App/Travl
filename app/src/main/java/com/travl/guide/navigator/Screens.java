@@ -10,7 +10,7 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen;
 
 //Created by Pereved on 23.02.2019.
 public class Screens {
-    public static class CollectionScreen extends SupportAppScreen {
+    public static class PlacesScreen extends SupportAppScreen {
 
         @Override
         public Fragment getFragment() {
