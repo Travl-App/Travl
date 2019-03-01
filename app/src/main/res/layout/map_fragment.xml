@@ -17,12 +17,12 @@
         mapbox:mapbox_cameraTilt="60"
         mapbox:mapbox_cameraZoom="12" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/fab_search_places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_search"
+        mapbox:sdMainFabClosedSrc="@drawable/ic_add"
         android:layout_marginBottom="8dp"
         mapbox:layout_constraintBottom_toBottomOf="parent"
         mapbox:layout_constraintEnd_toEndOf="parent" />

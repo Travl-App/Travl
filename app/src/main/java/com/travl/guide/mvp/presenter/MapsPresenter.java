@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
 
-//Created by Squirty on 24.02.2019.
+//Created by Pereved on 24.02.2019.
 @InjectViewState
 public class MapsPresenter extends MvpPresenter<MapsView> {
 
@@ -30,10 +30,13 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         super.onFirstViewAttach();
     }
 
-    public void requestPermissions() {
-        getViewState().requestPermissions();
-    }
     public void setupMapView() {
         getViewState().setupMapBox();
+    }
+    public void setupFabView() {
+        getViewState().setupMultiFab();
+    }
+    public void requestPermissions() {
+        getViewState().requestPermissions();
     }
 }

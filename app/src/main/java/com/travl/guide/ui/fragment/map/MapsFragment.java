@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.leinardi.android.speeddial.SpeedDialView;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Feature;
@@ -61,7 +61,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     @BindView(R.id.mapView)
     MapView mapView;
     @BindView(R.id.fab_search_places)
-    FloatingActionButton fab;
+    SpeedDialView fab;
 
     private MapboxMap mapBoxMap;
     private static final int PERMISSION_REQUEST_CODE = 10;
@@ -80,7 +80,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
 
     private void initEvents() {
         presenter.setupMapView();
-        fab.setOnClickListener(view -> findPlace());
+        presenter.setupFabView();
     }
 
     public void findPlace() {
@@ -95,6 +95,21 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     }
 
     @Override
+    public void setupMultiFab() {
+        fab.inflate(R.menu.map_fab_menu);
+        fab.setOnActionSelectedListener(actionItem -> {
+            switch(actionItem.getId()) {
+                case R.id.fab_menu_search:
+                    findPlace();
+                case R.id.fab_menu_location:
+                    enableLocationComponent(mapBoxMap);
+                default:
+                    return false;
+            }
+        });
+    }
+
+    @Override
     public void setupMapBox() {
         mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> {
             this.mapBoxMap = mapBoxMap;
@@ -106,10 +121,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     public void requestPermissions() {
         if(! ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(getActivity(), new String[] {
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    }, PERMISSION_REQUEST_CODE);
-
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, PERMISSION_REQUEST_CODE);
             enableLocationComponent(mapBoxMap);
         }
     }
