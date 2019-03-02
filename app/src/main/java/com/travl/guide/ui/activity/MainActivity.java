@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (savedInstanceState == null && fragment == null) {
 //        router.newRootScreen(new Screens.MapScreen());
-            Command[] commands = {new Replace(new Screens.PlacesScreen())};
+            Command[] commands = {new Replace(new Screens.MapScreen())};
             navigator.applyCommands(commands);
         }
     }
