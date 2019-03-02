@@ -6,4 +6,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 //Created by Pereved on 24.02.2019.
 @StateStrategyType(value = AddToEndSingleStrategy.class)
-public interface MapsView extends MvpView {}
+public interface MapsView extends MvpView {
+    void setupMapBox();
+    void setupMultiFab();
+    void requestPermissions();
+}

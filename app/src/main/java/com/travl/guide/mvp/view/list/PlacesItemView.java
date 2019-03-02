@@ -6,5 +6,5 @@ public interface PlacesItemView {
 
     void setImage(String url);
 
-    void setTitle(String title);
+    void setDescription(String title);
 }

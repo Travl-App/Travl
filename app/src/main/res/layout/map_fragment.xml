@@ -12,9 +12,19 @@
         mapbox:layout_constraintEnd_toEndOf="parent"
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent"
-        mapbox:mapbox_cameraTargetLat="41.885"
-        mapbox:mapbox_cameraTargetLng="-87.679"
+        mapbox:mapbox_cameraTargetLat="59.9386300"
+        mapbox:mapbox_cameraTargetLng="30.3141300"
         mapbox:mapbox_cameraTilt="60"
         mapbox:mapbox_cameraZoom="12" />
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/fab_search_places"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        mapbox:sdMainFabClosedSrc="@drawable/ic_add"
+        android:layout_marginBottom="8dp"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
+        mapbox:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

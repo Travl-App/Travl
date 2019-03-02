@@ -31,11 +31,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
     // Retrofit
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
@@ -44,6 +46,10 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.1.1'
     implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.1.1'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //CiceroneModule
     implementation 'ru.terrakok.cicerone:cicerone:4.0.2'
@@ -65,5 +71,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //MapBox
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.2'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-building-v7:0.5.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
+
+    //Multi Fab
+    implementation 'com.github.leinardi:FloatingActionButtonSpeedDial:master-SNAPSHOT'
 }

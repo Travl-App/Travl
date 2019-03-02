@@ -12,11 +12,13 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/place_image_view"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:src="@drawable/design" />
 
         <TextView
+            android:id="@+id/place_description"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center"

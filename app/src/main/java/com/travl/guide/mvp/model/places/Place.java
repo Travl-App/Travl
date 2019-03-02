@@ -8,25 +8,24 @@ public class Place {
     @SerializedName("id")
     @Expose
     private int id;
-    @SerializedName("title")
-    @Expose
-    private String title;
     @SerializedName("coordinates")
     @Expose
     private double[] coordinates;
-    private String position;
-    @SerializedName("imageUrl")
+    @SerializedName("description")
     @Expose
-    private String imageUrl;
+    private String description;
+    @SerializedName("author")
+    @Expose
+    private String author;
 
     public Place() {
     }
 
-    public Place(int id, String title, double[] coordinates, String imageUrl) {
+    public Place(int id, double[] coordinates, String description, String author) {
         this.id = id;
-        this.title = title;
+        this.description = description;
         this.coordinates = coordinates;
-        this.imageUrl = imageUrl;
+        this.author = author;
     }
 
     public int getId() {
@@ -37,12 +36,12 @@ public class Place {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double[] getCoordinates() {
@@ -53,22 +52,11 @@ public class Place {
         this.coordinates = coordinates;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getPosition() {
-        if (position == null) {
-            position = coordinates[0] + "," + coordinates[1];
-        }
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

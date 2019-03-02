@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (savedInstanceState == null && fragment == null) {
-        router.newRootScreen(new Screens.MapScreen());
-//            Command[] commands = {new Replace(new Screens.CollectionScreen())};
-//            navigator.applyCommands(commands);
+//        router.newRootScreen(new Screens.MapScreen());
+            Command[] commands = {new Replace(new Screens.MapScreen())};
+            navigator.applyCommands(commands);
         }
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch(menuItem.getItemId()) {
                 case R.id.nav_collections:
-                    router.newRootScreen(new Screens.CollectionScreen());
+                    router.newRootScreen(new Screens.PlacesScreen());
                     break;
                 case R.id.nav_map:
                     router.newRootScreen(new Screens.MapScreen());

@@ -10,6 +10,8 @@ import com.travl.guide.di.modules.AppModule;
 
 import org.jetbrains.annotations.Contract;
 
+import timber.log.Timber;
+
 //Created by Pereved on 21.02.2019.
 public class App extends Application {
 
@@ -30,6 +32,7 @@ public class App extends Application {
                 .appModule(new AppModule(this))
                 .build();
         Mapbox.getInstance(instance, getString(R.string.mapbox_access_token));
+        Timber.plant(new Timber.DebugTree());
     }
 
     public AppComponent getAppComponent() {

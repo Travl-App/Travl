@@ -2,6 +2,7 @@ package com.travl.guide.di.interfaces;
 
 import com.travl.guide.di.modules.AppModule;
 import com.travl.guide.di.modules.CiceroneModule;
+import com.travl.guide.di.modules.ImageLoaderModule;
 import com.travl.guide.di.modules.NetModule;
 import com.travl.guide.di.modules.PlacesRepoModule;
 import com.travl.guide.mvp.presenter.MapsPresenter;
@@ -20,7 +21,8 @@ import dagger.Component;
         AppModule.class,
         CiceroneModule.class,
         NetModule.class,
-        PlacesRepoModule.class
+        PlacesRepoModule.class,
+        ImageLoaderModule.class
 })
 public interface AppComponent {
     void inject(MainActivity mainActivity);
