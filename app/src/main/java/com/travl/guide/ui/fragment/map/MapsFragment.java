@@ -75,12 +75,17 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
+        setupViews();
+
+        if(savedInstanceState == null)
+            presenter.enableLocationComponent();
+
         mapView.onCreate(savedInstanceState);
-        initEvents();
+
         return view;
     }
 
-    private void initEvents() {
+    private void setupViews() {
         presenter.setupMapView();
         presenter.setupFabView();
     }
@@ -103,61 +108,53 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
             switch(actionItem.getId()) {
                 case R.id.fab_menu_search:
                     findPlace();
+                    break;
                 case R.id.fab_menu_location:
-                    enableLocationComponent(mapBoxMap);
-                default:
-                    return false;
+                    presenter.enableLocationComponent();
+                    break;
             }
+            return false;
         });
+
     }
 
     @Override
     public void setupMapBox() {
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> {
-            this.mapBoxMap = mapBoxMap;
-            enableLocationComponent(mapBoxMap);
-        }));
+        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> this.mapBoxMap = mapBoxMap));
     }
 
     @Override
     public void requestPermissions() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, PERMISSION_REQUEST_CODE);
-            //TODO Add Explanation: Why user needs GPS?
-            Timber.d("Explanation bla bla bla");
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, PERMISSION_REQUEST_CODE);
-        }
+        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }, PERMISSION_REQUEST_CODE);
+        Timber.d("Find user on the map and move to him");
+        presenter.enableLocationComponent();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableLocationComponent(mapBoxMap);
-            }
+        if(requestCode == PERMISSION_REQUEST_CODE) {
+            presenter.enableLocationComponent();
         }
     }
 
+    @Override
     @SuppressLint("MissingPermission")
-    private void enableLocationComponent(MapboxMap mapboxMap) {
-        if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            LocationComponent locationComponent = mapboxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapboxMap.getStyle()));
+    public void findUser() {
+        if(PermissionsManager.areLocationPermissionsGranted(App.getInstance()) && mapBoxMap != null) {
+            Timber.d("Ищем пользователя");
+            LocationComponent locationComponent = mapBoxMap.getLocationComponent();
+            locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.COMPASS);
-        } else {
+        } else if(! PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             presenter.requestPermissions();
         }
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
