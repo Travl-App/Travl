@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -129,7 +128,6 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
                 Manifest.permission.ACCESS_FINE_LOCATION
         }, PERMISSION_REQUEST_CODE);
         Timber.d("Find user on the map and move to him");
-        presenter.enableLocationComponent();
     }
 
     @Override
