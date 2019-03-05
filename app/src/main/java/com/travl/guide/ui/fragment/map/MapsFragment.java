@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
@@ -74,22 +76,20 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
-        setupViews();
-
-        if(savedInstanceState == null)
-            presenter.enableLocationComponent();
-
         mapView.onCreate(savedInstanceState);
-
+        Timber.d("onCreate");
+        setupViews();
         return view;
     }
 
     private void setupViews() {
+        Timber.d("Setup view");
         presenter.setupMapView();
         presenter.setupFabView();
     }
 
     public void findPlace() {
+        Timber.d("Find place");
         Intent intent = new PlaceAutocomplete.IntentBuilder()
                 .accessToken(getString(R.string.mapbox_access_token))
                 .placeOptions(PlaceOptions.builder()
@@ -102,6 +102,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
 
     @Override
     public void setupMultiFab() {
+        Timber.d("Multi Fab");
         fab.inflate(R.menu.map_fab_menu);
         fab.setOnActionSelectedListener(actionItem -> {
             switch(actionItem.getId()) {
@@ -119,7 +120,11 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
 
     @Override
     public void setupMapBox() {
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> this.mapBoxMap = mapBoxMap));
+        Timber.d("Setup MapBox");
+        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> {
+            this.mapBoxMap = mapBoxMap;
+
+        }));
     }
 
     @Override
@@ -127,27 +132,21 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION
         }, PERMISSION_REQUEST_CODE);
-        Timber.d("Find user on the map and move to him");
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == PERMISSION_REQUEST_CODE) {
-            presenter.enableLocationComponent();
-        }
+        Timber.d("Request permissions");
     }
 
     @Override
     @SuppressLint("MissingPermission")
     public void findUser() {
         if(PermissionsManager.areLocationPermissionsGranted(App.getInstance()) && mapBoxMap != null) {
-            Timber.d("Ищем пользователя");
+            Timber.d("Find user");
             LocationComponent locationComponent = mapBoxMap.getLocationComponent();
             locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.COMPASS);
         } else if(! PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            Timber.d("Can't find user and request permissions");
             presenter.requestPermissions();
         }
     }
@@ -155,6 +154,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Timber.d("Result query with find place");
         if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
             CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
             if(mapBoxMap != null) {
