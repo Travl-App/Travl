@@ -1,6 +1,5 @@
 package com.travl.guide.navigator;
 
-
 import android.support.v4.app.Fragment;
 
 import com.travl.guide.ui.fragment.map.MapsFragment;
@@ -14,7 +13,7 @@ public class Screens {
 
         @Override
         public Fragment getFragment() {
-            return PlacesFragment.getInstance();
+            return new PlacesFragment();
         }
     }
 
@@ -22,7 +21,7 @@ public class Screens {
 
         @Override
         public Fragment getFragment() {
-            return MapsFragment.getInstance();
+            return new MapsFragment();
         }
     }
 }

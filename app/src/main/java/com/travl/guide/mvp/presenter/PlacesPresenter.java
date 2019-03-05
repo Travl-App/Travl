@@ -83,7 +83,7 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
 
         @Override
         public int getListCount() {
-            Timber.d("placeList size=" + (placeList == null ? null : placeList.size()));
+            Timber.d("PlaceList size = %s", (placeList == null ? null : placeList.size()));
             //user == null || user.getDB() == null ? 0 : user.getDB().size();
             return placeList == null ? 0 : placeList.size();
         }

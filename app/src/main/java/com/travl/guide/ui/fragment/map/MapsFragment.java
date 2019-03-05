@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,7 +30,6 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
@@ -49,15 +47,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView {
-
-    @SuppressLint("StaticFieldLeak")
-    public static MapsFragment instance;
-
-    public static MapsFragment getInstance() {
-        if(instance == null)
-            instance = new MapsFragment();
-        return instance;
-    }
 
     @InjectPresenter
     MapsPresenter presenter;
@@ -121,10 +110,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     @Override
     public void setupMapBox() {
         Timber.d("Setup MapBox");
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> {
-            this.mapBoxMap = mapBoxMap;
-
-        }));
+        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> this.mapBoxMap = mapBoxMap));
     }
 
     @Override

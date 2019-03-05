@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.travl.guide.R;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.map.MapsFragment;
 
 import javax.inject.Inject;
 
@@ -40,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {};
+    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
+        @Override
+        public void applyCommands(Command[] commands) {
+            super.applyCommands(commands);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (savedInstanceState == null && fragment == null) {
-//        router.newRootScreen(new Screens.MapScreen());
-            Command[] commands = {new Replace(new Screens.MapScreen())};
-            navigator.applyCommands(commands);
+            navigator.applyCommands(new Command[] {new Replace(new Screens.MapScreen())});
         }
     }
 
@@ -111,10 +115,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch(menuItem.getItemId()) {
                 case R.id.nav_collections:
-                    router.newRootScreen(new Screens.PlacesScreen());
+                    router.replaceScreen(new Screens.PlacesScreen());
                     break;
                 case R.id.nav_map:
-                    router.newRootScreen(new Screens.MapScreen());
+                    router.replaceScreen(new Screens.MapScreen());
                     break;
                 case R.id.nav_settings:
 

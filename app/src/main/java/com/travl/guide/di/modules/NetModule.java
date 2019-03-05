@@ -21,7 +21,7 @@ public class NetModule {
     @Named("baseUrl")
     @Provides
     public String getApiBaseUrl() {
-        return "https://travlapp.herokuapp.com/api/";
+        return "https://travl.dev/api/";
     }
 
     @Provides
@@ -54,5 +54,4 @@ public class NetModule {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return interceptor;
     }
-
 }

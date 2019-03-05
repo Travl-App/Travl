@@ -20,6 +20,7 @@ import com.travl.guide.mvp.presenter.PlacesPresenter;
 import com.travl.guide.mvp.view.PlacesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.PlacesAdapter;
+import com.travl.guide.ui.fragment.map.MapsFragment;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,16 +31,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
 
-    private static PlacesFragment fragment = new PlacesFragment();
     @InjectPresenter
     PlacesPresenter presenter;
     @Inject
     IImageLoader imageLoader;
-
-    @Singleton
-    public static PlacesFragment getInstance() {
-        return fragment;
-    }
     @BindView(R.id.collection_recycler)
     RecyclerView recycler;
 
