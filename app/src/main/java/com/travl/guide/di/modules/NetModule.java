@@ -21,7 +21,7 @@ public class NetModule {
     @Named("baseUrl")
     @Provides
     public String getApiBaseUrl() {
-        return "https://travl.dev/api/";
+        return "https://travl.dev/";
     }
 
     @Provides

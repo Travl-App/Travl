@@ -13,6 +13,7 @@ import com.travl.guide.mvp.view.list.PlacesItemView;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
@@ -30,6 +31,9 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
     public PlacePresenter placePresenter;
     @Inject
     PlacesRepo repo;
+    @Inject
+    @Named("baseUrl")
+    String baseUrl;
 
     public PlacesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -75,7 +79,13 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
         public void bindView(PlacesItemView view) {
             Timber.d("BindView and set Description");
             Place place = placeList.get(view.getPos());
-            //view.setImage(place.getImageUrl());
+            //TODO Decide how should we show multiple images
+            int firstImage = 0;
+            int redundantEscapeCharacterSkip = 1;
+            List<String> imageUrls = place.getImageUrls();
+            if (imageUrls != null) {
+                view.setImage(baseUrl + imageUrls.get(firstImage).substring(redundantEscapeCharacterSkip));
+            }
             view.setDescription(place.getDescription());
         }
 
