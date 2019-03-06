@@ -21,7 +21,6 @@ import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
-//Created by Pereved on 18.02.2019.
 @InjectViewState
 public class PlacesPresenter extends MvpPresenter<PlacesView> {
 
@@ -75,7 +74,6 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
         @Override
         public void bindView(PlacesItemView view) {
             Timber.d("BindView and set Description");
-            //TODO: запрос строки из БД
             Place place = placeList.get(view.getPos());
             //view.setImage(place.getImageUrl());
             view.setDescription(place.getDescription());
@@ -84,7 +82,6 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
         @Override
         public int getListCount() {
             Timber.d("PlaceList size = %s", (placeList == null ? null : placeList.size()));
-            //user == null || user.getDB() == null ? 0 : user.getDB().size();
             return placeList == null ? 0 : placeList.size();
         }
 
