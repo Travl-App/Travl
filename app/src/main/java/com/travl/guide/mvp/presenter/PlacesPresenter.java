@@ -13,6 +13,7 @@ import com.travl.guide.mvp.view.list.PlacesItemView;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
@@ -21,7 +22,6 @@ import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
-//Created by Pereved on 18.02.2019.
 @InjectViewState
 public class PlacesPresenter extends MvpPresenter<PlacesView> {
 
@@ -31,6 +31,9 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
     public PlacePresenter placePresenter;
     @Inject
     PlacesRepo repo;
+    @Inject
+    @Named("baseUrl")
+    String baseUrl;
 
     public PlacesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -75,16 +78,20 @@ public class PlacesPresenter extends MvpPresenter<PlacesView> {
         @Override
         public void bindView(PlacesItemView view) {
             Timber.d("BindView and set Description");
-            //TODO: запрос строки из БД
             Place place = placeList.get(view.getPos());
-            //view.setImage(place.getImageUrl());
+            //TODO Decide how should we show multiple images
+            int firstImage = 0;
+            int redundantEscapeCharacterSkip = 1;
+            List<String> imageUrls = place.getImageUrls();
+            if (imageUrls != null) {
+                view.setImage(baseUrl + imageUrls.get(firstImage).substring(redundantEscapeCharacterSkip));
+            }
             view.setDescription(place.getDescription());
         }
 
         @Override
         public int getListCount() {
             Timber.d("PlaceList size = %s", (placeList == null ? null : placeList.size()));
-            //user == null || user.getDB() == null ? 0 : user.getDB().size();
             return placeList == null ? 0 : placeList.size();
         }
 
