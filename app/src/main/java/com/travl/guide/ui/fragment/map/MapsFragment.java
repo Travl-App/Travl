@@ -12,11 +12,11 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.leinardi.android.speeddial.SpeedDialView;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Feature;
@@ -36,11 +36,14 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MapsPresenter;
+import com.travl.guide.mvp.view.FabCallback;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.Objects;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,12 +55,11 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     MapsPresenter presenter;
     @BindView(R.id.mapView)
     MapView mapView;
-//    @BindView(R.id.fab_search_places)
-//    SpeedDialView fab;
 
     private MapboxMap mapBoxMap;
     private static final int PERMISSION_REQUEST_CODE = 10;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+
 
     @Nullable
     @Override
@@ -77,7 +79,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         presenter.setupFabView();
     }
 
-    public void findPlace() {
+    public void fabClick() {
         Timber.d("Find place");
         Intent intent = new PlaceAutocomplete.IntentBuilder()
                 .accessToken(getString(R.string.mapbox_access_token))

@@ -2,6 +2,7 @@ package com.travl.guide.ui.activity
 
 import android.app.Dialog
 import android.os.Bundle
+import android.support.design.bottomappbar.BottomAppBar
 import android.support.design.internal.NavigationMenuView
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -11,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.travl.guide.R
 import com.travl.guide.navigator.Screens
 import com.travl.guide.ui.App
@@ -23,9 +26,9 @@ class BottomNavigationDrawerFragment: BottomSheetDialogFragment() {
     @Inject lateinit var router: Router
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        App.getInstance().getAppComponent().inject(this)
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
-
+        val view: View = inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
+        App.getInstance().appComponent.inject(this)
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -35,7 +38,6 @@ class BottomNavigationDrawerFragment: BottomSheetDialogFragment() {
             when (menuItem.itemId) {
                 R.id.app_bar_collections -> {
                     router.replaceScreen(Screens.PlacesScreen())
-                    toPlacesScreen()
                 }
                 R.id.app_bar_map -> {
                     router.replaceScreen(Screens.MapScreen())
@@ -50,10 +52,6 @@ class BottomNavigationDrawerFragment: BottomSheetDialogFragment() {
         }
 
         disableNavigationViewScrollbars(navigation_view)
-    }
-
-    private fun toPlacesScreen() {
-        //TODO: Fab behavior
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
