@@ -52,8 +52,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     MapsPresenter presenter;
     @BindView(R.id.mapView)
     MapView mapView;
-    @BindView(R.id.fab_search_places)
-    SpeedDialView fab;
+//    @BindView(R.id.fab_search_places)
+//    SpeedDialView fab;
 
     private MapboxMap mapBoxMap;
     private static final int PERMISSION_REQUEST_CODE = 10;
@@ -92,18 +92,18 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     @Override
     public void setupMultiFab() {
         Timber.d("Multi Fab");
-        fab.inflate(R.menu.map_fab_menu);
-        fab.setOnActionSelectedListener(actionItem -> {
-            switch(actionItem.getId()) {
-                case R.id.fab_menu_search:
-                    findPlace();
-                    break;
-                case R.id.fab_menu_location:
-                    presenter.enableLocationComponent();
-                    break;
-            }
-            return false;
-        });
+//        fab.inflate(R.menu.map_fab_menu);
+//        fab.setOnActionSelectedListener(actionItem -> {
+//            switch(actionItem.getId()) {
+//                case R.id.fab_menu_search:
+//                    findPlace();
+//                    break;
+//                case R.id.fab_menu_location:
+//                    presenter.enableLocationComponent();
+//                    break;
+//            }
+//            return false;
+//        });
 
     }
 

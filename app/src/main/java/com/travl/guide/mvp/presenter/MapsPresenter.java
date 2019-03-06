@@ -39,7 +39,4 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     public void requestPermissions() {
         getViewState().requestPermissions();
     }
-    public void enableLocationComponent() {
-        getViewState().findUser();
-    }
 }
