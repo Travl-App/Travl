@@ -2,7 +2,6 @@ package com.travl.guide.ui.activity
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.bottomappbar.BottomAppBar
 import android.support.design.internal.NavigationMenuView
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -12,8 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.travl.guide.R
 import com.travl.guide.navigator.Screens
 import com.travl.guide.ui.App

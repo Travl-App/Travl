@@ -115,14 +115,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     private void toPlacesScreen() {
-        //                fab.setImageDrawable(getDrawable(R.drawable.ic_search));
-        fab.setOnClickListener(v -> {
-//                        FabCallback fabCallback = new FabCallback();
-//                        fabCallback.registerCallBack(new MapsFragment());
-//                        fabCallback.clickToFab(MainActivity.this);
-            presenter.initPlacesScreen();
-            presenter.changingScreen();
-        });
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
     }
 

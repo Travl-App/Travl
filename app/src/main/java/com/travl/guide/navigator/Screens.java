@@ -7,7 +7,6 @@ import com.travl.guide.ui.fragment.places.PlacesFragment;
 
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
 
-//Created by Pereved on 23.02.2019.
 public class Screens {
     public static class PlacesScreen extends SupportAppScreen {
 

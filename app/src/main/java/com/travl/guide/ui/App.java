@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Contract;
 
 import timber.log.Timber;
 
-//Created by Pereved on 21.02.2019.
 public class App extends Application {
 
     private static App instance;

@@ -5,6 +5,7 @@ import com.travl.guide.di.modules.CiceroneModule;
 import com.travl.guide.di.modules.ImageLoaderModule;
 import com.travl.guide.di.modules.NetModule;
 import com.travl.guide.di.modules.PlacesRepoModule;
+import com.travl.guide.mvp.presenter.BottomNavigationPresenter;
 import com.travl.guide.mvp.presenter.MainPresenter;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.presenter.PlacesPresenter;
@@ -17,7 +18,6 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
-//Created by Pereved on 23.02.2019.
 @Singleton
 @Component(modules = {
         AppModule.class,
@@ -39,6 +39,8 @@ public interface AppComponent {
     void inject(PlacesPresenter presenter);
 
     void inject(PlacesFragment placesFragment);
+
+    void inject(BottomNavigationPresenter fragment);
 
     void inject(BottomNavigationDrawerFragment fragment);
 }

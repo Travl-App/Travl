@@ -3,16 +3,17 @@ package com.travl.guide.ui.fragment.map;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -36,14 +37,12 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MapsPresenter;
-import com.travl.guide.mvp.view.FabCallback;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.Objects;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -60,6 +59,16 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     private static final int PERMISSION_REQUEST_CODE = 10;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) context;
+        FloatingActionButton floatingActionButton = mainActivity.findViewById(R.id.app_bar_fab);
+        if (floatingActionButton != null) {
+            floatingActionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_search));
+            floatingActionButton.setOnClickListener(view -> fabClick());
+        }
+    }
 
     @Nullable
     @Override
