@@ -23,7 +23,7 @@
             android:layout_marginEnd="@dimen/small_margin"
             android:fontFamily="monospace"
             android:text="@string/test_city"
-            android:textSize="30sp" />
+            android:textSize="@dimen/start_page_text_size" />
 
         <TextView
             android:id="@+id/city_temperature"
@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_margin"
             android:text="@string/test_temperature"
-            android:textSize="30sp" />
+            android:fontFamily="monospace"
+            android:textSize="@dimen/start_page_text_size" />
 
         <ImageView
             android:id="@+id/city_weather_icon"
@@ -56,7 +57,7 @@
         <ImageView
             android:id="@+id/places_image_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/start_page_image_view_height"
             android:layout_gravity="start"
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginEnd="@dimen/standard_margin"
@@ -68,7 +69,7 @@
         <ImageView
             android:id="@+id/map_image_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/start_page_image_view_height"
             android:layout_gravity="end"
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginEnd="@dimen/standard_margin"
@@ -78,11 +79,21 @@
             tools:text="ImageView" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/places_container_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Travel Zine"
+        android:textSize="@dimen/start_page_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_page_images_linear_layout" />
     <FrameLayout
         android:id="@+id/start_page_places_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_page_images_linear_layout" />
+        app:layout_constraintTop_toBottomOf="@id/places_container_title" />
 </android.support.constraint.ConstraintLayout>
