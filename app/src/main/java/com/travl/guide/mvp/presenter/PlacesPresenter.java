@@ -18,6 +18,7 @@ import javax.inject.Named;
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;

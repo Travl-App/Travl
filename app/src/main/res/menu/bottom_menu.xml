@@ -4,12 +4,7 @@
     <item
         android:id="@+id/app_bar_fav"
         android:icon="@drawable/ic_favorite"
-        android:title="Favorite"
+        android:title="Show favorite posts"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search"
-        android:title="Search"
-        app:showAsAction="always"/>
 </menu>

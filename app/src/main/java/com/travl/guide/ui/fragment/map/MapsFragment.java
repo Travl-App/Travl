@@ -77,19 +77,15 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
         mapView.onCreate(savedInstanceState);
-        Timber.d("onCreate");
         setupViews();
         return view;
     }
 
     private void setupViews() {
-        Timber.d("Setup view");
         presenter.setupMapView();
-        presenter.setupFabView();
     }
 
     public void fabClick() {
-        Timber.d("Find place");
         Intent intent = new PlaceAutocomplete.IntentBuilder()
                 .accessToken(getString(R.string.mapbox_access_token))
                 .placeOptions(PlaceOptions.builder()
@@ -97,31 +93,13 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
                         .limit(10)
                         .build(PlaceOptions.MODE_CARDS))
                 .build(getActivity());
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    public void setupMultiFab() {
-        Timber.d("Multi Fab");
-//        fab.inflate(R.menu.map_fab_menu);
-//        fab.setOnActionSelectedListener(actionItem -> {
-//            switch(actionItem.getId()) {
-//                case R.id.fab_menu_search:
-//                    findPlace();
-//                    break;
-//                case R.id.fab_menu_location:
-//                    presenter.enableLocationComponent();
-//                    break;
-//            }
-//            return false;
-//        });
-
+        startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
     }
 
     @Override
     public void setupMapBox() {
-        Timber.d("Setup MapBox");
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.DARK, style -> this.mapBoxMap = mapBoxMap));
+        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.TRAFFIC_NIGHT,
+                style -> this.mapBoxMap = mapBoxMap));
     }
 
     @Override

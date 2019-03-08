@@ -8,6 +8,5 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface MapsView extends MvpView {
     void findUser();
     void setupMapBox();
-    void setupMultiFab();
     void requestPermissions();
 }

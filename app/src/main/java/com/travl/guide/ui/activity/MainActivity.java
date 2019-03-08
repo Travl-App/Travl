@@ -42,8 +42,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     FloatingActionButton fab;
     @BindView(R.id.bottom_app_bar)
     BottomAppBar bar;
+
     private Screen screens;
     private BottomNavigationDrawerFragment bottomNavigationDrawerFragment;
+
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
         public void applyCommands(Command[] commands) {
@@ -53,9 +55,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         @Override
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
-            if (command instanceof Replace && nextFragment instanceof PlacesFragment) {
+            if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
                 toMapScreen();
-            } else if (command instanceof Replace && nextFragment instanceof MapsFragment) {
+            } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
                 toPlacesScreen();
             }
         }
@@ -82,7 +84,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     public void initDefaultScreen(Bundle savedInstanceState) {
         Fragment fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (savedInstanceState == null && fragmentContainer == null) {
+        if(savedInstanceState == null && fragmentContainer == null) {
             presenter.initPlacesScreen();
         }
         presenter.showCurrentFragment();
@@ -91,7 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showCurrentFragment() {
-        navigator.applyCommands(new Command[]{new Replace(screens)});
+        navigator.applyCommands(new Command[] {new Replace(screens)});
     }
 
     @Override
@@ -119,6 +121,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     private void toMapScreen() {
+        invalidateOptionsMenu();
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
             presenter.initMapScreen();
@@ -147,12 +150,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case R.id.app_bar_fav:
-                Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.app_bar_search:
-                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Show favorite posts", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);

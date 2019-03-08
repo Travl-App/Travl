@@ -32,9 +32,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     public void setupMapView() {
         getViewState().setupMapBox();
     }
-    public void setupFabView() {
-        getViewState().setupMultiFab();
-    }
     public void requestPermissions() {
         getViewState().requestPermissions();
     }

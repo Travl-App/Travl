@@ -12,6 +12,7 @@ import ru.terrakok.cicerone.Screen;
 
 @InjectViewState
 public class BottomNavigationPresenter extends MvpPresenter<BottomNavigationView> {
+
     @Inject
     Router router;
     Scheduler scheduler;
