@@ -55,6 +55,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         @Override
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
+            fragmentTransaction.addToBackStack(null);
             if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
                 toMapScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
@@ -68,6 +69,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         MainPresenter presenter = new MainPresenter(AndroidSchedulers.mainThread());
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        initStartPageScreen();
+        presenter.changingScreen();
     }
 
     @Override
@@ -85,7 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     public void initDefaultScreen(Bundle savedInstanceState) {
         Fragment fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
         if(savedInstanceState == null && fragmentContainer == null) {
-            presenter.initPlacesScreen();
+            presenter.initStartPageScreen();
         }
         presenter.showCurrentFragment();
     }
@@ -105,6 +113,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     public void initMapScreen() {
         screens = new Screens.MapScreen();
     }
+
+    @Override
+    public void initStartPageScreen() {
+        screens = new Screens.StartPageScreen();
+        toMapScreen();
+    }
+
+
 
     @Override
     public void replaceScreen() {

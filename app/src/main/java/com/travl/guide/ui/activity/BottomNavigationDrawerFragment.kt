@@ -8,7 +8,6 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.NavigationView
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -34,6 +33,9 @@ class BottomNavigationDrawerFragment: BottomSheetDialogFragment() {
 
         navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.app_bar_start_page -> {
+                    router.replaceScreen(Screens.StartPageScreen())
+                }
                 R.id.app_bar_collections -> {
                     router.replaceScreen(Screens.PlacesScreen())
                 }

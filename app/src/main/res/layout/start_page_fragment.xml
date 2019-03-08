@@ -7,10 +7,11 @@
 
     <LinearLayout
         android:id="@+id/main_page_text_linear_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginTop="@dimen/top_text_margin"
+        android:gravity="center_horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -18,27 +19,26 @@
             android:id="@+id/user_city_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="City" />
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:fontFamily="monospace"
+            android:text="@string/test_city"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/city_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="15 C°" />
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="@string/test_temperature"
+            android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/city_weather_icon"
-            android:layout_width="50dp"
+            android:layout_width="@dimen/cloud_width"
             android:layout_height="match_parent"
             android:contentDescription="@string/weather_icon_description"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/cloud_icon_foreground" />
 
     </LinearLayout>
@@ -54,30 +54,32 @@
         app:layout_constraintTop_toBottomOf="@id/main_page_text_linear_layout">
 
         <ImageView
-            android:id="@+id/place_collections_image_view"
-            android:layout_width="204dp"
-            android:layout_height="200dp"
+            android:id="@+id/places_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_weight="1"
             android:contentDescription="@string/place_collections"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:src="@drawable/places_collections"
             tools:text="ImageView" />
 
         <ImageView
-            android:id="@+id/places_on_map_image_view"
-            android:layout_width="204dp"
-            android:layout_height="200dp"
+            android:id="@+id/map_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_weight="1"
             android:contentDescription="@string/places_on_map"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:src="@drawable/places_on_map"
             tools:text="ImageView" />
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/main_page_places_container"
+        android:id="@+id/start_page_places_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

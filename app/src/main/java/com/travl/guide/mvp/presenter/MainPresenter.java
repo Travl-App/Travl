@@ -39,4 +39,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void initMapScreen() {
         getViewState().initMapScreen();
     }
+
+    public void initStartPageScreen() {
+        getViewState().initStartPageScreen();
+    }
 }
