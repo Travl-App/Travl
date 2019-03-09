@@ -79,8 +79,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        presenter.toStartPageScreen();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (!(fragment instanceof StartPageFragment)) {
+            presenter.toStartPageScreen();
+        } else {
+            finish();
+        }
     }
 
     @Override
