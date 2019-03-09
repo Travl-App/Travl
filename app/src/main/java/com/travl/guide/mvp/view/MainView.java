@@ -8,11 +8,11 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface MainView extends MvpView {
     void initEvents();
 
+    void initUI();
+
     void toMapScreen();
 
     void toPlaceScreen();
-
-    void initUI();
 
     void toStartPageScreen();
 }

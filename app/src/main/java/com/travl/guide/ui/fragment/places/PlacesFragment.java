@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -21,10 +20,8 @@ import com.travl.guide.mvp.presenter.PlacesPresenter;
 import com.travl.guide.mvp.view.PlacesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.PlacesAdapter;
-import com.travl.guide.ui.fragment.map.MapsFragment;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

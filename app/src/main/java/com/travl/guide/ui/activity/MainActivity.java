@@ -25,18 +25,15 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.Screen;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
-import ru.terrakok.cicerone.android.support.SupportAppScreen;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView {
+public class MainActivity extends MvpAppCompatActivity implements MainView, StartPageFragment.StartPageEventsListener, BottomNavigationDrawerListener {
 
     @Inject
     Router router;
@@ -63,19 +60,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             fragmentTransaction.addToBackStack(null);
             if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                toPlaceScreen();
+                onMoveToPlaceScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                toMapScreen();
+                onMoveToMapScreen();
             }else if (command instanceof Replace && nextFragment instanceof StartPageFragment){
-                toStartPageScreen();
+                onMoveToStartPageScreen();
             }
         }
     };
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
-        MainPresenter presenter = new MainPresenter(AndroidSchedulers.mainThread());
+        MainPresenter presenter = new MainPresenter();
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
     }
@@ -117,32 +114,45 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
                         navigationDrawer.getTag()));
     }
 
-    @Override
-    public void toPlaceScreen() {
-        Timber.d("toPlaceScreen");
+
+    public void onMoveToPlaceScreen() {
+        Timber.d("onMoveToPlaceScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
             presenter.toMapScreen();
-            router.replaceScreen(new Screens.MapScreen());
+        });
+    }
+
+
+    public void onMoveToMapScreen() {
+        Timber.d("onMoveToMapScreen");
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_search));
+    }
+
+
+    public void onMoveToStartPageScreen() {
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
+        fab.setOnClickListener(view -> {
+            presenter.toMapScreen();
         });
     }
 
     @Override
     public void toMapScreen() {
-        Timber.d("toMapScreen");
-        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-        fab.setImageDrawable(getDrawable(R.drawable.ic_search));
+        router.replaceScreen(new Screens.MapScreen());
     }
 
     @Override
-    public void toStartPageScreen(){
-        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-        fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
-        fab.setOnClickListener(view -> {
-            presenter.toMapScreen();
-            router.replaceScreen(new Screens.MapScreen());
-        });
+    public void toPlaceScreen() {
+        router.replaceScreen(new Screens.PlacesScreen());
+    }
+
+    @Override
+    public void toStartPageScreen() {
+        router.replaceScreen(new Screens.StartPageScreen());
     }
 
     @Override
@@ -171,5 +181,33 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //StartPageEventsListener
+    @Override
+    public void onPlaceCollectionsClick() {
+        presenter.toPlaceScreen();
+    }
+
+    @Override
+    public void onMapClick() {
+        presenter.toMapScreen();
+    }
+
+    //BottomNavigationDrawerListener
+    @Override
+    public void navToMapScreen() {
+        presenter.toMapScreen();
+    }
+
+    @Override
+    public void navToPlaceScreen() {
+        presenter.toPlaceScreen();
+    }
+
+    @Override
+    public void navToStartPageScreen() {
+        presenter.toStartPageScreen();
     }
 }

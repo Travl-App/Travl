@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.start.page;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +17,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.mvp.view.StartPageView;
-import com.travl.guide.ui.activity.MainActivity;
 import com.travl.guide.ui.fragment.places.PlacesFragment;
 
 import butterknife.BindView;
@@ -32,6 +32,13 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     ImageView placesImageView;
     @InjectPresenter
     StartPagePresenter presenter;
+    private StartPageEventsListener startPageEventsListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        startPageEventsListener = (StartPageEventsListener) context;
+    }
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -52,19 +59,21 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @OnClick(R.id.places_image_view)
     public void onPlaceCollectionsClick() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.initPlacesScreen();
-            mainActivity.replaceScreen();
+        if (startPageEventsListener != null) {
+            startPageEventsListener.onPlaceCollectionsClick();
         }
     }
 
     @OnClick(R.id.map_image_view)
     public void onMapClick() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.initMapScreen();
-            mainActivity.replaceScreen();
+        if (startPageEventsListener != null) {
+            startPageEventsListener.onMapClick();
         }
+    }
+
+    public interface StartPageEventsListener {
+        void onPlaceCollectionsClick();
+
+        void onMapClick();
     }
 }

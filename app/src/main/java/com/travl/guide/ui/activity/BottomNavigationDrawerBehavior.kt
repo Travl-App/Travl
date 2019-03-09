@@ -1,6 +1,7 @@
 package com.travl.guide.ui.activity
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.support.design.internal.NavigationMenuView
 import android.support.design.widget.BottomSheetBehavior
@@ -12,15 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.travl.guide.R
-import com.travl.guide.navigator.Screens
 import com.travl.guide.ui.App
 import kotlinx.android.synthetic.main.fragment_navigation_drawer.*
-import ru.terrakok.cicerone.Router
-import javax.inject.Inject
 
 class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
-    @Inject lateinit var router: Router
+    private var bottomNavigationDrawerListener: BottomNavigationDrawerListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
@@ -30,17 +28,16 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.app_bar_start_page -> {
-                    router.replaceScreen(Screens.StartPageScreen())
+                    bottomNavigationDrawerListener!!.navToStartPageScreen()
                 }
                 R.id.app_bar_collections -> {
-                    router.replaceScreen(Screens.PlacesScreen())
+                    bottomNavigationDrawerListener!!.navToPlaceScreen()
                 }
                 R.id.app_bar_map -> {
-                    router.replaceScreen(Screens.MapScreen())
+                    bottomNavigationDrawerListener!!.navToMapScreen()
                 }
             }
             this.dismiss()
@@ -52,7 +49,14 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
         }
 
         disableNavigationViewScrollbars(navigation_view)
+
     }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        bottomNavigationDrawerListener = context as BottomNavigationDrawerListener
+    }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog

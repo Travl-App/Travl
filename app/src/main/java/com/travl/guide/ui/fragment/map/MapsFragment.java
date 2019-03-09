@@ -39,7 +39,6 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.List;
 import java.util.Objects;
@@ -63,8 +62,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) context;
-        FloatingActionButton floatingActionButton = mainActivity.findViewById(R.id.app_bar_fab);
+        Activity activity = (Activity) context;
+        FloatingActionButton floatingActionButton = activity.findViewById(R.id.app_bar_fab);
         if(floatingActionButton != null) {
             floatingActionButton.setOnClickListener(view -> fabClick());
         }
