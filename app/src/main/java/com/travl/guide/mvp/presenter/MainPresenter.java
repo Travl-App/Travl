@@ -12,31 +12,19 @@ import ru.terrakok.cicerone.Screen;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
+
     @Inject
     Router router;
-    private Scheduler scheduler;
 
-    public MainPresenter(Scheduler scheduler) {
-        this.scheduler = scheduler;
+    public void initEvents() {
+        getViewState().initEvents();
     }
 
-    public void changingScreen() {
-        getViewState().replaceScreen();
+    public void toMapScreen() {
+        getViewState().toMapScreen();
     }
 
-    public void showCurrentFragment() {
-        getViewState().showCurrentFragment();
-    }
-
-    public void replaceScreen(Screen screen) {
-        router.replaceScreen(screen);
-    }
-
-    public void initPlacesScreen() {
-        getViewState().initPlacesScreen();
-    }
-
-    public void initMapScreen() {
-        getViewState().initMapScreen();
+    public void initUI() {
+        getViewState().initUI();
     }
 }

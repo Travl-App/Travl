@@ -5,9 +5,10 @@ import android.support.v4.app.Fragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.places.PlacesFragment;
 
+import ru.terrakok.cicerone.Screen;
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
 
-public class Screens {
+public class Screens extends Screen {
     public static class PlacesScreen extends SupportAppScreen {
 
         @Override

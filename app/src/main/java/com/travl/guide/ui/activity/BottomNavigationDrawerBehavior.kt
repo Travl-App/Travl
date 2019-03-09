@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_navigation_drawer.*
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class BottomNavigationDrawerFragment: BottomSheetDialogFragment() {
+class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
     @Inject lateinit var router: Router
 

@@ -1,6 +1,5 @@
 package com.travl.guide.ui.fragment.map;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -10,14 +9,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Feature;
@@ -41,6 +41,7 @@ import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.MainActivity;
 
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -48,7 +49,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-public class MapsFragment extends MvpAppCompatFragment implements MapsView {
+public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
     @InjectPresenter
     MapsPresenter presenter;
@@ -56,7 +57,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
     MapView mapView;
 
     private MapboxMap mapBoxMap;
-    private static final int PERMISSION_REQUEST_CODE = 10;
+    private PermissionsManager permissionsManager;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
     @Override
@@ -64,8 +65,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
         super.onAttach(context);
         MainActivity mainActivity = (MainActivity) context;
         FloatingActionButton floatingActionButton = mainActivity.findViewById(R.id.app_bar_fab);
-        if (floatingActionButton != null) {
-            floatingActionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_search));
+        if(floatingActionButton != null) {
             floatingActionButton.setOnClickListener(view -> fabClick());
         }
     }
@@ -98,31 +98,30 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
 
     @Override
     public void setupMapBox() {
-        mapView.getMapAsync(mapBoxMap -> mapBoxMap.setStyle(Style.TRAFFIC_NIGHT,
-                style -> this.mapBoxMap = mapBoxMap));
+        mapView.getMapAsync(mapBoxMap -> {
+            this.mapBoxMap = mapBoxMap;
+            mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
+                //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
+                findUser(style);
+            });
+        });
+        //TODO: Смена языка
+        // Layer mapText = Objects.requireNonNull(mapBoxMap.getStyle()).getLayer("country-label");
+        // if(mapText != null)
+        // mapText.setProperties(textField("{name_ru}"));
     }
 
-    @Override
-    public void requestPermissions() {
-        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {
-                Manifest.permission.ACCESS_FINE_LOCATION
-        }, PERMISSION_REQUEST_CODE);
-        Timber.d("Request permissions");
-    }
-
-    @Override
     @SuppressLint("MissingPermission")
-    public void findUser() {
-        if(PermissionsManager.areLocationPermissionsGranted(App.getInstance()) && mapBoxMap != null) {
-            Timber.d("Find user");
+    public void findUser(Style loadedMapStyle) {
+        if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             LocationComponent locationComponent = mapBoxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
+            locationComponent.activateLocationComponent(App.getInstance(), loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
-            locationComponent.setRenderMode(RenderMode.COMPASS);
+            locationComponent.setRenderMode(RenderMode.NORMAL);
         } else if(! PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            Timber.d("Can't find user and request permissions");
-            presenter.requestPermissions();
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(getActivity());
         }
     }
 
@@ -150,6 +149,24 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView {
                 }
             }
         }
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        Toast.makeText(getContext(), "This app needs location permissions in order to show its functionality.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if(granted)
+            mapBoxMap.getStyle(this::findUser);
+        else
+            Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @ProvidePresenter

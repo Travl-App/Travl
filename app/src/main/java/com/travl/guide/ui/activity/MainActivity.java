@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MainPresenter;
 import com.travl.guide.mvp.view.MainView;
@@ -24,16 +23,20 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
+import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.Screen;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
+import ru.terrakok.cicerone.android.support.SupportAppScreen;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
+import timber.log.Timber;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
+    @Inject
+    Router router;
     @InjectPresenter
     MainPresenter presenter;
     @Inject
@@ -43,8 +46,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.bottom_app_bar)
     BottomAppBar bar;
 
-    private Screen screens;
-    private BottomNavigationDrawerFragment bottomNavigationDrawerFragment;
+    private BottomNavigationDrawerBehavior navigationDrawer;
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
@@ -56,19 +58,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
-                toMapScreen();
+
+                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+                toPlaceScreen();
+
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
-                toPlacesScreen();
+
+                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+                toMapScreen();
+
             }
         }
     };
-
-    @ProvidePresenter
-    public MainPresenter providePresenter() {
-        MainPresenter presenter = new MainPresenter(AndroidSchedulers.mainThread());
-        App.getInstance().getAppComponent().inject(presenter);
-        return presenter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,58 +77,46 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         App.getInstance().getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        bottomNavigationDrawerFragment = new BottomNavigationDrawerFragment();
-        setSupportActionBar(bar);
-        initEvents();
-        initDefaultScreen(savedInstanceState);
-    }
+        presenter.initUI();
+        presenter.initEvents();
 
-    public void initDefaultScreen(Bundle savedInstanceState) {
         Fragment fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
         if(savedInstanceState == null && fragmentContainer == null) {
-            presenter.initPlacesScreen();
+            navigator.applyCommands(new Command[] {new Replace(new Screens.PlacesScreen())});
         }
-        presenter.showCurrentFragment();
-    }
-
-
-    @Override
-    public void showCurrentFragment() {
-        navigator.applyCommands(new Command[] {new Replace(screens)});
     }
 
     @Override
-    public void initPlacesScreen() {
-        screens = new Screens.PlacesScreen();
+    public void initUI() {
+        Timber.d("initUI");
+        navigationDrawer = new BottomNavigationDrawerBehavior();
+        setSupportActionBar(bar);
     }
 
     @Override
-    public void initMapScreen() {
-        screens = new Screens.MapScreen();
+    public void initEvents() {
+        Timber.d("initEvents");
+        bar.setNavigationOnClickListener(view ->
+                navigationDrawer.show(getSupportFragmentManager(),
+                        navigationDrawer.getTag()));
     }
 
     @Override
-    public void replaceScreen() {
-        presenter.replaceScreen(screens);
-    }
-
-    private void initEvents() {
-        fab.setOnClickListener(view -> presenter.changingScreen());
-        bar.setNavigationOnClickListener(view -> bottomNavigationDrawerFragment.show(getSupportFragmentManager(), bottomNavigationDrawerFragment.getTag()));
-    }
-
-    private void toPlacesScreen() {
-        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-    }
-
-    private void toMapScreen() {
-        invalidateOptionsMenu();
+    public void toPlaceScreen() {
+        Timber.d("toPlaceScreen");
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
-            presenter.initMapScreen();
-            presenter.changingScreen();
+            presenter.toMapScreen();
+            router.replaceScreen(new Screens.MapScreen());
         });
-        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+    }
+
+    @Override
+    public void toMapScreen() {
+        Timber.d("toMapScreen");
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_search));
     }
 
     @Override
