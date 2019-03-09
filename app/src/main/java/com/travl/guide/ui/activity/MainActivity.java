@@ -58,15 +58,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
-
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 toPlaceScreen();
-
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
-
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 toMapScreen();
-
             }
         }
     };
