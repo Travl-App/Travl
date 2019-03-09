@@ -32,7 +32,4 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     public void setupMapView() {
         getViewState().setupMapBox();
     }
-    public void requestPermissions() {
-        getViewState().requestPermissions();
-    }
 }

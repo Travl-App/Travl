@@ -6,7 +6,5 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface MapsView extends MvpView {
-    void findUser();
     void setupMapBox();
-    void requestPermissions();
 }
