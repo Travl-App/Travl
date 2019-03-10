@@ -81,6 +81,7 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
                     }
                 }
             })
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
         }
 
         return dialog
