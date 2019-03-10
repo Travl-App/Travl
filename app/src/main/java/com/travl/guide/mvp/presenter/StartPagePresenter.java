@@ -14,4 +14,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
     public StartPagePresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
+
+    public void initPlacesFragment() {
+        getViewState().initPlacesFragment();
+    }
 }

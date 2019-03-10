@@ -60,12 +60,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
             fragmentTransaction.addToBackStack(null);
             if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                onMoveToPlaceScreen();
+                presenter.onMoveToPlaceScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                onMoveToMapScreen();
+                presenter.onMoveToMapScreen();
             }else if (command instanceof Replace && nextFragment instanceof StartPageFragment){
-                onMoveToStartPageScreen();
+                presenter.onMoveToStartPageScreen();
             }
         }
     };
@@ -117,7 +117,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
                 navigationDrawer.show(getSupportFragmentManager(),
                         navigationDrawer.getTag()));
     }
-
 
     public void onMoveToPlaceScreen() {
         Timber.d("onMoveToPlaceScreen");

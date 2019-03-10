@@ -51,9 +51,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
-        Fragment placesFragment = new PlacesFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.start_page_places_container, placesFragment).commit();
+        presenter.initPlacesFragment();
         return view;
     }
 
@@ -69,6 +67,13 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (startPageEventsListener != null) {
             startPageEventsListener.onMapClick();
         }
+    }
+
+    @Override
+    public void initPlacesFragment() {
+        Fragment placesFragment = new PlacesFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.start_page_places_container, placesFragment).commit();
     }
 
     public interface StartPageEventsListener {

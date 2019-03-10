@@ -2,6 +2,7 @@ package com.travl.guide.mvp.view;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(value = AddToEndStrategy.class)
@@ -10,9 +11,18 @@ public interface MainView extends MvpView {
 
     void initUI();
 
+    @StateStrategyType(value = SkipStrategy.class)
     void toMapScreen();
 
+    @StateStrategyType(value = SkipStrategy.class)
     void toPlaceScreen();
 
+    @StateStrategyType(value = SkipStrategy.class)
     void toStartPageScreen();
+
+    void onMoveToPlaceScreen();
+
+    void onMoveToMapScreen();
+
+    void onMoveToStartPageScreen();
 }

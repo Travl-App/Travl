@@ -6,5 +6,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface PlacesView extends MvpView {
+
     void onChangedPlacesData();
 }

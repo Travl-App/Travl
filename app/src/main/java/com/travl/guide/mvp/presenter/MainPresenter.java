@@ -26,4 +26,16 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void toStartPageScreen() {
         getViewState().toStartPageScreen();
     }
+
+    public void onMoveToMapScreen() {
+        getViewState().onMoveToMapScreen();
+    }
+
+    public void onMoveToPlaceScreen() {
+        getViewState().onMoveToPlaceScreen();
+    }
+
+    public void onMoveToStartPageScreen() {
+        getViewState().onMoveToStartPageScreen();
+    }
 }
