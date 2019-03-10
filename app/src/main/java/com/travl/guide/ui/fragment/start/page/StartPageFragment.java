@@ -42,8 +42,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
-        StartPagePresenter presenter = new StartPagePresenter(AndroidSchedulers.mainThread());
-        return presenter;
+        return new StartPagePresenter(AndroidSchedulers.mainThread());
     }
 
     @Nullable
@@ -51,7 +50,9 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
-        presenter.initPlacesFragment();
+        if (savedInstanceState == null) {
+            presenter.initPlacesFragment();
+        }
         return view;
     }
 
