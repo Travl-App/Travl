@@ -20,10 +20,8 @@ import com.travl.guide.mvp.presenter.PlacesPresenter;
 import com.travl.guide.mvp.view.PlacesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.PlacesAdapter;
-import com.travl.guide.ui.fragment.map.MapsFragment;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
 
+    private static final int SPAN_COUNT = 2;
     @InjectPresenter
     PlacesPresenter presenter;
     @Inject
@@ -50,10 +49,11 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
     }
 
     private void setupRecycler() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        else
-            recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else {
+            recycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
+        }
         PlacesAdapter adapter = new PlacesAdapter(presenter.placePresenter, imageLoader);
         recycler.setAdapter(adapter);
     }

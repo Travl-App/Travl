@@ -3,6 +3,8 @@ package com.travl.guide.mvp.model.places;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Place {
 
     @SerializedName("id")
@@ -17,6 +19,10 @@ public class Place {
     @SerializedName("author")
     @Expose
     private String author;
+
+    @SerializedName("images")
+    @Expose
+    private List<String> imageUrls;
 
     public Place() {
     }
@@ -58,5 +64,14 @@ public class Place {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }

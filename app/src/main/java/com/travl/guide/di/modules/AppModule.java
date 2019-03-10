@@ -5,7 +5,6 @@ import com.travl.guide.ui.App;
 import dagger.Module;
 import dagger.Provides;
 
-//Created by Pereved on 23.02.2019.
 @Module
 public class AppModule {
 

@@ -1,14 +1,18 @@
 <resources>
     <string name="app_name">Travl</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="collections">Подборки</string>
+    <string name="location">Местоположение</string>
+    <string name="search">Поиск</string>
+    <string name="map">Карта</string>
 
-    //Token
-    <string name="mapbox_access_token">pk.eyJ1IjoicGVyZXZlZCIsImEiOiJjanM5YTkyejYwa2JnNDRxeG1uY2FvcmtwIn0.vPpjgtkaQh-YZApGJV83ww</string>
-    <string name="location">Location</string>
-    <string name="search">Search</string>
+    <string name="mapbox_access_token">
+        pk.eyJ1IjoicGVyZXZlZCIsImEiOiJjanM5YTkyejYwa2JnNDRxeG1uY2FvcmtwIn0.vPpjgtkaQh-YZApGJV83ww
+    </string>
+    <string name="place_collections">Place Collections</string>
+    <string name="places_on_map">Places on Map</string>
+    <string name="weather_icon_description">weather_icon_description</string>
+    <string name="test_temperature">15 C°</string>
+    <string name="test_city">City</string>
+    <string name="start_page_title">Главная</string>
+    <string name="travl_zine_title">Travl Zine</string>
 </resources>
