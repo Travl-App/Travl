@@ -21,4 +21,9 @@
     <dimen name="cloud_width">70dp</dimen>
     <dimen name="start_page_image_view_height">200dp</dimen>
     <dimen name="start_page_text_size">30sp</dimen>
+    <!--Place card dimens-->
+    <dimen name="place_card_margin">5dp</dimen>
+    <dimen name="place_card_padding">5dp</dimen>
+    <dimen name="user_avatar_size">60dp</dimen>
+
 </resources>
