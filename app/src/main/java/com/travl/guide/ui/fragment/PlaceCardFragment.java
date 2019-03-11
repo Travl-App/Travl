@@ -13,6 +13,8 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.image.GlideImageLoader;
+import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.PlaceCardPresenter;
 import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.mvp.view.PlaceCardView;
@@ -44,6 +46,8 @@ public class PlaceCardFragment extends MvpAppCompatFragment implements PlaceCard
     @InjectPresenter
     PlaceCardPresenter presenter;
 
+    private IImageLoader imageLoader;
+
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -56,42 +60,44 @@ public class PlaceCardFragment extends MvpAppCompatFragment implements PlaceCard
         View view = inflater.inflate(R.layout.place_card_fragment, container, false);
         ButterKnife.bind(this, view);
 
+        imageLoader = new GlideImageLoader();
+
         return view;
     }
 
 
     @Override
     public void setAuthorNameTextView(String userName) {
-
+        authorNameTextView.setText(userName);
     }
 
     @Override
     public void setAuthorAvatarImageView(String imageUrl) {
-
+        imageLoader.loadInto(authorAvatarImageView, imageUrl);
     }
 
     @Override
     public void setTitleTextView(String title) {
-
+        placeCardTitleTextView.setText(title);
     }
 
     @Override
-    public void setFerstTextView(String text) {
-
+    public void setFirstTextView(String text) {
+        placeCardFirstTextView.setText(text);
     }
 
     @Override
     public void setFirstImageView(String imageUrl) {
-
+        imageLoader.loadInto(placeCardFirstImageView, imageUrl);
     }
 
     @Override
     public void setSecondTextView(String text) {
-
+        placeCardSecondTextView.setText(text);
     }
 
     @Override
     public void setSecondImageView(String imageUrl) {
-
+        imageLoader.loadInto(placeCardSecondImageView, imageUrl);
     }
 }

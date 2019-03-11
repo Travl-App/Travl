@@ -10,7 +10,7 @@ public interface PlaceCardView extends MvpView {
     void setAuthorNameTextView(String userName);
     void setAuthorAvatarImageView(String imageUrl);
     void setTitleTextView(String title);
-    void setFerstTextView(String text);
+    void setFirstTextView(String text);
     void setFirstImageView(String imageUrl);
     void setSecondTextView(String text);
     void setSecondImageView(String imageUrl);
