@@ -118,6 +118,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
+
         Style style = mapBoxMap.getStyle();
         if (style != null) {
             GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
