@@ -77,6 +77,7 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-building-v7:0.5.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v7:0.8.0'
 
     //Multi Fab
     implementation 'com.github.leinardi:FloatingActionButtonSpeedDial:master-SNAPSHOT'

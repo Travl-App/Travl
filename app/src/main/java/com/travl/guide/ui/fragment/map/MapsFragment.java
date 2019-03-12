@@ -32,6 +32,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
@@ -105,6 +106,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         mapView.getMapAsync(mapBoxMap -> {
             this.mapBoxMap = mapBoxMap;
             mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
+                LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
+                localizationPlugin.matchMapLanguageWithDeviceDefault();
                 //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
                 findUser(style);
                 presenter.getPlaces();
