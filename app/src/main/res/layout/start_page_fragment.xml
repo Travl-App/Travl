@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -95,6 +95,7 @@
             app:layout_constraintTop_toBottomOf="@id/main_page_images_linear_layout" />
 
         <FrameLayout
+            android:nestedScrollingEnabled="false"
             android:id="@+id/start_page_places_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,4 +103,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/places_container_title" />
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
