@@ -15,6 +15,7 @@
         mapbox:mapbox_cameraTargetLat="59.9386300"
         mapbox:mapbox_cameraTargetLng="30.3141300"
         mapbox:mapbox_cameraTilt="60"
-        mapbox:mapbox_cameraZoom="12" />
+        mapbox:mapbox_cameraZoom="12"
+        mapbox:mapbox_uiRotateGestures="false" />
 
 </android.support.constraint.ConstraintLayout>

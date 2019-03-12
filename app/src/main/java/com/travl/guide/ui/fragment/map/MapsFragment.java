@@ -34,6 +34,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MapsPresenter;
@@ -48,8 +50,11 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
+
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
+    public static final String PLACES_GEO_SOURCE = "places_geo_source";
     @InjectPresenter
     MapsPresenter presenter;
     @BindView(R.id.mapView)
@@ -102,12 +107,26 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
                 //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
                 findUser(style);
+                presenter.getPlaces();
             });
         });
         //TODO: Смена языка
         // Layer mapText = Objects.requireNonNull(mapBoxMap.getStyle()).getLayer("country-label");
         // if(mapText != null)
         // mapText.setProperties(textField("{name_ru}"));
+    }
+
+    @Override
+    public void onPlacesLoaded(List<Feature> markerCoordinates) {
+        Style style = mapBoxMap.getStyle();
+        if (style != null) {
+            GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
+            style.addSource(geoJsonSource);
+            style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_white));
+            style.addLayer(new SymbolLayer("marker-layer", PLACES_GEO_SOURCE)
+                    .withProperties(PropertyFactory.iconImage("place_image"),
+                            iconOffset(new Float[]{0f, -9f})));
+        }
     }
 
     @SuppressLint("MissingPermission")
