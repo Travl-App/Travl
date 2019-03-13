@@ -31,7 +31,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     PlacesRepo placesRepo;
     private MapsModel model;
     private Scheduler scheduler;
-    public MapsPresenter mapPresenter;
 
     public MapsPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;

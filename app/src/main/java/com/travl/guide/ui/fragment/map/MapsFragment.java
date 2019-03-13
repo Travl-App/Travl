@@ -55,7 +55,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
-    public static final String PLACES_GEO_SOURCE = "places_geo_source";
     @InjectPresenter
     MapsPresenter presenter;
     @BindView(R.id.mapView)
@@ -64,6 +63,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     private MapboxMap mapBoxMap;
     private PermissionsManager permissionsManager;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+    public static final String PLACES_GEO_SOURCE = "places_geo_source";
 
     @Override
     public void onAttach(Context context) {
@@ -105,31 +105,33 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void setupMapBox() {
         mapView.getMapAsync(mapBoxMap -> {
             this.mapBoxMap = mapBoxMap;
+
+            //TODO: Строка ниже ставит стиль, который просила Кристина, но ломает всё вокруг
+            //TODO: О том, как ставить кастом стили можно посмотреть здесь -> https://bitly.su/m2NK
+            //mapBoxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx"));
+
             mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
+
                 //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
                 findUser(style);
+
                 presenter.getPlaces();
             });
         });
-        //TODO: Смена языка
-        // Layer mapText = Objects.requireNonNull(mapBoxMap.getStyle()).getLayer("country-label");
-        // if(mapText != null)
-        // mapText.setProperties(textField("{name_ru}"));
     }
 
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
-
         Style style = mapBoxMap.getStyle();
-        if (style != null) {
+        if(style != null) {
             GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
             style.addSource(geoJsonSource);
             style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_white));
             style.addLayer(new SymbolLayer("marker-layer", PLACES_GEO_SOURCE)
                     .withProperties(PropertyFactory.iconImage("place_image"),
-                            iconOffset(new Float[]{0f, -9f})));
+                            iconOffset(new Float[] {0f, - 9f})));
         }
     }
 
