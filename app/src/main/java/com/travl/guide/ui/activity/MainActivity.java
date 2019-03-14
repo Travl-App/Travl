@@ -89,6 +89,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         App.getInstance().getAppComponent().inject(this);
         setContentView(R.layout.activity_main);

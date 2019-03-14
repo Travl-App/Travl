@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Атрибут android:opacity=”opaque” предотвращает черные мигания при переходе к нашей теме -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <!-- Цвет фона, предпочтительно как в главной теме -->
+    <item android:drawable="@color/colorPrimaryDark" />
+    <item
+        android:drawable="@drawable/ic_balloon"
+        android:gravity="center" />
+    <!-- Нужно будет поставить нормальнкю картинку -->
+</layer-list>

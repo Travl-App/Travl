@@ -133,6 +133,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                     .withProperties(PropertyFactory.iconImage("place_image"),
                             iconOffset(new Float[] {0f, - 9f})));
         }
+
     }
 
     @SuppressLint("MissingPermission")
