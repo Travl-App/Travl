@@ -103,7 +103,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
         }
     }
 
-
     @Override
     public void initUI() {
         Timber.d("initUI");
