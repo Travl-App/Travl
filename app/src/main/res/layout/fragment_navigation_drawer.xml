@@ -18,8 +18,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2"
-        app:menu="@menu/bottom_drawer_menu"
-        app:theme="@style/NavigationDrawerStyle" />
+        app:menu="@menu/bottom_drawer_menu" />
 
     <TextView
         android:id="@+id/app_bar_tittle"

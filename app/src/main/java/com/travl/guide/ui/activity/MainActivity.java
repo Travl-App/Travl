@@ -89,6 +89,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         App.getInstance().getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
@@ -101,7 +102,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
             navigator.applyCommands(new Command[] {new Replace(new Screens.StartPageScreen())});
         }
     }
-
 
     @Override
     public void initUI() {

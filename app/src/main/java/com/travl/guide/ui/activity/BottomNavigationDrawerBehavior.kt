@@ -20,6 +20,8 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
     private var bottomNavigationDrawerListener: BottomNavigationDrawerListener? = null
 
+    override fun getTheme(): Int = R.style.BottomSheetDialogTheme
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
         App.getInstance().appComponent.inject(this)
