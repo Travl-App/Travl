@@ -33,9 +33,6 @@ public class PlaceCardPresenter extends MvpPresenter<PlaceCardView> {
         placesRepo.loadPlaceCard("somethingParametr").observeOn(scheduler).subscribe(placeCardEntity -> {
                     getViewState().setAuthorNameTextView(placeCardEntity.getAuthorName());
                     //set other place card views
-                },
-                throwable -> {
-                    Timber.e(throwable);
-                });
+                }, Timber::e);
     }
 }

@@ -14,4 +14,7 @@ public interface MapsView extends MvpView {
 
     @StateStrategyType(value = SkipStrategy.class)
     void onPlacesLoaded(List<Feature> markerCoordinates);
+
+    @StateStrategyType(value = SkipStrategy.class)
+    void findUser();
 }
