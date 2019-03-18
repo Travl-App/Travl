@@ -2,6 +2,7 @@ package com.travl.guide.navigator;
 
 import android.support.v4.app.Fragment;
 
+import com.travl.guide.ui.fragment.PlaceFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.places.PlacesFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
@@ -31,6 +32,14 @@ public class Screens extends Screen {
         @Override
         public Fragment getFragment() {
             return new StartPageFragment();
+        }
+    }
+
+    public static class PlaceScreen extends SupportAppScreen {
+
+        @Override
+        public Fragment getFragment() {
+            return new PlaceFragment();
         }
     }
 }
