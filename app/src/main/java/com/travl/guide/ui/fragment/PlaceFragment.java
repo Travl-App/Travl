@@ -39,7 +39,6 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @BindView(R.id.text_view_place)
     TextView placeTextView;
 
-
     @InjectPresenter
     PlacePresenter presenter;
 
