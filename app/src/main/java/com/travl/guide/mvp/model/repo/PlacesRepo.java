@@ -19,4 +19,9 @@ public class PlacesRepo {
         Timber.d("Loading Places");
         return netService.getPlaces(userName, position, radius).subscribeOn(Schedulers.io());
     }
+
+//    public Single<PlaceEntity> loadPlace(String somethingParameter) {
+//        Timber.d("Loading Place");
+//        return netService.getPlace(...).subscribeOn(Schedulers.io());
+//    }
 }
