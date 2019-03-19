@@ -105,19 +105,11 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void setupMapBox() {
         mapView.getMapAsync(mapBoxMap -> {
             this.mapBoxMap = mapBoxMap;
-
-            //TODO: Строка ниже ставит стиль, который просила Кристина, но ломает всё вокруг
-            //TODO: О том, как ставить кастом стили можно посмотреть здесь -> https://bitly.su/m2NK
-            //mapBoxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx"));
-
             mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
-
-                //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
-                findUser(style);
-
-                presenter.loadPlacesLinks();
+                presenter.getPlacesLinks();
+                presenter.showLocations();
             });
         });
     }
@@ -136,11 +128,12 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     }
 
+    @Override
     @SuppressLint("MissingPermission")
-    public void findUser(Style loadedMapStyle) {
+    public void findUser() {
         if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             LocationComponent locationComponent = mapBoxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(App.getInstance(), loadedMapStyle);
+            locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.NORMAL);
@@ -183,10 +176,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void onPermissionResult(boolean granted) {
-        if(granted)
-            mapBoxMap.getStyle(this::findUser);
-        else
-            Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
+        if(granted) findUser();
+        else Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -45,6 +45,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     public void setupMapView() {
         getViewState().setupMapBox();
     }
+    public void showLocations() {
+        getViewState().findUser();
+    }
 
     public void loadPlacesLinks() {
         SingleObserver<PlacesMap> observer = new SingleObserver<PlacesMap>() {
