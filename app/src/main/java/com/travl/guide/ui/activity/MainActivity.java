@@ -113,9 +113,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
     @Override
     public void initEvents() {
         Timber.d("initEvents");
-        bar.setNavigationOnClickListener(view ->
+        bar.setNavigationOnClickListener(view -> {
+            if (!getSupportFragmentManager().executePendingTransactions() && !navigationDrawer.isAdded()) {
                 navigationDrawer.show(getSupportFragmentManager(),
-                        navigationDrawer.getTag()));
+                        navigationDrawer.getTag());
+            }
+        });
+
     }
 
     public void onMoveToPlaceScreen() {

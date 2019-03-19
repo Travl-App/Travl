@@ -70,8 +70,8 @@
                 android:id="@+id/image_view_place_card_first_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
                 android:padding="@dimen/place_card_padding"
                 android:scaleType="centerCrop"
                 android:src="@drawable/fireman_1" />
@@ -88,8 +88,8 @@
                 android:id="@+id/image_view_place_card_second_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
                 android:padding="@dimen/place_card_padding"
                 android:scaleType="centerCrop"
                 android:src="@drawable/fireman_2" />

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mapbox.mapboxsdk.maps.MapView android:id="@+id/mapView"
+<com.mapbox.mapboxsdk.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mapView"
     mapbox:mapbox_cameraTargetLat="59.9386300"
     mapbox:mapbox_cameraTargetLng="30.3141300"
-    mapbox:mapbox_cameraTilt="60"
+    mapbox:mapbox_cameraTilt="0"
     mapbox:mapbox_cameraZoom="12"
-    mapbox:mapbox_uiRotateGestures="false"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    mapbox:mapbox_uiRotateGestures="false" />

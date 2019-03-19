@@ -21,7 +21,7 @@ public class PlacesRepo {
         return netService.getPlaces(userName, position, radius).subscribeOn(Schedulers.io());
     }
 
-    public  Single<PlaceCardEtity> loadPlaceCard(String somethingParameter){
+    public Single<PlaceCardEtity> loadPlaceCard(String somethingParameter) {
         Timber.d("Loading Place Card");
         return netService.getPlaceCard(somethingParameter).subscribeOn(Schedulers.io());
     }

@@ -71,9 +71,9 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
             bottomSheetBehavior.setBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                     if (slideOffset > 0.5) {
-                        app_bar_close_icon.visibility = View.VISIBLE
+                        app_bar_close_icon?.visibility = View.VISIBLE
                     } else {
-                        app_bar_close_icon.visibility = View.GONE
+                        app_bar_close_icon?.visibility = View.GONE
                     }
                 }
 
