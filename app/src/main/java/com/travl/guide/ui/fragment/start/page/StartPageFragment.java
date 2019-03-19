@@ -17,7 +17,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.mvp.view.StartPageView;
-import com.travl.guide.ui.fragment.places.PlacesFragment;
+import com.travl.guide.ui.fragment.places.ArticlesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +72,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void initPlacesFragment() {
-        Fragment placesFragment = new PlacesFragment();
+        Fragment placesFragment = new ArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.start_page_places_container, placesFragment).commit();
     }

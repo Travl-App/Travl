@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.model.places;
+package com.travl.guide.mvp.model.api.places;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

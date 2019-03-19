@@ -5,9 +5,9 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
+import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.PlacesMap;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
-import com.travl.guide.mvp.model.places.Place;
-import com.travl.guide.mvp.model.places.PlacesMap;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.MapsView;
 
@@ -46,7 +46,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().setupMapBox();
     }
 
-    public void getPlaces() {
+    public void loadPlacesLinks() {
         SingleObserver<PlacesMap> observer = new SingleObserver<PlacesMap>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -55,7 +55,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
             @Override
             public void onSuccess(PlacesMap placesMap) {
-                getViewState().onPlacesLoaded(parsePlacesMapToFeautures(placesMap));
+                loadPlacesList(placesMap);
             }
 
             @Override
@@ -63,14 +63,35 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 Timber.e(e);
             }
         };
-        placesRepo.loadPlaces("travl", new CoordinatesRequest(59.89432427, 30.27730692), 1.0).observeOn(scheduler).subscribe(observer);
+        placesRepo.loadPlacesLinks("travl", new CoordinatesRequest(59.89432427, 30.27730692), 7.0).observeOn(scheduler).subscribe(observer);
     }
 
-    private List<Feature> parsePlacesMapToFeautures(PlacesMap placesMap) {
-        List<Place> placeList = placesMap.getPlaces();
+    private void loadPlacesList(PlacesMap placesMap) {
+        SingleObserver<List<Place>> observer = new SingleObserver<List<Place>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Place> places) {
+                Timber.e("loadPlacesList = Success");
+                getViewState().onPlacesLoaded(parsePlacesListToFeautures(places));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e);
+            }
+        };
+        placesRepo.getPlacesList("travl", placesMap).observeOn(scheduler).subscribe(observer);
+    }
+
+    private List<Feature> parsePlacesListToFeautures(List<Place> places) {
+        Timber.e("Parsing coordinates");
         List<Feature> features = new ArrayList<>();
-        for (int i = 0; i < placeList.size(); i++) {
-            Place place = placeList.get(i);
+        for (int i = 0; i < places.size(); i++) {
+            Place place = places.get(i);
             double[] coordinates = place.getCoordinates();
             double longitude = coordinates[1];
             double latitude = coordinates[0];

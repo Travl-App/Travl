@@ -16,8 +16,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
-import com.travl.guide.mvp.presenter.PlacesPresenter;
-import com.travl.guide.mvp.view.PlacesView;
+import com.travl.guide.mvp.presenter.ArticlesPresenter;
+import com.travl.guide.mvp.view.ArticlesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.PlacesAdapter;
 
@@ -27,11 +27,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
+public class ArticlesFragment extends MvpAppCompatFragment implements ArticlesView {
 
     private static final int SPAN_COUNT = 2;
     @InjectPresenter
-    PlacesPresenter presenter;
+    ArticlesPresenter presenter;
     @Inject
     IImageLoader imageLoader;
     @BindView(R.id.collection_recycler)
@@ -40,11 +40,11 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.places_fragment, container, false);
+        View view = inflater.inflate(R.layout.articles_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
-        presenter.loadPlaces();
+        presenter.loadArticles();
         return view;
     }
 
@@ -54,19 +54,19 @@ public class PlacesFragment extends MvpAppCompatFragment implements PlacesView {
         } else {
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
         }
-        PlacesAdapter adapter = new PlacesAdapter(presenter.placePresenter, imageLoader);
+        PlacesAdapter adapter = new PlacesAdapter(presenter.articleListPresenter, imageLoader);
         recycler.setAdapter(adapter);
     }
 
     @ProvidePresenter
-    public PlacesPresenter providePresenter() {
-        PlacesPresenter presenter = new PlacesPresenter(AndroidSchedulers.mainThread());
+    public ArticlesPresenter providePresenter() {
+        ArticlesPresenter presenter = new ArticlesPresenter(AndroidSchedulers.mainThread());
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
     }
 
     @Override
-    public void onChangedPlacesData() {
+    public void onChangedArticlesData() {
         if (recycler != null && recycler.getAdapter() != null) {
             recycler.getAdapter().notifyDataSetChanged();
         }

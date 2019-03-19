@@ -117,7 +117,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 //TODO: Этот метод нужно вызывать только при первом открытии приложения или по нажатию кнопки
                 findUser(style);
 
-                presenter.getPlaces();
+                presenter.loadPlacesLinks();
             });
         });
     }

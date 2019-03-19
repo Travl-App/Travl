@@ -15,10 +15,14 @@
     <string name="test_city">City</string>
     <string name="start_page_title">Главная</string>
     <string name="travl_zine_title">Travl Zine</string>
-    <!--Place card strings-->
-    <string name="author">Author:</string>
-    <string name="author_name"> author_name</string>
+    <!--Place strings-->
+    <string name="author">Author: </string>
+    <string name="author_name">author_name</string>
+    <string name="address">Address: </string>
+    <string name="place_address"> place_address</string>
     <string name="title"> title</string>
+    <string name="subtitle"> subtitle</string>
+    <string name="image_view_content_description">image_view</string>
     <string name="first_text">Товарищ, я вахты не в силах стоять,\n
                             Сказал кочегар кочегару.\n
                             Огни в моих топках совсем не горят,\n
@@ -29,12 +33,5 @@
                             Термометр поднялся аж на сорок пять,\n
                             Без воздуха вся кочегарка.\n
     </string>
-    <string name="second_text">Дом, в котором живет тепло, — место самое, что ни на есть реальное.
-        Это уже совсем не то, что раньше называлось кочегаркой или каптеркой.
-        Современные котельные куда чище, аккуратнее и модернизированней своих предшественниц,
-        которые работали на угле, хотя по возрасту своему могут сравниться с самыми старыми заводами области.
-        И несмотря на то, что с каждым годом автономное поквартирное отопление становится все актуальнее,
-        сотрудники старых проверенных временем советских котельных в один голос говорят, что еще век прослужат — не шелохнутся.
-    </string>
-    <string name="loading">Загрузка...</string>
+
 </resources>

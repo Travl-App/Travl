@@ -18,7 +18,7 @@ import com.travl.guide.mvp.view.MainView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.fragment.map.MapsFragment;
-import com.travl.guide.ui.fragment.places.PlacesFragment;
+import com.travl.guide.ui.fragment.places.ArticlesFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
 
 import javax.inject.Inject;
@@ -58,7 +58,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if(command instanceof Replace && nextFragment instanceof PlacesFragment) {
+            if (command instanceof Replace && nextFragment instanceof ArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPlaceScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {

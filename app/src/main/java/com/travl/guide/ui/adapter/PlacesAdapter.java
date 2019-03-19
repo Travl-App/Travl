@@ -10,27 +10,27 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
-import com.travl.guide.mvp.presenter.list.PlacePresenter;
-import com.travl.guide.mvp.view.list.PlacesItemView;
+import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
+import com.travl.guide.mvp.view.list.ArticlesItemView;
 
-public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder> {
+public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ArticlesViewHolder> {
 
-    private PlacePresenter presenter;
+    private ArticleListPresenter presenter;
     private IImageLoader imageLoader;
 
-    public PlacesAdapter(PlacePresenter presenter, IImageLoader imageLoader) {
+    public PlacesAdapter(ArticleListPresenter presenter, IImageLoader imageLoader) {
         this.presenter = presenter;
         this.imageLoader = imageLoader;
     }
 
     @NonNull
     @Override
-    public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new PlacesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
+    public ArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new ArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ArticlesViewHolder holder, int position) {
         RxView.clicks(holder.itemView).map(obj -> holder).subscribe(presenter.getClickSubject());
         holder.position = position;
         presenter.bindView(holder);
@@ -41,12 +41,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlacesView
         return presenter.getListCount();
     }
 
-    public class PlacesViewHolder extends RecyclerView.ViewHolder implements PlacesItemView {
+    public class ArticlesViewHolder extends RecyclerView.ViewHolder implements ArticlesItemView {
 
         int position = 0;
         private MaterialCardView cardView;
 
-        PlacesViewHolder(@NonNull MaterialCardView cardView) {
+        ArticlesViewHolder(@NonNull MaterialCardView cardView) {
             super(cardView);
             this.cardView = cardView;
         }

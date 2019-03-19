@@ -1,6 +1,6 @@
 package com.travl.guide.mvp.view.list;
 
-public interface PlacesItemView {
+public interface ArticlesItemView {
     int getPos();
 
     void setImage(String url);
