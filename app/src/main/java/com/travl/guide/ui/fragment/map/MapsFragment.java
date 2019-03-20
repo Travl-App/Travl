@@ -105,10 +105,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void setupMapBox() {
         mapView.getMapAsync(mapBoxMap -> {
             this.mapBoxMap = mapBoxMap;
-            mapBoxMap.setStyle(Style.TRAFFIC_NIGHT, style -> {
+            mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
-                presenter.getPlacesLinks();
+//                presenter.loadPlacesLinks();
                 presenter.showLocations();
             });
         });
@@ -117,13 +117,13 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
         Style style = mapBoxMap.getStyle();
-        if (style != null) {
+        if(style != null) {
             GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
             style.addSource(geoJsonSource);
             style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_white));
             style.addLayer(new SymbolLayer("marker-layer", PLACES_GEO_SOURCE)
                     .withProperties(PropertyFactory.iconImage("place_image"),
-                            iconOffset(new Float[]{0f, -9f})));
+                            iconOffset(new Float[] {0f, - 9f})));
         }
 
     }
@@ -177,7 +177,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Override
     public void onPermissionResult(boolean granted) {
         if(granted) findUser();
-        else Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
     }
 
     @Override
