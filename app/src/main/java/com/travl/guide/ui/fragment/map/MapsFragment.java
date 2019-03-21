@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
@@ -60,6 +62,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @BindView(R.id.mapView)
     MapView mapView;
 
+    private LocationComponent locationComponent;
     private MapboxMap mapBoxMap;
     private PermissionsManager permissionsManager;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
@@ -108,7 +111,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
-//                presenter.loadPlacesLinks();
+                presenter.loadPlacesForMap();
                 presenter.showLocations();
             });
         });
@@ -132,7 +135,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @SuppressLint("MissingPermission")
     public void findUser() {
         if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            LocationComponent locationComponent = mapBoxMap.getLocationComponent();
+            locationComponent = mapBoxMap.getLocationComponent();
             locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
@@ -141,6 +144,23 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(getActivity());
         }
+        setUserCoordinates();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void setUserCoordinates() {
+        double[] coordinates = new double[2];
+        coordinates[0] = 0;
+        coordinates[1] = 0;
+        if (locationComponent != null) {
+            Location location = locationComponent.getLastKnownLocation();
+            if (location != null) {
+                coordinates[0] = location.getLatitude();
+                coordinates[1] = location.getLongitude();
+                Timber.e("User coordinates set to: " + coordinates[0] + ", " + coordinates[1]);
+            }
+        }
+        User.getInstance().setCoordinates(coordinates);
     }
 
     @Override

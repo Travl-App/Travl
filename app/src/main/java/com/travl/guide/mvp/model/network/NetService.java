@@ -9,10 +9,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NetService {
-    @GET("api/users/{username}/places/")
-    Single<PlacesMap> getPlaces(@Path("username") String user, @Query(value = "position", encoded = true) CoordinatesRequest position, @Query("radius") double radius);
+    @GET("api/users/{username}/map/")
+    Single<PlacesMap> getPlacesForMap(@Path("username") String user, @Query(value = "position", encoded = true) CoordinatesRequest position, @Query("radius") double radius, @Query("detailed") int detailed);
 
-    //Single<PlaceEntity> getPlace(...);
     @GET("api/users/{username}/places/{id}")
     Single<Place> getPlace(@Path("username") String user, @Path("id") int id);
 

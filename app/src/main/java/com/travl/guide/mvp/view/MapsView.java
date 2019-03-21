@@ -17,4 +17,5 @@ public interface MapsView extends MvpView {
 
     @StateStrategyType(value = SkipStrategy.class)
     void findUser();
+
 }
