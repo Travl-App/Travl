@@ -66,7 +66,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 Timber.e(e);
             }
         };
-        placesRepo.loadPlacesForMap("travl", new CoordinatesRequest(60, 31), 0.6, 1).observeOn(scheduler).subscribe(observer);
+        placesRepo.loadPlacesForMap("travl", new CoordinatesRequest(60, 31), 7, 1).observeOn(scheduler).subscribe(observer);
     }
 
     private List<Feature> parsePlaceLinksListToFeautures(List<PlaceLink> places) {

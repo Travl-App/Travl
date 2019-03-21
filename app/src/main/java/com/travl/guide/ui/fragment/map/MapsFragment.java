@@ -123,7 +123,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         if(style != null) {
             GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
             style.addSource(geoJsonSource);
-            style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_white));
+            style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_black));
             style.addLayer(new SymbolLayer("marker-layer", PLACES_GEO_SOURCE)
                     .withProperties(PropertyFactory.iconImage("place_image"),
                             iconOffset(new Float[] {0f, - 9f})));
