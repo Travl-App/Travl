@@ -12,10 +12,8 @@ import java.util.List;
 public interface MapsView extends MvpView {
     void setupMapBox();
 
-    @StateStrategyType(value = SkipStrategy.class)
     void onPlacesLoaded(List<Feature> markerCoordinates);
 
     @StateStrategyType(value = SkipStrategy.class)
     void findUser();
-
 }

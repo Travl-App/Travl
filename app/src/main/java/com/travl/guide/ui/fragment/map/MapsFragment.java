@@ -54,19 +54,22 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
+import static com.travl.guide.ui.utils.MapUtils.MARKER_LAYER;
+import static com.travl.guide.ui.utils.MapUtils.PLACES_GEO_SOURCE;
+import static com.travl.guide.ui.utils.MapUtils.PLACE_IMAGE;
+import static com.travl.guide.ui.utils.MapUtils.REQUEST_CODE_AUTOCOMPLETE;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
-    @InjectPresenter
-    MapsPresenter presenter;
     @BindView(R.id.mapView)
     MapView mapView;
+    @InjectPresenter
+    MapsPresenter presenter;
 
-    private LocationComponent locationComponent;
     private MapboxMap mapBoxMap;
+    private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
-    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
-    public static final String PLACES_GEO_SOURCE = "places_geo_source";
+
 
     @Override
     public void onAttach(Context context) {
@@ -111,24 +114,52 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
+
+                /* Отключение всякой херни мапбоксовской */
+                mapBoxMap.getUiSettings().setCompassEnabled(false);
+                mapBoxMap.getUiSettings().setLogoEnabled(false);
+                mapBoxMap.getUiSettings().setAttributionEnabled(false);
+
                 presenter.loadPlacesForMap();
                 presenter.showLocations();
             });
         });
     }
 
+    public void setupOnMapViewClickListener() {
+        mapBoxMap.addOnMapClickListener(point -> {
+
+            //TODO: Поднимаем view превью места
+//            PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
+//            List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, CALLOUT_LAYER_ID);
+//            PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(features.get(0)));
+
+            onMarkerClickCallback(point.toString());
+            return false;
+        });
+    }
+
+    private void onMarkerClickCallback(String location) {
+        Toast.makeText(getContext(), "Нажат маркер c координатами: " + location, Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
         Style style = mapBoxMap.getStyle();
         if(style != null) {
+            SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
+                    .withProperties(PropertyFactory.iconImage(PLACE_IMAGE), iconOffset(new Float[] {0f, - 9f}));
+
             GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
             style.addSource(geoJsonSource);
-            style.addImage("place_image", getResources().getDrawable(R.drawable.ic_place_black));
-            style.addLayer(new SymbolLayer("marker-layer", PLACES_GEO_SOURCE)
-                    .withProperties(PropertyFactory.iconImage("place_image"),
-                            iconOffset(new Float[] {0f, - 9f})));
-        }
 
+            //TODO: здесь в заисимости от категории места ставим подходящую иконку
+            style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
+            style.addLayer(layer);
+
+            /* По загрузке мест вешаем на них слушатели */
+            setupOnMapViewClickListener();
+        }
     }
 
     @Override
@@ -152,9 +183,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         double[] coordinates = new double[2];
         coordinates[0] = 0;
         coordinates[1] = 0;
-        if (locationComponent != null) {
+        if(locationComponent != null) {
             Location location = locationComponent.getLastKnownLocation();
-            if (location != null) {
+            if(location != null) {
                 coordinates[0] = location.getLatitude();
                 coordinates[1] = location.getLongitude();
                 Timber.e("User coordinates set to: " + coordinates[0] + ", " + coordinates[1]);

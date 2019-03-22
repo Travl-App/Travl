@@ -45,6 +45,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     public void setupMapView() {
         getViewState().setupMapBox();
     }
+
     public void showLocations() {
         getViewState().findUser();
     }
@@ -66,15 +67,17 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 Timber.e(e);
             }
         };
-        placesRepo.loadPlacesForMap("travl", new CoordinatesRequest(60, 31), 7, 1).observeOn(scheduler).subscribe(observer);
+        placesRepo.loadPlacesForMap("travl",
+                new CoordinatesRequest(60, 31), 7, 1)
+                .observeOn(scheduler)
+                .subscribe(observer);
     }
 
     private List<Feature> parsePlaceLinksListToFeautures(List<PlaceLink> places) {
         Timber.e("Parsing coordinates");
         List<Feature> features = new ArrayList<>();
-        for (int i = 0; i < places.size(); i++) {
-            PlaceLink place = places.get(i);
-            double[] coordinates = place.getCoordinates();
+        for(int i = 0; i < places.size(); i++) {
+            double[] coordinates = places.get(i).getCoordinates();
             double longitude = coordinates[1];
             double latitude = coordinates[0];
             features.add(Feature.fromGeometry(Point.fromLngLat(longitude, latitude)));
