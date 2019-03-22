@@ -145,20 +145,22 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
-        Style style = mapBoxMap.getStyle();
-        if(style != null) {
-            SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
-                    .withProperties(PropertyFactory.iconImage(PLACE_IMAGE), iconOffset(new Float[] {0f, - 9f}));
+        if (mapBoxMap != null) {
+            Style style = mapBoxMap.getStyle();
+            if (style != null) {
+                SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
+                        .withProperties(PropertyFactory.iconImage(PLACE_IMAGE), iconOffset(new Float[]{0f, -9f}));
 
-            GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
-            style.addSource(geoJsonSource);
+                GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
+                style.addSource(geoJsonSource);
 
-            //TODO: здесь в заисимости от категории места ставим подходящую иконку
-            style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
-            style.addLayer(layer);
+                //TODO: здесь в заисимости от категории места ставим подходящую иконку
+                style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
+                style.addLayer(layer);
 
-            /* По загрузке мест вешаем на них слушатели */
-            setupOnMapViewClickListener();
+                /* По загрузке мест вешаем на них слушатели */
+                setupOnMapViewClickListener();
+            }
         }
     }
 
