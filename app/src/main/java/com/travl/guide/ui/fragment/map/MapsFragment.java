@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -45,6 +47,7 @@ import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,6 +61,7 @@ import static com.travl.guide.ui.utils.MapUtils.MARKER_LAYER;
 import static com.travl.guide.ui.utils.MapUtils.PLACES_GEO_SOURCE;
 import static com.travl.guide.ui.utils.MapUtils.PLACE_IMAGE;
 import static com.travl.guide.ui.utils.MapUtils.REQUEST_CODE_AUTOCOMPLETE;
+import static com.travl.guide.ui.utils.MapUtils.convertToLatLng;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
@@ -67,9 +71,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     MapsPresenter presenter;
 
     private MapboxMap mapBoxMap;
+    private GeoJsonSource source;
+    private HashMap<String, View> viewMap;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
-
 
     @Override
     public void onAttach(Context context) {
@@ -129,12 +134,21 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void setupOnMapViewClickListener() {
         mapBoxMap.addOnMapClickListener(point -> {
 
-            //TODO: Поднимаем view превью места
-//            PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
-//            List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, CALLOUT_LAYER_ID);
-//            PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(features.get(0)));
+            PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
+            List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, MARKER_LAYER);
+            if(! features.isEmpty()) {
+                Feature feature = features.get(0);
+//                PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
+                MarkerOptions marker = new MarkerOptions()
+                        .position(convertToLatLng(feature))
+                        .title("Заголовок")
+                        .snippet("Описание");
+                mapBoxMap.selectMarker(marker.getMarker());
 
-            onMarkerClickCallback(point.toString());
+                } else {
+                onMarkerClickCallback(point.toString());
+            }
+
             return false;
         });
     }
@@ -145,20 +159,19 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
-        if (mapBoxMap != null) {
+        if(mapBoxMap != null) {
             Style style = mapBoxMap.getStyle();
-            if (style != null) {
+            if(style != null) {
                 SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
-                        .withProperties(PropertyFactory.iconImage(PLACE_IMAGE), iconOffset(new Float[]{0f, -9f}));
+                        .withProperties(PropertyFactory.iconImage(PLACE_IMAGE),
+                                iconOffset(new Float[] {0f, - 9f}));
 
                 GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
                 style.addSource(geoJsonSource);
 
-                //TODO: здесь в заисимости от категории места ставим подходящую иконку
                 style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
                 style.addLayer(layer);
 
-                /* По загрузке мест вешаем на них слушатели */
                 setupOnMapViewClickListener();
             }
         }

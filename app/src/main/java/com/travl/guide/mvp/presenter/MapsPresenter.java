@@ -82,6 +82,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             double latitude = coordinates[0];
             features.add(Feature.fromGeometry(Point.fromLngLat(longitude, latitude)));
         }
+
         return features;
     }
 }
