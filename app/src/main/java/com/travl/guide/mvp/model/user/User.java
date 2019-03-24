@@ -21,4 +21,8 @@ public class User {
     public void setCoordinates(double[] coordinates) {
         this.coordinates = coordinates;
     }
+
+    public String getDefaultUserName() {
+        return "travl";
+    }
 }

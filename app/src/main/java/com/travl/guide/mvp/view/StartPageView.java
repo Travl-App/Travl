@@ -9,5 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface StartPageView extends MvpView {
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void initPlacesFragment();
+    void initArticlesFragment();
+
+    void setCityName(String placeName);
 }

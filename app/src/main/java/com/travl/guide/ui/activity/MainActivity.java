@@ -33,7 +33,7 @@ import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView, StartPageFragment.StartPageEventsListener, BottomNavigationDrawerListener {
+public class MainActivity extends MvpAppCompatActivity implements MainView, BottomNavigationDrawerListener {
 
     @Inject
     Router router;
@@ -188,18 +188,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Star
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    //StartPageEventsListener
-    @Override
-    public void onPlaceCollectionsClick() {
-        presenter.toPlaceScreen();
-    }
-
-    @Override
-    public void onMapClick() {
-        presenter.toMapScreen();
     }
 
     //BottomNavigationDrawerListener
