@@ -5,16 +5,18 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/start_page_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/start_page_city_info_relative_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
         <LinearLayout
-            android:id="@+id/main_page_text_linear_layout"
+            android:id="@+id/start_page_city_info_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin"
@@ -50,11 +52,12 @@
                 android:src="@drawable/cloud_icon_foreground" />
 
         </LinearLayout>
+
             <ImageView
                 android:id="@+id/city_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginEnd="@dimen/standard_margin"
                 android:contentDescription="@string/place_collections"

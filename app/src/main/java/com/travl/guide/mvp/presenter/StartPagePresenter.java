@@ -39,10 +39,14 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
             @Override
             public void onSuccess(CityContent cityContent) {
-                City city = cityContent.getCity();
-                if (city == null) {
+                int status = cityContent.getStatus();
+                City city = null;
+                if (status == 200) {
+                    city = cityContent.getCity();
+                } else if (status == 404) {
                     city = cityContent.getContext();
                 }
+
                 if (city != null) {
                     getViewState().setCityName(city.getPlaceName());
                 }

@@ -18,10 +18,16 @@ public class CityContent {
     @Expose
     private City context;
 
+    @SerializedName("status")
+    @Expose
+    private int status;
 
-    public CityContent(String userName, City city) {
-        this.userName = userName;
-        this.city = city;
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getUserName() {
