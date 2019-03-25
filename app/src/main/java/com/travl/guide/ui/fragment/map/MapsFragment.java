@@ -155,6 +155,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     private void onMarkerClickCallback(String location) {
         Toast.makeText(getContext(), "Нажат маркер c координатами: " + location, Toast.LENGTH_LONG).show();
+        presenter.toPlaceScreen();
     }
 
     @Override

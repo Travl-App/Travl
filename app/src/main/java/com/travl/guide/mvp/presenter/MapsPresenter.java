@@ -10,6 +10,7 @@ import com.travl.guide.mvp.model.api.places.PlacesMap;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.MapsView;
+import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,5 +85,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         }
 
         return features;
+    }
+
+    public void toPlaceScreen() {
+        router.replaceScreen(new Screens.PlaceScreen());
     }
 }

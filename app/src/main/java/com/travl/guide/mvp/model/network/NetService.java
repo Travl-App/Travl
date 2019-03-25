@@ -22,6 +22,4 @@ public interface NetService {
 
     @GET("api/users/{username}/articles/")
     Single<Articles> getArticles(@Path("username") String user);
-
-    //Single<PlaceEntity> getPlace(...);
 }
