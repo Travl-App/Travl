@@ -80,8 +80,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     private void setCoordinates(Location lastKnownLocation) {
-        Timber.e("Setting coordinates to " + lastKnownLocation.getLatitude() + "," + lastKnownLocation.getLongitude());
-        User.getInstance().setCoordinates(new double[]{lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()});
+        if (lastKnownLocation != null) {
+            Timber.e("Setting coordinates to " + lastKnownLocation.getLatitude() + "," + lastKnownLocation.getLongitude());
+            User.getInstance().setCoordinates(new double[]{lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()});
+        }
     }
 
     @Override

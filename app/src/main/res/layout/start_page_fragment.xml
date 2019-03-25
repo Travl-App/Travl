@@ -31,7 +31,6 @@
                 android:layout_marginStart="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/small_margin"
                 android:fontFamily="monospace"
-                android:text="@string/test_city"
                 android:textSize="@dimen/start_page_text_size" />
 
             <TextView
