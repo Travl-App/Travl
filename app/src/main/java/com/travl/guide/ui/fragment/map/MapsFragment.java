@@ -145,9 +145,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         for(int i = 0; i < listPlaces.size(); i++) {
             View view = getLayoutInflater().inflate(R.layout.mapillary_layout_callout, null);
 
-            TextView titleTv = view.findViewById(R.id.title);
+//            TextView titleTv = view.findViewById(R.id.title);
 //            titleTv.setText(listPlaces.get(i).getDescription());
-            ImageView imageView = view.findViewById(R.id.logoView);
+//            ImageView imageView = view.findViewById(R.id.logoView);
 
             bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
             viewMap.put(listPlaces.get(i).getId(), view);
@@ -163,23 +163,22 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
             List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, MARKER_LAYER);
             if(! features.isEmpty()) {
+
                 Feature feature = features.get(0);
                 PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
-//
+
+                //Снизу должно передаваться id
+                new Bundle().putInt("marker_id", 0);
+                presenter.toCardScreen();
+
+                /** Не лезь, убьёт
                 View view = viewMap.get(0);
-//
                 View textContainer = view.findViewById(R.id.text_container);
-//
-//                 create hitbox for textView
                 Rect hitRectText = new Rect();
                 textContainer.getHitRect(hitRectText);
-//
-//                 move hitbox to location of symbol
                 hitRectText.offset((int) symbolScreenPoint.x, (int) symbolScreenPoint.y);
-//
-//                 offset vertically to match anchor behaviour
                 hitRectText.offset(0, - view.getMeasuredHeight());
-//
+                */
             } else {
                 onMarkerClickCallback(point.toString());
             }
@@ -188,8 +187,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     }
 
     private void onMarkerClickCallback(String location) {
-        Toast.makeText(getContext(), "Нажат маркер c координатами: " + location, Toast.LENGTH_LONG).show();
-//        presenter.toPlaceScreen();
+        Toast.makeText(getContext(), "Нажата точка c координатами: " + location, Toast.LENGTH_LONG).show();
     }
 
     @Override

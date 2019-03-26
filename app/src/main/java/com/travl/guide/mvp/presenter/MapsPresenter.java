@@ -52,7 +52,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().findUser();
     }
 
-    public void toPlaceScreen() {
+    public void toCardScreen() {
         router.replaceScreen(new Screens.PlaceScreen());
     }
 
