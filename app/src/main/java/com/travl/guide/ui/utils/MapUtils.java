@@ -12,14 +12,16 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.Objects;
 
-//Created by Squirty on 22.03.2019.
 public class MapUtils {
 
-    public static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+    public static final String LAYER_ID = "layer_id";
+    public static final String SOURCE_ID = "source_id";
+    public static final String PROPERTY_TITLE = "title";
     public static final String PLACE_IMAGE = "place_image";
     public static final String MARKER_LAYER = "marker-layer";
     public static final String PLACES_GEO_SOURCE = "places_geo_source";
-    public static final String CALLOUT_LAYER_ID = "mapbox.poi.callout";
+
+    public static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
     public static LatLng convertToLatLng(Feature feature) {
         Point symbolPoint = (Point) feature.geometry();

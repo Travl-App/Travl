@@ -1,10 +1,13 @@
 package com.travl.guide.mvp.presenter;
 
+import android.util.SparseArray;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
+import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.api.places.PlaceLink;
 import com.travl.guide.mvp.model.api.places.PlacesMap;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
@@ -13,6 +16,7 @@ import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,7 +55,11 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().findUser();
     }
 
-    public void loadPlacesForMap() {
+    public void toPlaceScreen() {
+        router.replaceScreen(new Screens.PlaceScreen());
+    }
+
+    public void makeRequest() {
         SingleObserver<PlacesMap> observer = new SingleObserver<PlacesMap>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -60,7 +68,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
             @Override
             public void onSuccess(PlacesMap placesMap) {
-                getViewState().onPlacesLoaded(parsePlaceLinksListToFeautures(placesMap.getPlaces()));
+                getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placesMap.getPlaces()));
+                getViewState().onRequestCompleted(creatingPlacesList(placesMap.getPlaces()));
             }
 
             @Override
@@ -74,8 +83,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 .subscribe(observer);
     }
 
-    private List<Feature> parsePlaceLinksListToFeautures(List<PlaceLink> places) {
-        Timber.e("Parsing coordinates");
+    private List<Feature> parsePlaceLinksListToFeatures(List<PlaceLink> places) {
+        Timber.d("Parsing coordinates");
         List<Feature> features = new ArrayList<>();
         for(int i = 0; i < places.size(); i++) {
             double[] coordinates = places.get(i).getCoordinates();
@@ -87,7 +96,19 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         return features;
     }
 
-    public void toPlaceScreen() {
-        router.replaceScreen(new Screens.PlaceScreen());
+    private List<Place> creatingPlacesList(List<PlaceLink> places) {
+        Timber.d("Creating places list");
+        List<Place> placeMap = new ArrayList<>();
+        for(int i = 0; i < places.size(); i++) {
+            Place place = new Place();
+            place.setId(places.get(i).getId());
+            place.setImageUrls(places.get(i).getImageUrls());
+            place.setDescription(places.get(i).getDescription());
+            place.setCoordinates(places.get(i).getCoordinates());
+
+            placeMap.add(place);
+        }
+
+        return placeMap;
     }
 }

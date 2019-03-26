@@ -1,7 +1,10 @@
 package com.travl.guide.mvp.model.api.places;
 
+import android.view.View;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.geojson.Feature;
 
 import java.util.List;
 
@@ -24,14 +27,18 @@ public class Place {
     @Expose
     private List<String> imageUrls;
 
+    private View view;
+    private Feature feature;
+
     public Place() {
     }
 
-    public Place(int id, double[] coordinates, String description, String author) {
+    public Place(int id, double[] coordinates, String description, String author, Feature feature) {
         this.id = id;
         this.description = description;
         this.coordinates = coordinates;
         this.author = author;
+        this.feature = feature;
     }
 
     public int getId() {
@@ -66,6 +73,21 @@ public class Place {
         this.author = author;
     }
 
+    public Feature getFeature() {
+        return feature;
+    }
+
+    public void setFeature(Feature feature) {
+        this.feature = feature;
+    }
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
 
     public List<String> getImageUrls() {
         return imageUrls;

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +26,6 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -37,10 +38,10 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
@@ -55,11 +56,14 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.travl.guide.ui.utils.MapUtils.MARKER_LAYER;
 import static com.travl.guide.ui.utils.MapUtils.PLACES_GEO_SOURCE;
 import static com.travl.guide.ui.utils.MapUtils.PLACE_IMAGE;
+import static com.travl.guide.ui.utils.MapUtils.PROPERTY_TITLE;
 import static com.travl.guide.ui.utils.MapUtils.REQUEST_CODE_AUTOCOMPLETE;
+import static com.travl.guide.ui.utils.MapUtils.SymbolGenerator;
 import static com.travl.guide.ui.utils.MapUtils.convertToLatLng;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
@@ -70,8 +74,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     MapsPresenter presenter;
 
     private MapboxMap mapBoxMap;
-    private GeoJsonSource source;
-    private HashMap<String, View> viewMap;
+    private List<Place> viewMap;
+    private HashMap<String, Bitmap> imageMap;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
 
@@ -124,10 +128,25 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
 
-                presenter.loadPlacesForMap();
+                presenter.makeRequest();
 //                presenter.showLocations();
             });
         });
+    }
+
+    @SuppressLint("UseSparseArrays")
+    @Override
+    public void onRequestCompleted(List<Place> viewMap) {
+        this.viewMap = viewMap;
+        imageMap = new HashMap<>();
+
+        for(int i = 0; i < viewMap.size(); i++) {
+            View view = getLayoutInflater().inflate(R.layout.info_place_bubble, null);
+            imageMap.put(viewMap.get(i).getDescription(), SymbolGenerator(view));
+        }
+
+        if(mapBoxMap != null)
+            mapBoxMap.getStyle().addImages(imageMap);
     }
 
     public void setupOnMapViewClickListener() {
@@ -137,24 +156,19 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, MARKER_LAYER);
             if(! features.isEmpty()) {
                 Feature feature = features.get(0);
-//                PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
-                MarkerOptions marker = new MarkerOptions()
-                        .position(convertToLatLng(feature))
-                        .title("Заголовок")
-                        .snippet("Описание");
-                mapBoxMap.selectMarker(marker.getMarker());
+                PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
 
-                } else {
+
+            } else {
                 onMarkerClickCallback(point.toString());
             }
-
             return false;
         });
     }
 
     private void onMarkerClickCallback(String location) {
         Toast.makeText(getContext(), "Нажат маркер c координатами: " + location, Toast.LENGTH_LONG).show();
-        presenter.toPlaceScreen();
+//        presenter.toPlaceScreen();
     }
 
     @Override
@@ -163,7 +177,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             Style style = mapBoxMap.getStyle();
             if(style != null) {
                 SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
-                        .withProperties(PropertyFactory.iconImage(PLACE_IMAGE),
+                        .withProperties(iconImage(PLACE_IMAGE),
                                 iconOffset(new Float[] {0f, - 9f}));
 
                 GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
