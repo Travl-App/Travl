@@ -15,10 +15,15 @@ public class User {
     }
 
     public double[] getCoordinates() {
+        if (coordinates == null) coordinates = new double[]{0, 0};
         return coordinates;
     }
 
     public void setCoordinates(double[] coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public String getDefaultUserName() {
+        return "travl";
     }
 }

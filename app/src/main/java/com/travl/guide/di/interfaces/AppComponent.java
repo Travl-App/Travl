@@ -1,7 +1,9 @@
 package com.travl.guide.di.interfaces;
 
 import com.travl.guide.di.modules.AppModule;
+import com.travl.guide.di.modules.ArticlesRepoModule;
 import com.travl.guide.di.modules.CiceroneModule;
+import com.travl.guide.di.modules.CityRepoModule;
 import com.travl.guide.di.modules.ImageLoaderModule;
 import com.travl.guide.di.modules.NetModule;
 import com.travl.guide.di.modules.PlacesRepoModule;
@@ -9,10 +11,11 @@ import com.travl.guide.mvp.presenter.ArticlesPresenter;
 import com.travl.guide.mvp.presenter.MainPresenter;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.presenter.PlacePresenter;
+import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.ui.activity.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.activity.MainActivity;
-import com.travl.guide.ui.fragment.PlaceFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
+import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.places.ArticlesFragment;
 
 import javax.inject.Singleton;
@@ -25,7 +28,9 @@ import dagger.Component;
         CiceroneModule.class,
         NetModule.class,
         PlacesRepoModule.class,
-        ImageLoaderModule.class
+        ImageLoaderModule.class,
+        CityRepoModule.class,
+        ArticlesRepoModule.class
 })
 public interface AppComponent {
 
@@ -41,11 +46,11 @@ public interface AppComponent {
 
     void inject(ArticlesFragment articlesFragment);
 
-//    void inject(BottomNavigationPresenter fragment);
-
     void inject(BottomNavigationDrawerBehavior fragment);
 
     void inject(PlaceFragment fragment);
 
     void inject(PlacePresenter presenter);
+
+    void inject(StartPagePresenter startPagePresenter);
 }

@@ -19,7 +19,7 @@ import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.ArticlesPresenter;
 import com.travl.guide.mvp.view.ArticlesView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.adapter.PlacesAdapter;
+import com.travl.guide.ui.adapter.ArticlesAdapter;
 
 import javax.inject.Inject;
 
@@ -54,7 +54,7 @@ public class ArticlesFragment extends MvpAppCompatFragment implements ArticlesVi
         } else {
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
         }
-        PlacesAdapter adapter = new PlacesAdapter(presenter.articleListPresenter, imageLoader);
+        ArticlesAdapter adapter = new ArticlesAdapter(presenter.articleListPresenter, imageLoader);
         recycler.setAdapter(adapter);
     }
 

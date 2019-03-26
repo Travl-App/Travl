@@ -13,12 +13,12 @@ import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
 import com.travl.guide.mvp.view.list.ArticlesItemView;
 
-public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ArticlesViewHolder> {
+public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticlesViewHolder> {
 
     private ArticleListPresenter presenter;
     private IImageLoader imageLoader;
 
-    public PlacesAdapter(ArticleListPresenter presenter, IImageLoader imageLoader) {
+    public ArticlesAdapter(ArticleListPresenter presenter, IImageLoader imageLoader) {
         this.presenter = presenter;
         this.imageLoader = imageLoader;
     }

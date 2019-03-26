@@ -1,5 +1,7 @@
 package com.travl.guide.mvp.model.network;
 
+import com.travl.guide.mvp.model.api.articles.Articles;
+import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.api.places.PlacesMap;
 
@@ -15,5 +17,9 @@ public interface NetService {
     @GET("api/users/{username}/places/{id}")
     Single<Place> getPlace(@Path("username") String user, @Path("id") int id);
 
-    //Single<PlaceEntity> getPlace(...);
+    @GET("api/users/{username}/query/")
+    Single<CityContent> getCityContent(@Path("username") String user, @Query(value = "position", encoded = true) CoordinatesRequest position);
+
+    @GET("api/users/{username}/articles/")
+    Single<Articles> getArticles(@Path("username") String user);
 }

@@ -3,7 +3,9 @@ package com.travl.guide.mvp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.Article;
-import com.travl.guide.mvp.model.repo.PlacesRepo;
+import com.travl.guide.mvp.model.api.articles.Articles;
+import com.travl.guide.mvp.model.repo.ArticlesRepo;
+import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
 import com.travl.guide.mvp.view.ArticlesView;
 import com.travl.guide.mvp.view.list.ArticlesItemView;
@@ -14,6 +16,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
@@ -26,7 +30,7 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
     private Scheduler scheduler;
     public ArticleListPresenter articleListPresenter;
     @Inject
-    PlacesRepo repo;
+    ArticlesRepo repo;
     @Inject
     @Named("baseUrl")
     String baseUrl;
@@ -42,8 +46,24 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
     }
 
     public void loadArticles() {
-        Timber.d("Loading places");
-        //TODO LoadArticles
+        Timber.d("Loading articles");
+        SingleObserver<Articles> articlesSingleObserver = new SingleObserver<Articles>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Articles articles) {
+                articleListPresenter.setArticleList(articles.getArticleList());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e);
+            }
+        };
+        repo.getArticles(User.getInstance().getDefaultUserName()).observeOn(scheduler).subscribe(articlesSingleObserver);
     }
 
     public class ArticleListPresenterImpl implements ArticleListPresenter {
@@ -59,7 +79,7 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
         public void bindView(ArticlesItemView view) {
             Timber.d("BindView and set Description");
             Article article = articleList.get(view.getPos());
-            //TODO set article to a list view
+            view.setDescription(article.getTitle());
         }
 
         @Override

@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/start_page_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <RelativeLayout
+            android:id="@+id/start_page_city_info_relative_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <LinearLayout
-            android:id="@+id/main_page_text_linear_layout"
+            android:id="@+id/start_page_city_info_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginTop="@dimen/top_text_margin"
             android:gravity="center_horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:elevation="2dp">
 
             <TextView
                 android:id="@+id/user_city_name"
@@ -26,7 +31,6 @@
                 android:layout_marginStart="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/small_margin"
                 android:fontFamily="monospace"
-                android:text="@string/test_city"
                 android:textSize="@dimen/start_page_text_size" />
 
             <TextView
@@ -48,40 +52,17 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/main_page_images_linear_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_page_text_linear_layout">
-
             <ImageView
-                android:id="@+id/places_image_view"
+                android:id="@+id/city_image_view"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/start_page_image_view_height"
-                android:layout_gravity="start"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginEnd="@dimen/standard_margin"
-                android:layout_weight="1"
                 android:contentDescription="@string/place_collections"
                 android:src="@drawable/places_collections"
                 tools:text="ImageView" />
-
-            <ImageView
-                android:id="@+id/map_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/start_page_image_view_height"
-                android:layout_gravity="end"
-                android:layout_marginStart="@dimen/standard_margin"
-                android:layout_marginEnd="@dimen/standard_margin"
-                android:layout_weight="1"
-                android:contentDescription="@string/places_on_map"
-                android:src="@drawable/places_on_map"
-                tools:text="ImageView" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/places_container_title"
@@ -90,17 +71,12 @@
             android:fontFamily="monospace"
             android:text="@string/travl_zine_title"
             android:textSize="@dimen/start_page_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_page_images_linear_layout" />
+            android:layout_gravity="center_horizontal" />
 
         <FrameLayout
             android:nestedScrollingEnabled="false"
-            android:id="@+id/start_page_places_container"
+            android:id="@+id/start_page_articles_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/places_container_title" />
-    </android.support.constraint.ConstraintLayout>
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

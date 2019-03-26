@@ -27,9 +27,4 @@ public class PlacesRepo {
             Timber.e(throwable);
         });
     }
-
-//    public Single<PlaceEntity> loadPlace(String somethingParameter) {
-//        Timber.d("Loading Place");
-//        return netService.getPlace(...).subscribeOn(Schedulers.io());
-//    }
 }
