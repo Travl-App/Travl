@@ -14,8 +14,8 @@ import com.travl.guide.mvp.presenter.PlacePresenter;
 import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.ui.activity.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.activity.MainActivity;
-import com.travl.guide.ui.fragment.PlaceFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
+import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.places.ArticlesFragment;
 
 import javax.inject.Singleton;

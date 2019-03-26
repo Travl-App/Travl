@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment;
+package com.travl.guide.ui.fragment.place;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +26,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
+    private static final String ARGUMENT_ONE_KEY = "arg1";
+    private static final String ARGUMENT_TWO_KEY = "arg2";
+
     @BindView(R.id.text_view_place_title)
     TextView placeTitleTextView;
     @BindView(R.id.text_view_place_subtitle)
@@ -45,9 +48,20 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Inject
     IImageLoader imageLoader;
 
+    public static PlaceFragment getInstanse(String parameter1, int parameter2) {
+        PlaceFragment placeFragment = new PlaceFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGUMENT_ONE_KEY, parameter1);
+        args.putInt(ARGUMENT_TWO_KEY, parameter2);
+        placeFragment.setArguments(args);
+        return placeFragment;
+    }
+
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        return new PlacePresenter(AndroidSchedulers.mainThread());
+        String arg1 = getArguments().getString(ARGUMENT_ONE_KEY);
+        int arg2 = getArguments().getInt(ARGUMENT_TWO_KEY);
+        return new PlacePresenter(AndroidSchedulers.mainThread(), arg1, arg2);
     }
 
     @Nullable
