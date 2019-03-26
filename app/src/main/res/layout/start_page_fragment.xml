@@ -54,13 +54,12 @@
 
             <ImageView
                 android:id="@+id/city_image_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@android:color/darker_gray"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="@dimen/standard_margin"
-                android:layout_marginEnd="@dimen/standard_margin"
                 android:contentDescription="@string/place_collections"
-                android:src="@drawable/places_collections"
+                android:minHeight="100dp"
                 tools:text="ImageView" />
         </RelativeLayout>
 
