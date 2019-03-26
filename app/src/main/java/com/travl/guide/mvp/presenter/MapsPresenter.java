@@ -1,7 +1,5 @@
 package com.travl.guide.mvp.presenter;
 
-import android.util.SparseArray;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
@@ -16,7 +14,6 @@ import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -98,7 +95,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     private List<Place> creatingPlacesList(List<PlaceLink> places) {
         Timber.d("Creating places list");
-        List<Place> placeMap = new ArrayList<>();
+        List<Place> placesMap = new ArrayList<>();
         for(int i = 0; i < places.size(); i++) {
             Place place = new Place();
             place.setId(places.get(i).getId());
@@ -106,9 +103,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             place.setDescription(places.get(i).getDescription());
             place.setCoordinates(places.get(i).getCoordinates());
 
-            placeMap.add(place);
+            placesMap.add(place);
         }
 
-        return placeMap;
+        return placesMap;
     }
 }
