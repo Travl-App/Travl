@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
@@ -105,7 +104,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         Intent intent = new PlaceAutocomplete.IntentBuilder()
                 .accessToken(getString(R.string.mapbox_access_token))
                 .placeOptions(PlaceOptions.builder()
-                        .backgroundColor(Color.parseColor("#EEEEEE"))
+                        .backgroundColor(getResources().getColor(R.color.transparent))
                         .limit(10)
                         .build(PlaceOptions.MODE_CARDS))
                 .build(getActivity());
