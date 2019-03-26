@@ -126,7 +126,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
 
                 presenter.loadPlacesForMap();
-                presenter.showLocations();
+//                presenter.showLocations();
             });
         });
     }
