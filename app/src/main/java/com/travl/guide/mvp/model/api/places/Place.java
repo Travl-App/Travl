@@ -5,6 +5,7 @@ import android.view.View;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.Feature;
+import com.travl.guide.mvp.model.api.author.Author;
 
 import java.util.List;
 
@@ -21,8 +22,7 @@ public class Place {
     private String description;
     @SerializedName("author")
     @Expose
-    private String author;
-
+    private Author author;
     @SerializedName("images")
     @Expose
     private List<String> imageUrls;
@@ -33,7 +33,7 @@ public class Place {
     public Place() {
     }
 
-    public Place(int id, double[] coordinates, String description, String author, Feature feature) {
+    public Place(int id, double[] coordinates, String description, Author author, Feature feature) {
         this.id = id;
         this.description = description;
         this.coordinates = coordinates;
@@ -65,11 +65,11 @@ public class Place {
         this.coordinates = coordinates;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 

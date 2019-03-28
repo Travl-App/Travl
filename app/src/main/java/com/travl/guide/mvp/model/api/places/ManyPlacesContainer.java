@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PlacesMap {
+public class ManyPlacesContainer {
     @SerializedName("places")
     @Expose
     private List<PlaceLink> places;
@@ -13,7 +13,7 @@ public class PlacesMap {
     @Expose
     private String name;
 
-    public PlacesMap(List<PlaceLink> places, String name) {
+    public ManyPlacesContainer(List<PlaceLink> places, String name) {
         this.name = name;
         this.places = places;
     }

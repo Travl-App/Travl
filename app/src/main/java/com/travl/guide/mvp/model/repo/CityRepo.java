@@ -16,6 +16,6 @@ public class CityRepo {
     }
 
     public Single<CityContent> getCityContent(CoordinatesRequest position) {
-        return netService.getCityContent(position).subscribeOn(Schedulers.io());
+        return netService.loadCityContent(position).subscribeOn(Schedulers.io());
     }
 }

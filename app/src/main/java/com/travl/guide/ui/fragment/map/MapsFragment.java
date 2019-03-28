@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,8 +14,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -48,7 +45,6 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -153,8 +149,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             viewMap.put(listPlaces.get(i).getId(), view);
         }
 
-        if(mapBoxMap != null)
-            mapBoxMap.getStyle().addImages(bitmapMap);
+        // if(mapBoxMap != null) mapBoxMap.getStyle().addImages(bitmapMap);
     }
 
     public void setupOnMapViewClickListener() {

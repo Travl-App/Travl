@@ -48,7 +48,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Inject
     IImageLoader imageLoader;
 
-    public static PlaceFragment getInstanse(String parameter1, int parameter2) {
+    public static PlaceFragment getInstance(String parameter1, int parameter2) {
         PlaceFragment placeFragment = new PlaceFragment();
         Bundle args = new Bundle();
         args.putString(ARGUMENT_ONE_KEY, parameter1);

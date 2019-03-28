@@ -62,7 +62,7 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
                 Timber.e(e);
             }
         };
-        repo.getArticles().observeOn(scheduler).subscribe(articlesSingleObserver);
+        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articlesSingleObserver);
     }
 
     public class ArticleListPresenterImpl implements ArticleListPresenter {
@@ -79,6 +79,7 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
             Timber.d("BindView and set Description");
             Article article = articleList.get(view.getPos());
             view.setDescription(article.getTitle());
+            view.setImage(baseUrl + article.getImageCoverUrl().substring(1));
         }
 
         @Override

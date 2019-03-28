@@ -13,7 +13,7 @@ public class ArticlesRepo {
         this.netService = netService;
     }
 
-    public Single<Articles> getArticles() {
-        return netService.getArticles().subscribeOn(Schedulers.io());
+    public Single<Articles> getTravlZineArticles() {
+        return netService.loadArticles(true).subscribeOn(Schedulers.io());
     }
 }

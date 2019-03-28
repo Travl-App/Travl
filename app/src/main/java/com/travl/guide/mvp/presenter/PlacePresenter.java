@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.PlaceContainer;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.PlaceView;
 import com.travl.guide.ui.App;
@@ -38,10 +39,11 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
 
     @SuppressLint("CheckResult")
     private void loadPlaceCardInfo() {
-        placesRepo.loadPlace(argument2).observeOn(scheduler).subscribe(new Consumer<Place>() {
+        placesRepo.loadPlace(argument2).observeOn(scheduler).subscribe(new Consumer<PlaceContainer>() {
             @Override
-            public void accept(Place place) throws Exception {
-                getViewState().setPlaceAuthorNameTextView(place.getAuthor());
+            public void accept(PlaceContainer placeContainer) throws Exception {
+                Place place = placeContainer.getPlace();
+                getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
                 getViewState().setTextView(place.getDescription());
 //                getViewState().setImageView(place.getImageUrls().get(0));
             }

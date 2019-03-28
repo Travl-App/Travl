@@ -5,9 +5,9 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
+import com.travl.guide.mvp.model.api.places.ManyPlacesContainer;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.api.places.PlaceLink;
-import com.travl.guide.mvp.model.api.places.PlacesMap;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.MapsView;
@@ -57,14 +57,14 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     public void makeRequest() {
-        SingleObserver<PlacesMap> observer = new SingleObserver<PlacesMap>() {
+        SingleObserver<ManyPlacesContainer> observer = new SingleObserver<ManyPlacesContainer>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onSuccess(PlacesMap placesMap) {
+            public void onSuccess(ManyPlacesContainer placesMap) {
                 getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placesMap.getPlaces()));
                 getViewState().onRequestCompleted(creatingPlacesList(placesMap.getPlaces()));
             }
