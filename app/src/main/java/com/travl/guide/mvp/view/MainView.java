@@ -20,6 +20,9 @@ public interface MainView extends MvpView {
     @StateStrategyType(value = SkipStrategy.class)
     void toStartPageScreen();
 
+    @StateStrategyType(value = SkipStrategy.class)
+    void toFavoriteScreen();
+
     void onMoveToPlaceScreen();
 
     void onMoveToMapScreen();
@@ -27,4 +30,6 @@ public interface MainView extends MvpView {
     void onMoveToStartPageScreen();
 
     void onMoveToPostScreen();
+
+    void onMoveToFavoriteScreen();
 }

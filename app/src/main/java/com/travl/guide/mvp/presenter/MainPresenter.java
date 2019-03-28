@@ -23,6 +23,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().toPlaceScreen();
     }
 
+    public void toFavoriteScreen() {
+        getViewState().toFavoriteScreen();
+    }
+
     public void toStartPageScreen() {
         getViewState().toStartPageScreen();
     }
@@ -33,6 +37,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void onMoveToPlaceScreen() {
         getViewState().onMoveToPlaceScreen();
+    }
+
+    public void onMoveToFavoriteScreen() {
+        getViewState().onMoveToFavoriteScreen();
     }
 
     public void onMoveToStartPageScreen() {

@@ -7,7 +7,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.mapbox.geojson.Feature;
 import com.travl.guide.mvp.model.api.places.Place;
 
-import java.util.HashMap;
 import java.util.List;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)

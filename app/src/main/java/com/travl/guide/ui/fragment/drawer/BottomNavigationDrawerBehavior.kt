@@ -1,4 +1,4 @@
-package com.travl.guide.ui.activity
+package com.travl.guide.ui.fragment.drawer
 
 import android.app.Dialog
 import android.content.Context
@@ -37,6 +37,9 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
                 }
                 R.id.app_bar_collections -> {
                     bottomNavigationDrawerListener!!.navToPlaceScreen()
+                }
+                R.id.app_bar_favorite -> {
+                    bottomNavigationDrawerListener!!.navToFavoriteScreen()
                 }
                 R.id.app_bar_map -> {
                     bottomNavigationDrawerListener!!.navToMapScreen()

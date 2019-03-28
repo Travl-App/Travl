@@ -81,9 +81,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = (Activity) context;
-        FloatingActionButton floatingActionButton = activity.findViewById(R.id.app_bar_fab);
-        if(floatingActionButton != null) {
-            floatingActionButton.setOnClickListener(view -> fabClick());
+        FloatingActionButton fab = activity.findViewById(R.id.app_bar_fab);
+        if(fab != null) {
+            fab.setOnClickListener(v -> fabClick());
         }
     }
 

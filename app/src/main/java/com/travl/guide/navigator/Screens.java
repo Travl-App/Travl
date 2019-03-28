@@ -3,6 +3,7 @@ package com.travl.guide.navigator;
 import android.support.v4.app.Fragment;
 
 import com.travl.guide.mvp.model.user.User;
+import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.places.ArticlesFragment;
@@ -41,6 +42,14 @@ public class Screens extends Screen {
         @Override
         public Fragment getFragment() {
             return PlaceFragment.getInstance(User.getInstance().getDefaultUserName(), 1);
+        }
+    }
+
+    public static class FavoriteScreens extends SupportAppScreen {
+
+        @Override
+        public Fragment getFragment() {
+            return new FavoriteFragment();
         }
     }
 }

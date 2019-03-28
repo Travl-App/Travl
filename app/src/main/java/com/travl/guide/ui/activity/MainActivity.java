@@ -17,6 +17,9 @@ import com.travl.guide.mvp.presenter.MainPresenter;
 import com.travl.guide.mvp.view.MainView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
+import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerListener;
+import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.places.ArticlesFragment;
@@ -71,6 +74,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             } else if(nextFragment instanceof PlaceFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPostScreen();
+            } else if(nextFragment instanceof FavoriteFragment) {
+                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+                presenter.onMoveToFavoriteScreen();
             }
         }
     };
@@ -129,6 +135,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     public void onMoveToPlaceScreen() {
         Timber.d("onMoveToPlaceScreen");
+        bar.replaceMenu(R.menu.bottom_main_menu);
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
@@ -136,15 +143,25 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         });
     }
 
-
     public void onMoveToMapScreen() {
         Timber.d("onMoveToMapScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
         fab.setImageDrawable(getDrawable(R.drawable.ic_search));
+        bar.getMenu().clear();
     }
 
+    public void onMoveToFavoriteScreen() {
+        Timber.d("onMoveToFavoriteScreen");
+        bar.getMenu().clear();
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_show_on_map));
+        fab.setOnClickListener(view -> {
+            presenter.toMapScreen();
+        });
+    }
 
     public void onMoveToStartPageScreen() {
+        bar.replaceMenu(R.menu.bottom_main_menu);
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
@@ -154,16 +171,22 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void onMoveToPostScreen() {
+        bar.replaceMenu(R.menu.bottom_post_menu);
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-        fab.setImageDrawable(getDrawable(R.drawable.ic_favorite));
+        fab.setImageDrawable(getDrawable(R.drawable.ic_show_on_map));
         fab.setOnClickListener(view -> {
-            Toast.makeText(this, "Add post to favorite", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Show post in map", Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
     public void toMapScreen() {
         router.replaceScreen(new Screens.MapScreen());
+    }
+
+    @Override
+    public void toFavoriteScreen() {
+        router.navigateTo(new Screens.FavoriteScreens());
     }
 
     @Override
@@ -178,7 +201,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bottom_menu, menu);
+        getMenuInflater().inflate(R.menu.bottom_main_menu, menu);
         return true;
     }
 
@@ -197,8 +220,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.app_bar_fav:
+            case R.id.app_bar_search:
+                Toast.makeText(this, "Search posts", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.app_bar_post_shared:
+                Toast.makeText(this, "Shared this post", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.app_bar_post_favorite:
                 Toast.makeText(this, "Show favorite posts", Toast.LENGTH_SHORT).show();
+                presenter.toFavoriteScreen();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -213,6 +243,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @Override
     public void navToPlaceScreen() {
         presenter.toPlaceScreen();
+    }
+
+    @Override
+    public void navToFavoriteScreen() {
+        presenter.toFavoriteScreen();
     }
 
     @Override
