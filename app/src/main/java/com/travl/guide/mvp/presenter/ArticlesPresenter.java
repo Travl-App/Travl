@@ -5,7 +5,6 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.Article;
 import com.travl.guide.mvp.model.api.articles.Articles;
 import com.travl.guide.mvp.model.repo.ArticlesRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
 import com.travl.guide.mvp.view.ArticlesView;
 import com.travl.guide.mvp.view.list.ArticlesItemView;
@@ -63,7 +62,7 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
                 Timber.e(e);
             }
         };
-        repo.getArticles(User.getInstance().getDefaultUserName()).observeOn(scheduler).subscribe(articlesSingleObserver);
+        repo.getArticles().observeOn(scheduler).subscribe(articlesSingleObserver);
     }
 
     public class ArticleListPresenterImpl implements ArticleListPresenter {

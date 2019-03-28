@@ -11,15 +11,15 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NetService {
-    @GET("api/users/{username}/map/")
-    Single<PlacesMap> getPlacesForMap(@Path("username") String user, @Query(value = "position", encoded = true) CoordinatesRequest position, @Query("radius") double radius, @Query("detailed") int detailed);
+    @GET("api/map/")
+    Single<PlacesMap> getPlacesForMap(@Query(value = "position", encoded = true) CoordinatesRequest position, @Query("radius") double radius, @Query("detailed") int detailed);
 
-    @GET("api/users/{username}/places/{id}")
-    Single<Place> getPlace(@Path("username") String user, @Path("id") int id);
+    @GET("api/places/{id}")
+    Single<Place> getPlace(@Path("id") int id);
 
-    @GET("api/users/{username}/query/")
-    Single<CityContent> getCityContent(@Path("username") String user, @Query(value = "position", encoded = true) CoordinatesRequest position);
+    @GET("api/query/")
+    Single<CityContent> getCityContent(@Query(value = "position", encoded = true) CoordinatesRequest position);
 
-    @GET("api/users/{username}/articles/")
-    Single<Articles> getArticles(@Path("username") String user);
+    @GET("api/articles/")
+    Single<Articles> getArticles();
 }

@@ -15,7 +15,7 @@ public class CityRepo {
         this.netService = netService;
     }
 
-    public Single<CityContent> getCityContent(String userName, CoordinatesRequest position) {
-        return netService.getCityContent(userName, position).subscribeOn(Schedulers.io());
+    public Single<CityContent> getCityContent(CoordinatesRequest position) {
+        return netService.getCityContent(position).subscribeOn(Schedulers.io());
     }
 }

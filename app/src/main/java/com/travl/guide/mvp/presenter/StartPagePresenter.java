@@ -58,7 +58,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
             }
         };
         CoordinatesRequest position = new CoordinatesRequest(User.getInstance().getCoordinates());
-        cityRepo.getCityContent(User.getInstance().getDefaultUserName(), position).observeOn(scheduler).subscribe(observer);
+        cityRepo.getCityContent(position).observeOn(scheduler).subscribe(observer);
     }
 
 

@@ -38,7 +38,7 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
 
     @SuppressLint("CheckResult")
     private void loadPlaceCardInfo() {
-        placesRepo.loadPlace(argument1, argument2).observeOn(scheduler).subscribe(new Consumer<Place>() {
+        placesRepo.loadPlace(argument2).observeOn(scheduler).subscribe(new Consumer<Place>() {
             @Override
             public void accept(Place place) throws Exception {
                 getViewState().setPlaceAuthorNameTextView(place.getAuthor());

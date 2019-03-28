@@ -16,13 +16,13 @@ public class PlacesRepo {
         this.netService = netService;
     }
 
-    public Single<PlacesMap> loadPlacesForMap(String userName, CoordinatesRequest position, double radius, int detailed) {
+    public Single<PlacesMap> loadPlacesForMap(CoordinatesRequest position, double radius, int detailed) {
         Timber.d("Loading Places");
-        return netService.getPlacesForMap(userName, position, radius, detailed).subscribeOn(Schedulers.io());
+        return netService.getPlacesForMap(position, radius, detailed).subscribeOn(Schedulers.io());
     }
 
-    public Single<Place> loadPlace(String userName, int id) {
-        return netService.getPlace(userName, id).subscribeOn(Schedulers.io()).doOnError(throwable -> {
+    public Single<Place> loadPlace(int id) {
+        return netService.getPlace(id).subscribeOn(Schedulers.io()).doOnError(throwable -> {
             Timber.e("LoadPlaceError");
             Timber.e(throwable);
         });
