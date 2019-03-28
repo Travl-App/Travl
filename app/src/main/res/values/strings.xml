@@ -43,5 +43,7 @@
                             Без воздуха вся кочегарка.\n
     </string>
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
-
+    <string-array name="cities">
+        <item>Санкт-Петербу́рг</item>
+    </string-array>
 </resources>

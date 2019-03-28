@@ -6,7 +6,6 @@ import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.StartPageView;
 import com.travl.guide.ui.App;
 
@@ -30,7 +29,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     }
 
-    public void loadCityContent() {
+    public void loadCityContent(double[] coordinates) {
         SingleObserver<CityContent> observer = new SingleObserver<CityContent>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -57,7 +56,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
                 Timber.e(e);
             }
         };
-        CoordinatesRequest position = new CoordinatesRequest(User.getInstance().getCoordinates());
+        CoordinatesRequest position = new CoordinatesRequest(coordinates);
         cityRepo.getCityContent(position).observeOn(scheduler).subscribe(observer);
     }
 
