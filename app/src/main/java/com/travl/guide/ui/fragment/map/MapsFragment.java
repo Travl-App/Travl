@@ -15,6 +15,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -46,6 +48,7 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.MapsPresenter;
 import com.travl.guide.mvp.view.MapsView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +64,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.travl.guide.ui.utils.MapUtils.MARKER_LAYER;
 import static com.travl.guide.ui.utils.MapUtils.PLACES_GEO_SOURCE;
 import static com.travl.guide.ui.utils.MapUtils.PLACE_IMAGE;
-import static com.travl.guide.ui.utils.MapUtils.PROPERTY_TITLE;
 import static com.travl.guide.ui.utils.MapUtils.REQUEST_CODE_AUTOCOMPLETE;
 import static com.travl.guide.ui.utils.MapUtils.SymbolGenerator;
 import static com.travl.guide.ui.utils.MapUtils.convertToLatLng;
@@ -74,8 +76,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     MapsPresenter presenter;
 
     private MapboxMap mapBoxMap;
-    private List<Place> viewMap;
-    private HashMap<String, Bitmap> imageMap;
+    private HashMap<Integer, View> viewMap;
+    private HashMap<String, Bitmap> bitmapMap;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
 
@@ -136,17 +138,23 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @SuppressLint("UseSparseArrays")
     @Override
-    public void onRequestCompleted(List<Place> viewMap) {
-        this.viewMap = viewMap;
-        imageMap = new HashMap<>();
+    public void onRequestCompleted(List<Place> listPlaces) {
+        viewMap = new HashMap<>();
+        bitmapMap = new HashMap<>();
 
-        for(int i = 0; i < viewMap.size(); i++) {
-            View view = getLayoutInflater().inflate(R.layout.info_place_bubble, null);
-            imageMap.put(viewMap.get(i).getDescription(), SymbolGenerator(view));
+        for(int i = 0; i < listPlaces.size(); i++) {
+            View view = getLayoutInflater().inflate(R.layout.mapillary_layout_callout, null);
+
+//            TextView titleTv = view.findViewById(R.id.title);
+//            titleTv.setText(listPlaces.get(i).getDescription());
+//            ImageView imageView = view.findViewById(R.id.logoView);
+
+            bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
+            viewMap.put(listPlaces.get(i).getId(), view);
         }
 
         if(mapBoxMap != null)
-            mapBoxMap.getStyle().addImages(imageMap);
+            mapBoxMap.getStyle().addImages(bitmapMap);
     }
 
     public void setupOnMapViewClickListener() {
@@ -155,10 +163,22 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
             List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, MARKER_LAYER);
             if(! features.isEmpty()) {
+
                 Feature feature = features.get(0);
                 PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
 
+                //Снизу должно передаваться id
+                new Bundle().putInt("marker_id", 0);
+                presenter.toCardScreen();
 
+                /** Не лезь, убьёт
+                View view = viewMap.get(0);
+                View textContainer = view.findViewById(R.id.text_container);
+                Rect hitRectText = new Rect();
+                textContainer.getHitRect(hitRectText);
+                hitRectText.offset((int) symbolScreenPoint.x, (int) symbolScreenPoint.y);
+                hitRectText.offset(0, - view.getMeasuredHeight());
+                */
             } else {
                 onMarkerClickCallback(point.toString());
             }
@@ -167,8 +187,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     }
 
     private void onMarkerClickCallback(String location) {
-        Toast.makeText(getContext(), "Нажат маркер c координатами: " + location, Toast.LENGTH_LONG).show();
-//        presenter.toPlaceScreen();
+        Toast.makeText(getContext(), "Нажата точка c координатами: " + location, Toast.LENGTH_LONG).show();
     }
 
     @Override
