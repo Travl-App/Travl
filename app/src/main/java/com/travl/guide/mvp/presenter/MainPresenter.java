@@ -38,4 +38,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void onMoveToStartPageScreen() {
         getViewState().onMoveToStartPageScreen();
     }
+
+    public void onMoveToPostScreen() {
+        getViewState().onMoveToPostScreen();
+    }
 }

@@ -25,4 +25,6 @@ public interface MainView extends MvpView {
     void onMoveToMapScreen();
 
     void onMoveToStartPageScreen();
+
+    void onMoveToPostScreen();
 }

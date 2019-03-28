@@ -18,6 +18,7 @@ import com.travl.guide.mvp.view.MainView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.fragment.map.MapsFragment;
+import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.places.ArticlesFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
 
@@ -58,14 +59,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if (command instanceof Replace && nextFragment instanceof ArticlesFragment) {
+            if(command instanceof Replace && nextFragment instanceof ArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPlaceScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToMapScreen();
-            }else if (command instanceof Replace && nextFragment instanceof StartPageFragment){
+            } else if(command instanceof Replace && nextFragment instanceof StartPageFragment) {
+                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToStartPageScreen();
+            } else if(nextFragment instanceof PlaceFragment) {
+                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+                presenter.onMoveToPostScreen();
             }
         }
     };
@@ -80,7 +85,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (!(fragment instanceof StartPageFragment)) {
+        if(! (fragment instanceof StartPageFragment)) {
             presenter.toStartPageScreen();
         } else {
             finish();
@@ -114,7 +119,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void initEvents() {
         Timber.d("initEvents");
         bar.setNavigationOnClickListener(view -> {
-            if (!getSupportFragmentManager().executePendingTransactions() && !navigationDrawer.isAdded()) {
+            if(! getSupportFragmentManager().executePendingTransactions() && ! navigationDrawer.isAdded()) {
                 navigationDrawer.show(getSupportFragmentManager(),
                         navigationDrawer.getTag());
             }
@@ -144,6 +149,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
         fab.setOnClickListener(view -> {
             presenter.toMapScreen();
+        });
+    }
+
+    @Override
+    public void onMoveToPostScreen() {
+        bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_favorite));
+        fab.setOnClickListener(view -> {
+            Toast.makeText(this, "Add post to favorite", Toast.LENGTH_SHORT).show();
         });
     }
 
