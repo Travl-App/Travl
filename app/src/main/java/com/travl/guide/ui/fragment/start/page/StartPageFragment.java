@@ -13,8 +13,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -39,13 +41,14 @@ import timber.log.Timber;
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
 
-    @BindView(R.id.user_city_name)
-    TextView cityNameTextView;
+
     @BindView(R.id.city_image_view)
     ImageView cityImageView;
+    @BindView(R.id.user_city_spinner)
+    Spinner userCitySpinner;
     @InjectPresenter
     StartPagePresenter presenter;
-
+    private ArrayAdapter<String> cityArrayAdapter;
     private PermissionsManager permissionsManager;
 
     @ProvidePresenter
@@ -62,7 +65,25 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             presenter.initPlacesFragment();
         }
         requestCoordinates();
-        presenter.loadCityContent();
+        presenter.loadCityContent(User.getInstance().getCoordinates());
+        cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
+        cityArrayAdapter.addAll(getResources().getStringArray(R.array.cities));
+        userCitySpinner.setAdapter(cityArrayAdapter);
+        userCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapterView.getItemAtPosition(i).equals("Санкт-Петербу́рг")) {
+                    presenter.loadCityContent(new double[]{59.93, 30.33});
+                } else {
+                    presenter.loadCityContent(User.getInstance().getCoordinates());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
@@ -95,7 +116,16 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCityName(String placeName) {
-        cityNameTextView.setText(placeName);
+        boolean isPlaceAdded = false;
+        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+            if (((String) Objects.requireNonNull(cityArrayAdapter.getItem(i))).equals(placeName)) {
+                isPlaceAdded = true;
+            }
+        }
+        if (!isPlaceAdded) {
+            cityArrayAdapter.insert(placeName, 0);
+        }
+        // cityNameTextView.setText(placeName);
     }
 
     @Override

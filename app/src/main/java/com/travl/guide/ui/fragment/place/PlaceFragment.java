@@ -3,6 +3,7 @@ package com.travl.guide.ui.fragment.place;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +34,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     private static final String ARGUMENT_ONE_KEY = "arg1";
     private static final String ARGUMENT_TWO_KEY = "arg2";
 
-    @BindView(R.id.text_view_place_title)
-    TextView placeTitleTextView;
+    @BindView(R.id.post_toolbar)
+    Toolbar toolbar;
     @BindView(R.id.text_view_place_subtitle)
     TextView placeSubtitleTextView;
     @BindView(R.id.image_view_place)
@@ -74,13 +75,20 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
         View view = inflater.inflate(R.layout.place_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
-
+        setupToolbar();
         return view;
+    }
+
+    private void setupToolbar() {
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        toolbar.setNavigationOnClickListener(v -> {
+            Toast.makeText(getContext(), "Назад", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
     public void setTitleTextView(String title) {
-        placeTitleTextView.setText(title);
+        toolbar.setTitle(title);
     }
 
     @Override
@@ -107,5 +115,4 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     public void setTextView(String text) {
         placeTextView.setText(text);
     }
-
 }
