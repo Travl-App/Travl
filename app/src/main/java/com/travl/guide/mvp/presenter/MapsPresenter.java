@@ -53,7 +53,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     public void toCardScreen() {
-        router.replaceScreen(new Screens.PlaceScreen());
+        router.navigateTo(new Screens.PlaceScreen());
     }
 
     public void makeRequest() {
