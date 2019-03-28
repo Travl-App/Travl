@@ -14,12 +14,15 @@ public class Place {
     @SerializedName("id")
     @Expose
     private int id;
+
     @SerializedName("coordinates")
     @Expose
     private double[] coordinates;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("author")
     @Expose
     private Author author;
@@ -27,8 +30,8 @@ public class Place {
     @Expose
     private List<String> imageUrls;
 
-    private View view;
-    private Feature feature;
+    transient private View view;
+    transient private Feature feature;
 
     public Place() {
     }

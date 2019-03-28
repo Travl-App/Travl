@@ -8,6 +8,10 @@ public class Author {
     @Expose
     private String userName;
 
+    public Author(String userName) {
+        this.userName = userName;
+    }
+
     public String getUserName() {
         return userName;
     }

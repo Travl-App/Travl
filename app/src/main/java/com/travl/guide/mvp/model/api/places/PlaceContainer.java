@@ -11,6 +11,9 @@ public class PlaceContainer {
     @Expose
     private Place place;
 
+    public PlaceContainer() {
+    }
+
     public PlaceContainer(int status, Place place) {
         this.status = status;
         this.place = place;
