@@ -3,6 +3,7 @@ package com.travl.guide.ui.fragment.start.page;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,17 +52,43 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     StartPagePresenter presenter;
     private ArrayAdapter<String> cityArrayAdapter;
     private PermissionsManager permissionsManager;
+    private LocationManager locationManager;
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
         return new StartPagePresenter(AndroidSchedulers.mainThread());
     }
 
+    private LocationListener mListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Timber.e("Location changed:" + location.getLatitude() + "," + location.getLongitude());
+            setCoordinates(location);
+            presenter.loadCityContent(User.getInstance().getCoordinates());
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
+        locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
         if (savedInstanceState == null) {
             presenter.initPlacesFragment();
         }
@@ -88,19 +115,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         return view;
     }
 
-    @SuppressLint("MissingPermission")
-    public void requestCoordinates() {
-        LocationManager locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.GPS_PROVIDER;
-        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            setCoordinates(lastKnownLocation);
-        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(getActivity());
-        }
-    }
-
     private void setCoordinates(Location lastKnownLocation) {
         if (lastKnownLocation != null) {
             Timber.e("Setting coordinates to " + lastKnownLocation.getLatitude() + "," + lastKnownLocation.getLongitude());
@@ -115,18 +129,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         transaction.replace(R.id.start_page_articles_container, articlesFragment).commit();
     }
 
-    @Override
-    public void setCityName(String placeName) {
-        boolean isPlaceAdded = false;
-        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-            if (((String) Objects.requireNonNull(cityArrayAdapter.getItem(i))).equals(placeName)) {
-                isPlaceAdded = true;
-            }
+    @SuppressLint("MissingPermission")
+    public void requestCoordinates() {
+        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            requestLocation();
+        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(getActivity());
         }
-        if (!isPlaceAdded) {
-            cityArrayAdapter.insert(placeName, 0);
-        }
-        // cityNameTextView.setText(placeName);
     }
 
     @Override
@@ -135,9 +145,36 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     @Override
+    public void setCityName(String placeName) {
+        if (!placeName.equals("Не найден")) {
+            boolean isPlaceAdded = false;
+            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+                if (((String) Objects.requireNonNull(cityArrayAdapter.getItem(i))).equals(placeName)) {
+                    isPlaceAdded = true;
+                }
+            }
+            if (!isPlaceAdded) {
+                cityArrayAdapter.insert(placeName, 0);
+            }
+        }
+        // cityNameTextView.setText(placeName);
+    }
+
+    @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
+            requestLocation();
             requestCoordinates();
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestLocation() {
+        int millisInSecond = 1000;
+        int minutes = 5;
+        int secondsInMinutes = 60;
+        int meters = 100;
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 }
