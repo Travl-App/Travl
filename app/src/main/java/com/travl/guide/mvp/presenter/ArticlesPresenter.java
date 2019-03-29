@@ -91,6 +91,14 @@ public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
         @Override
         public void setArticleList(List<Article> articles) {
             this.articleList = articles;
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            articles.add(new Article("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
             getViewState().onChangedArticlesData();
         }
     }

@@ -10,12 +10,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -41,11 +41,12 @@ import timber.log.Timber;
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
 
-
-    @BindView(R.id.city_image_view)
-    ImageView cityImageView;
+    //    @BindView(R.id.city_image_view)
+//    ImageView cityImageView;
     @BindView(R.id.user_city_spinner)
     Spinner userCitySpinner;
+    @BindView(R.id.start_page_toolbar)
+    Toolbar toolbar;
     @InjectPresenter
     StartPagePresenter presenter;
     private ArrayAdapter<String> cityArrayAdapter;
