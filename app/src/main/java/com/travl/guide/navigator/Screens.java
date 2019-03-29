@@ -2,10 +2,10 @@ package com.travl.guide.navigator;
 
 import android.support.v4.app.Fragment;
 
+import com.travl.guide.ui.fragment.articles.ArticlesFragment;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
-import com.travl.guide.ui.fragment.places.ArticlesFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
 
 import ru.terrakok.cicerone.Screen;

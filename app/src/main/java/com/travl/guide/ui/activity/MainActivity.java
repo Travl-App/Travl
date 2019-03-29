@@ -12,18 +12,17 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.mapbox.mapboxsdk.maps.MapFragment;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.MainPresenter;
 import com.travl.guide.mvp.view.MainView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.articles.ArticlesFragment;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerListener;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
-import com.travl.guide.ui.fragment.places.ArticlesFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
 
 import javax.inject.Inject;
@@ -34,8 +33,6 @@ import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
@@ -65,19 +62,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if(command instanceof Replace && nextFragment instanceof ArticlesFragment) {
+            if (command instanceof Replace && nextFragment instanceof ArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPlaceScreen();
-            } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
+            } else if (command instanceof Replace && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToMapScreen();
-            } else if(command instanceof Replace && nextFragment instanceof StartPageFragment) {
+            } else if (command instanceof Replace && nextFragment instanceof StartPageFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToStartPageScreen();
-            } else if(nextFragment instanceof PlaceFragment) {
+            } else if (nextFragment instanceof PlaceFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPostScreen();
-            } else if(nextFragment instanceof FavoriteFragment) {
+            } else if (nextFragment instanceof FavoriteFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToFavoriteScreen();
             }
@@ -94,8 +91,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(! (fragment instanceof StartPageFragment)) {
+        if (fragment instanceof PlaceFragment) {
+            presenter.toMapScreen();
+        } else if (!(fragment instanceof StartPageFragment)) {
             presenter.toStartPageScreen();
+
         } else {
             finish();
         }
@@ -112,8 +112,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         presenter.initEvents();
 
         Fragment fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(savedInstanceState == null && fragmentContainer == null) {
-            navigator.applyCommands(new Command[] {new Replace(new Screens.StartPageScreen())});
+        if (savedInstanceState == null && fragmentContainer == null) {
+            navigator.applyCommands(new Command[]{new Replace(new Screens.StartPageScreen())});
         }
     }
 
@@ -128,7 +128,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void initEvents() {
         Timber.d("initEvents");
         bar.setNavigationOnClickListener(view -> {
-            if(! getSupportFragmentManager().executePendingTransactions() && ! navigationDrawer.isAdded()) {
+            if (!getSupportFragmentManager().executePendingTransactions() && !navigationDrawer.isAdded()) {
                 navigationDrawer.show(getSupportFragmentManager(),
                         navigationDrawer.getTag());
             }
@@ -222,7 +222,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.app_bar_search:
                 Toast.makeText(this, "Search posts", Toast.LENGTH_SHORT).show();
                 break;

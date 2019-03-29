@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment.places;
+package com.travl.guide.ui.fragment.articles;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

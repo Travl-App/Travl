@@ -29,7 +29,7 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.StartPagePresenter;
 import com.travl.guide.mvp.view.StartPageView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.fragment.places.ArticlesFragment;
+import com.travl.guide.ui.fragment.articles.ArticlesFragment;
 
 import java.util.List;
 import java.util.Objects;
