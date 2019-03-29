@@ -7,14 +7,12 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.PlaceView;
-import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.BackTo;
 
 @InjectViewState
 public class PlacePresenter extends MvpPresenter<PlaceView> {
@@ -24,13 +22,11 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
     @Inject
     PlacesRepo placesRepo;
     private Scheduler scheduler;
-    private String argument1;
-    private int argument2;
+    private int placeId;
 
-    public PlacePresenter(Scheduler scheduler, String arg1, int arg2) {
+    public PlacePresenter(Scheduler scheduler, int placeId) {
         this.scheduler = scheduler;
-        this.argument1 = arg1;
-        this.argument2 = arg2;
+        this.placeId = placeId;
         App.getInstance().getAppComponent().inject(this);
     }
 
@@ -42,11 +38,11 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
 
     @SuppressLint("CheckResult")
     private void loadPlaceCardInfo() {
-        placesRepo.loadPlace(argument2).observeOn(scheduler).subscribe(placeContainer -> {
+        placesRepo.loadPlace(placeId).observeOn(scheduler).subscribe(placeContainer -> {
             Place place = placeContainer.getPlace();
             getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
             getViewState().setTextView(place.getDescription());
-//                getViewState().setImageView(place.getImageUrls().get(0));
+//            getViewState().setImageView(place.getImageUrls().get(0));
         });
     }
 }

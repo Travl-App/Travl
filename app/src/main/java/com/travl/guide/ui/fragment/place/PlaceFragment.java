@@ -5,9 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,8 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
-    private static final String ARGUMENT_ONE_KEY = "arg1";
-    private static final String ARGUMENT_TWO_KEY = "arg2";
+    private static final String PLACE_ID_KEY = "place id key";
 
     @BindView(R.id.post_toolbar)
     Toolbar toolbar;
@@ -53,20 +49,18 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Inject
     IImageLoader imageLoader;
 
-    public static PlaceFragment getInstance(String parameter1, int parameter2) {
+    public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
         Bundle args = new Bundle();
-        args.putString(ARGUMENT_ONE_KEY, parameter1);
-        args.putInt(ARGUMENT_TWO_KEY, parameter2);
+        args.putInt(PLACE_ID_KEY, placeId);
         placeFragment.setArguments(args);
         return placeFragment;
     }
 
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        String arg1 = getArguments().getString(ARGUMENT_ONE_KEY);
-        int arg2 = getArguments().getInt(ARGUMENT_TWO_KEY);
-        return new PlacePresenter(AndroidSchedulers.mainThread(), arg1, arg2);
+        int placeId = getArguments().getInt(PLACE_ID_KEY);
+        return new PlacePresenter(AndroidSchedulers.mainThread(), placeId);
     }
 
     @Nullable
