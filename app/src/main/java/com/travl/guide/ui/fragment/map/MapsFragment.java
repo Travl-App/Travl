@@ -160,20 +160,15 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             if(! features.isEmpty()) {
 
                 Feature feature = features.get(0);
-                PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(convertToLatLng(feature));
+
+                LatLng coordinates = convertToLatLng(feature);
+                PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(coordinates);
 
                 //Снизу должно передаваться id
-                new Bundle().putInt("marker_id", 0);
+                new Bundle().putDoubleArray("marker_id", new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
+                Timber.d("Переданы координаты: " + String.valueOf(coordinates.getLatitude()) + " " + String.valueOf(coordinates.getLongitude()));
                 presenter.toCardScreen();
 
-                /** Не лезь, убьёт
-                View view = viewMap.get(0);
-                View textContainer = view.findViewById(R.id.text_container);
-                Rect hitRectText = new Rect();
-                textContainer.getHitRect(hitRectText);
-                hitRectText.offset((int) symbolScreenPoint.x, (int) symbolScreenPoint.y);
-                hitRectText.offset(0, - view.getMeasuredHeight());
-                */
             } else {
                 onMarkerClickCallback(point.toString());
             }

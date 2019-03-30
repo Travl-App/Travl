@@ -10,7 +10,7 @@
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_height">200dp</dimen>
     <dimen name="card_text_size">28sp</dimen>
-    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
 
     <!--BottomSheet dimens-->
     <dimen name="bottom_sheet_corner_radius">16dp</dimen>

@@ -40,7 +40,7 @@ public class Screens extends Screen {
 
         @Override
         public Fragment getFragment() {
-            return PlaceFragment.getInstance(1);
+            return PlaceFragment.getInstance(2);
         }
     }
 
