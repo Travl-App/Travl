@@ -75,7 +75,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             }
         };
         placesRepo.loadPlacesForMap(
-                new CoordinatesRequest(60, 31), 7, 1)
+                new CoordinatesRequest(60, 31), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(observer);
     }

@@ -113,7 +113,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private void initCitySpinnerList(View view) {
         cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
         cityNames = citiesListToCitiesNameList();
-        cityNames = cityNames.size() == 0 ? Arrays.asList(getResources().getStringArray(R.array.cities)) : cityNames;
+        cityNames = Arrays.asList(getResources().getStringArray(R.array.cities));
         cityArrayAdapter.addAll(cityNames);
         userCitySpinner.setAdapter(cityArrayAdapter);
     }
