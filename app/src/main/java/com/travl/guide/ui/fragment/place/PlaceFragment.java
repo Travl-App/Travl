@@ -80,7 +80,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     private void setupToolbar() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         toolbar.setNavigationOnClickListener(v -> {
-
+            presenter.backPressure();
             Toast.makeText(getContext(), "Назад", Toast.LENGTH_SHORT).show();
         });
     }

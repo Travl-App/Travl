@@ -15,6 +15,10 @@ public class Place {
     @Expose
     private int id;
 
+    @SerializedName("title")
+    @Expose
+    private String title;
+
     @SerializedName("coordinates")
     @Expose
     private double[] coordinates;
@@ -36,8 +40,9 @@ public class Place {
     public Place() {
     }
 
-    public Place(int id, double[] coordinates, String description, Author author, Feature feature) {
+    public Place(int id, String title, double[] coordinates, String description, Author author, Feature feature) {
         this.id = id;
+        this.title = title;
         this.description = description;
         this.coordinates = coordinates;
         this.author = author;
@@ -50,6 +55,14 @@ public class Place {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
