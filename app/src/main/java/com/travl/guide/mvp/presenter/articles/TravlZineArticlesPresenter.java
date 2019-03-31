@@ -10,6 +10,7 @@ import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresente
 import com.travl.guide.mvp.view.articles.TravlZineArticlesView;
 import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,8 +63,11 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         public void bindView(TravlZineArticlesItemView view) {
             Timber.d("BindView and set Description");
             ArticleLink articleLink = articleLinkList.get(view.getPos());
-            view.setDescription(articleLink.getTitle());
-            view.setImage(baseUrl + articleLink.getImageCoverUrl().substring(1));
+            String title = articleLink.getTitle();
+            String imageUrl = articleLink.getImageCoverUrl();
+            if (title != null) view.setDescription(title);
+            if (imageUrl != null)
+                view.setImage(baseUrl + imageUrl.substring(1));
         }
 
         @Override
@@ -75,14 +79,10 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
             this.articleLinkList = articleLinks;
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
-            articleLinks.add(new ArticleLink("test", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
+            if (articleLinkList == null || articleLinkList.size() == 0) {
+                articleLinkList = new ArrayList<>();
+                articleLinkList.add(new ArticleLink("Проверьте соединение", null));
+            }
             getViewState().onChangedArticlesData();
         }
     }
