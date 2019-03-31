@@ -9,6 +9,7 @@ import com.travl.guide.mvp.model.repo.ArticlesRepo;
 import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.TravlZineArticlesView;
 import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
+import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +60,16 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             return clickSubject;
         }
 
+        @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
             Timber.d("BindView and set Description");
             ArticleLink articleLink = articleLinkList.get(view.getPos());
+            clickSubject.subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())));
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             if (title != null) view.setDescription(title);
-            if (imageUrl != null)
-                view.setImage(baseUrl + imageUrl.substring(1));
+            if (imageUrl != null) view.setImage(baseUrl + imageUrl.substring(1));
         }
 
         @Override

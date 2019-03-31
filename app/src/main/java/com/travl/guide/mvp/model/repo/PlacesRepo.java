@@ -33,7 +33,7 @@ public class PlacesRepo {
     }
 
     public Single<PlaceContainer> loadPlace(int id) {
-        Timber.e("loading place with id = " + id);
+        Timber.e("loading place with id = %s", id);
         if (NetworkStatus.isOnline()) {
             return netService.loadPlace(id).subscribeOn(Schedulers.io()).doOnError(throwable -> {
                 Timber.e("LoadPlaceError");
