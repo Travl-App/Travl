@@ -25,6 +25,8 @@
     <dimen name="start_page_text_size">30sp</dimen>
     <!--Place dimens-->
     <dimen name="place_margin">5dp</dimen>
+    <dimen name="place_title_margin">20dp</dimen>
     <dimen name="place_padding">5dp</dimen>
+    <dimen name="subtitle_text_size">20sp</dimen>
 
 </resources>

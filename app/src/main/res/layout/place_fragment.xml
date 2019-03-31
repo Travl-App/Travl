@@ -18,8 +18,10 @@
             android:layout_height="200dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMargin="@dimen/place_title_margin"
             app:expandedTitleTextAppearance="@android:color/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:title="@string/title">
 
             <ImageView
                 android:id="@+id/image_view_place"
@@ -29,12 +31,23 @@
                 android:src="@drawable/fireman_1"
                 app:layout_collapseMode="parallax" />
 
+            <TextView
+                android:id="@+id/text_view_place_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="@dimen/place_title_margin"
+                android:text="@string/subtitle"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/subtitle_text_size" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/post_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -52,14 +65,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/card_margin"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_view_place_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:padding="@dimen/place_padding"
-                android:text="@string/subtitle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,8 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:padding="@dimen/place_padding"
-                android:text="@string/first_text" />
+                android:padding="@dimen/place_padding" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

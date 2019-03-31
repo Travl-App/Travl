@@ -4,4 +4,7 @@
     <color name="colorPrimary">#ff424242</color>
     <color name="colorPrimaryDark">#ff2b2b2b</color>
     <color name="transparent">#0000</color>
+    <!--Place colors-->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOrange">#DD2C00</color>
 </resources>

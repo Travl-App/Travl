@@ -167,7 +167,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 //Снизу должно передаваться id
                 new Bundle().putDoubleArray("marker_id", new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
                 Timber.d("Переданы координаты: " + String.valueOf(coordinates.getLatitude()) + " " + String.valueOf(coordinates.getLongitude()));
-                presenter.toCardScreen();
+
+                presenter.toCardScreen(1);
 
             } else {
                 onMarkerClickCallback(point.toString());

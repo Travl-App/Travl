@@ -38,9 +38,15 @@ public class Screens extends Screen {
 
     public static class PlaceScreen extends SupportAppScreen {
 
+        private int placeId;
+
+        public PlaceScreen(int placeId) {
+            this.placeId = placeId;
+        }
+
         @Override
         public Fragment getFragment() {
-            return PlaceFragment.getInstance(2);
+            return PlaceFragment.getInstance(placeId);
         }
     }
 

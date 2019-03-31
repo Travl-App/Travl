@@ -52,8 +52,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().findUser();
     }
 
-    public void toCardScreen() {
-        router.navigateTo(new Screens.PlaceScreen());
+    public void toCardScreen(int placeId) {
+        router.navigateTo(new Screens.PlaceScreen(placeId));
     }
 
     public void makeRequest() {

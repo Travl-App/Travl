@@ -3,6 +3,7 @@ package com.travl.guide.ui.fragment.place;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     @BindView(R.id.post_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.text_view_place_subtitle)
     TextView placeSubtitleTextView;
     @BindView(R.id.image_view_place)
@@ -70,19 +73,26 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupToolbar();
+        setupCollapsingToolbarLayout();
         return view;
     }
 
     private void setupToolbar() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         toolbar.setNavigationOnClickListener(v -> {
+
             Toast.makeText(getContext(), "Назад", Toast.LENGTH_SHORT).show();
         });
     }
 
+    private void setupCollapsingToolbarLayout() {
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorOrange));
+    }
+
     @Override
     public void setTitleTextView(String title) {
-        toolbar.setTitle(title);
+        collapsingToolbarLayout.setTitle(title);
     }
 
     @Override
