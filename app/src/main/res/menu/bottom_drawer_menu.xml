@@ -7,7 +7,7 @@
             android:title="@string/start_page_title" />
         <!-- <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->
         <item
-            android:id="@+id/app_bar_collections"
+            android:id="@+id/app_bar_travlzine"
             android:icon="@drawable/ic_magazine"
             android:title="@string/travlzine" />
         <item
