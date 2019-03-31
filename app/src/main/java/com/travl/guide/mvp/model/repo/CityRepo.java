@@ -1,11 +1,15 @@
 package com.travl.guide.mvp.model.repo;
 
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.network.NetService;
+import com.travl.guide.ui.utils.NetworkStatus;
 
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class CityRepo {
 
@@ -16,6 +20,38 @@ public class CityRepo {
     }
 
     public Single<CityContent> getCityContent(CoordinatesRequest position) {
-        return netService.loadCityContent(position).subscribeOn(Schedulers.io());
+        if (NetworkStatus.isOnline()) {
+            return netService.loadCityContent(position).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+        } else {
+            return new Single<CityContent>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super CityContent> observer) {
+                }
+            };
+        }
+    }
+
+    public Single<CitiesList> getCitiesList() {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadCitiesList().subscribeOn(Schedulers.io()).doOnError(Timber::e);
+        } else {
+            return new Single<CitiesList>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super CitiesList> observer) {
+                }
+            };
+        }
+    }
+
+    public Single<CityContent> loadCity(int id) {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadCity(id).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+        } else {
+            return new Single<CityContent>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super CityContent> observer) {
+                }
+            };
+        }
     }
 }

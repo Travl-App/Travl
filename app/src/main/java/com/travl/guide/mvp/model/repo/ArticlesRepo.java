@@ -1,10 +1,13 @@
 package com.travl.guide.mvp.model.repo;
 
-import com.travl.guide.mvp.model.api.articles.Articles;
+import com.travl.guide.mvp.model.api.articles.ArticleLinksContainer;
 import com.travl.guide.mvp.model.network.NetService;
+import com.travl.guide.ui.utils.NetworkStatus;
 
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class ArticlesRepo {
     private NetService netService;
@@ -13,7 +16,15 @@ public class ArticlesRepo {
         this.netService = netService;
     }
 
-    public Single<Articles> getTravlZineArticles() {
-        return netService.loadArticles(true).subscribeOn(Schedulers.io());
+    public Single<ArticleLinksContainer> getTravlZineArticles() {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadArticles(true).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+        } else {
+            return new Single<ArticleLinksContainer>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super ArticleLinksContainer> observer) {
+                }
+            };
+        }
     }
 }

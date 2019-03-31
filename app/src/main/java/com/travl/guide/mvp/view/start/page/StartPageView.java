@@ -4,6 +4,8 @@ import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
+import com.travl.guide.mvp.model.api.city.content.CityContent;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface StartPageView extends MvpView {
@@ -11,8 +13,10 @@ public interface StartPageView extends MvpView {
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void initArticlesFragment();
 
-    void setCityName(String placeName);
-
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void initCityArticlesFragment();
+
+    void setCitiesList(CitiesList citiesList);
+
+    void setCityContent(CityContent cityContent);
 }

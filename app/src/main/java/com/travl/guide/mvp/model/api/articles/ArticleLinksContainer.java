@@ -5,17 +5,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Articles {
+public class ArticleLinksContainer {
     @SerializedName("user")
     @Expose
     private String userName;
     @SerializedName("articles")
     @Expose
-    private List<Article> articleList;
+    private List<ArticleLink> articleLinkList;
 
-    public Articles(String userName, List<Article> articleList) {
+    public ArticleLinksContainer(String userName, List<ArticleLink> articleLinkList) {
         this.userName = userName;
-        this.articleList = articleList;
+        this.articleLinkList = articleLinkList;
     }
 
     public String getUserName() {
@@ -26,11 +26,11 @@ public class Articles {
         this.userName = userName;
     }
 
-    public List<Article> getArticleList() {
-        return articleList;
+    public List<ArticleLink> getArticleLinkList() {
+        return articleLinkList;
     }
 
-    public void setArticleList(List<Article> articleList) {
-        this.articleList = articleList;
+    public void setArticleLinkList(List<ArticleLink> articleLinkList) {
+        this.articleLinkList = articleLinkList;
     }
 }

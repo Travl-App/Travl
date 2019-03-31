@@ -1,6 +1,6 @@
 package com.travl.guide.mvp.presenter.articles.list;
 
-import com.travl.guide.mvp.model.api.articles.Article;
+import com.travl.guide.mvp.model.api.articles.ArticleLink;
 import com.travl.guide.mvp.view.articles.list.CityArticlesItemView;
 
 import java.util.List;
@@ -14,5 +14,5 @@ public interface CityArticlesListPresenter {
 
     int getListCount();
 
-    void setArticleList(List<Article> articles);
+    void setArticleLinkList(List<ArticleLink> articleLinks);
 }

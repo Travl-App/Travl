@@ -13,19 +13,24 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.api.articles.ArticleLink;
 import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.CityArticlesPresenter;
 import com.travl.guide.mvp.view.articles.CityArticlesView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.adapter.articles.city.CityArticlesAdapter;
+import com.travl.guide.ui.fragment.start.page.StartPageFragment;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
-public class CityArticlesFragment extends MvpAppCompatFragment implements CityArticlesView {
+public class CityArticlesFragment extends MvpAppCompatFragment implements CityArticlesView, StartPageFragment.ArticlesReceiver {
 
     @BindView(R.id.city_articles_preview_recycler)
     RecyclerView cityArticlesPreviewRecycler;
@@ -50,7 +55,6 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
-        presenter.loadArticles();
         return view;
     }
 
@@ -67,5 +71,11 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
         if (cityArticlesPreviewRecycler != null && cityArticlesPreviewRecycler.getAdapter() != null) {
             cityArticlesPreviewRecycler.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void setArticles(List<ArticleLink> articleLinks) {
+        Timber.e("Setting CityArticles to " + articleLinks);
+        presenter.cityArticlesListPresenter.setArticleLinkList(articleLinks);
     }
 }

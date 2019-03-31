@@ -22,6 +22,7 @@ public class CityContent {
     @Expose
     private int status;
 
+
     public int getStatus() {
         return status;
     }
@@ -53,4 +54,6 @@ public class CityContent {
     public void setContext(City context) {
         this.context = context;
     }
+
+
 }

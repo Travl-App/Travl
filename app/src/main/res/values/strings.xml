@@ -28,6 +28,6 @@
     <string name="share">Share</string>
     <string name="interesting_nearby">Интересное здесь:</string>
     <string-array name="cities">
-        <item>Санкт-Петербу́рг</item>
+        <item>Ваш город не найден</item>
     </string-array>
 </resources>

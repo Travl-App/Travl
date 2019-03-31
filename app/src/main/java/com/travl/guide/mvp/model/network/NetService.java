@@ -1,6 +1,7 @@
 package com.travl.guide.mvp.model.network;
 
-import com.travl.guide.mvp.model.api.articles.Articles;
+import com.travl.guide.mvp.model.api.articles.ArticleLinksContainer;
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.api.places.ManyPlacesContainer;
 import com.travl.guide.mvp.model.api.places.PlaceContainer;
@@ -21,5 +22,11 @@ public interface NetService {
     Single<CityContent> loadCityContent(@Query(value = "position", encoded = true) CoordinatesRequest position);
 
     @GET("api/articles/")
-    Single<Articles> loadArticles(@Query("travlzine") boolean isTravlZine);
+    Single<ArticleLinksContainer> loadArticles(@Query("travlzine") boolean isTravlZine);
+
+    @GET("api/cities/")
+    Single<CitiesList> loadCitiesList();
+
+    @GET("api/cities/{id}")
+    Single<CityContent> loadCity(@Path("id") int id);
 }

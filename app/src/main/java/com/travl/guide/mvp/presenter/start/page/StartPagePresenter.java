@@ -1,9 +1,9 @@
 package com.travl.guide.mvp.presenter.start.page;
 
+import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.model.api.city.content.City;
-import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
@@ -12,9 +12,6 @@ import com.travl.guide.ui.App;
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 @InjectViewState
 public class StartPagePresenter extends MvpPresenter<StartPageView> {
@@ -29,35 +26,17 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     }
 
+    @SuppressLint("CheckResult")
+    public void loadCitiesList() {
+        cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCitiesList(citiesList));
+    }
+
+    @SuppressLint("CheckResult")
     public void loadCityContent(double[] coordinates) {
-        SingleObserver<CityContent> observer = new SingleObserver<CityContent>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(CityContent cityContent) {
-                int status = cityContent.getStatus();
-                City city = null;
-                if (status == 200) {
-                    city = cityContent.getCity();
-                } else if (status == 404) {
-                    city = cityContent.getContext();
-                }
-
-                if (city != null) {
-                    getViewState().setCityName(city.getPlaceName());
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e);
-            }
-        };
         CoordinatesRequest position = new CoordinatesRequest(coordinates);
-        cityRepo.getCityContent(position).observeOn(scheduler).subscribe(observer);
+        cityRepo.getCityContent(position).observeOn(scheduler).subscribe(cityContent -> {
+            getViewState().setCityContent(cityContent);
+        });
     }
 
 
@@ -67,5 +46,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     public void initCityArticlesFragment() {
         getViewState().initCityArticlesFragment();
+    }
+
+    @SuppressLint("CheckResult")
+    public void loadCityContent(int id) {
+        cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContent(cityContent));
+
     }
 }

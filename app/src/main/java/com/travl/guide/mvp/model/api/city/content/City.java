@@ -2,6 +2,9 @@ package com.travl.guide.mvp.model.api.city.content;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.travl.guide.mvp.model.api.articles.ArticleLink;
+
+import java.util.List;
 
 public class City {
     @SerializedName("place")
@@ -13,6 +16,10 @@ public class City {
     @SerializedName("country")
     @Expose
     private String country;
+
+    @SerializedName("articles")
+    @Expose
+    private List<ArticleLink> articleLinks;
 
     public City(String placeName, String region, String country) {
         this.placeName = placeName;
@@ -42,5 +49,13 @@ public class City {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<ArticleLink> getArticleLinks() {
+        return articleLinks;
+    }
+
+    public void setArticleLinks(List<ArticleLink> articleLinks) {
+        this.articleLinks = articleLinks;
     }
 }

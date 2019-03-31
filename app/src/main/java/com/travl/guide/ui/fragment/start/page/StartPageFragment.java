@@ -25,6 +25,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.api.articles.ArticleLink;
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
+import com.travl.guide.mvp.model.api.city.content.City;
+import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
@@ -32,6 +36,8 @@ import com.travl.guide.ui.App;
 import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,6 +48,7 @@ import timber.log.Timber;
 
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
+    public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
     @BindView(R.id.user_city_spinner)
     Spinner userCitySpinner;
     @BindView(R.id.start_page_toolbar)
@@ -50,12 +57,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     StartPagePresenter presenter;
     private ArrayAdapter<String> cityArrayAdapter;
     private LocationManager locationManager;
-
-    @ProvidePresenter
-    public StartPagePresenter providePresenter() {
-        return new StartPagePresenter(AndroidSchedulers.mainThread());
-    }
-
+    private CitiesList citiesList;
+    private City city;
+    private List<String> cityNames;
+    private CityContent cityContent;
     private LocationListener mListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -67,13 +72,21 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
         }
+
         @Override
         public void onProviderEnabled(String s) {
         }
+
         @Override
         public void onProviderDisabled(String s) {
         }
     };
+    private ArticlesReceiver articlesReceiver;
+
+    @ProvidePresenter
+    public StartPagePresenter providePresenter() {
+        return new StartPagePresenter(AndroidSchedulers.mainThread());
+    }
 
     @Nullable
     @Override
@@ -87,21 +100,41 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
         requestCoordinates();
         presenter.loadCityContent(User.getInstance().getCoordinates());
+        presenter.loadCitiesList();
         initCitySpinner(view);
         return view;
     }
 
     private void initCitySpinner(View view) {
+        initCitySpinnerList(view);
+        initCitySpinnerClickListener();
+    }
+
+    private void initCitySpinnerList(View view) {
         cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
-        cityArrayAdapter.addAll(getResources().getStringArray(R.array.cities));
+        cityNames = citiesListToCitiesNameList();
+        cityNames = cityNames.size() == 0 ? Arrays.asList(getResources().getStringArray(R.array.cities)) : cityNames;
+        cityArrayAdapter.addAll(cityNames);
         userCitySpinner.setAdapter(cityArrayAdapter);
+    }
+
+    private void initCitySpinnerClickListener() {
         userCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapterView.getItemAtPosition(i).equals("Санкт-Петербу́рг")) {
-                    presenter.loadCityContent(new double[]{59.93, 30.33});
-                } else {
-                    presenter.loadCityContent(User.getInstance().getCoordinates());
+                String city = (String) adapterView.getItemAtPosition(i);
+                Timber.e("OnItemSelected CityNames =" + cityNames + " \n City = " + city + "\n CitiesList = " + citiesList);
+                if (cityNames != null) {
+                    if (citiesList != null && cityNames.contains(city)) {
+                        for (CitiesList.CityLink link : citiesList.getCities()) {
+                            if (city.equals(link.getTitle())) {
+                                Timber.e("Loading city by id");
+                                presenter.loadCityContent(link.getId());
+                            }
+                        }
+                    } else {
+                        presenter.loadCityContent(User.getInstance().getCoordinates());
+                    }
                 }
             }
 
@@ -110,6 +143,17 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
             }
         });
+    }
+
+    private ArrayList<String> citiesListToCitiesNameList() {
+        List<CitiesList.CityLink> cityLinks;
+        ArrayList<String> cityNames = new ArrayList<>();
+        if (citiesList != null && (cityLinks = citiesList.getCities()) != null) {
+            for (int i = 0; i < citiesList.getCities().size(); i++) {
+                cityNames.add(cityLinks.get(i).getTitle());
+            }
+        }
+        return cityNames;
     }
 
     private void setCoordinates(Location lastKnownLocation) {
@@ -130,7 +174,23 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void initCityArticlesFragment() {
         Fragment cityArticlesFragment = new CityArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.start_page_city_articles_container, cityArticlesFragment).commit();
+        transaction.replace(R.id.start_page_city_articles_container, cityArticlesFragment, CITY_ARTICLES_FRAGMENT_TAG).commit();
+    }
+
+    @Override
+    public void setCitiesList(CitiesList citiesList) {
+        this.citiesList = citiesList;
+        cityNames = citiesListToCitiesNameList();
+        cityArrayAdapter.addAll(cityNames);
+    }
+
+    @Override
+    public void setCityContent(CityContent cityContent) {
+        this.cityContent = cityContent;
+        setCityName();
+        if (articlesReceiver != null && this.cityContent != null) {
+            articlesReceiver.setArticles(city.getArticleLinks());
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -148,22 +208,47 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.fragment_container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
     }
 
-    @Override
-    public void setCityName(String placeName) {
-        if (!placeName.equals("Не найден")) {
-            boolean isPlaceAdded = false;
-            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-                if (((String) Objects.requireNonNull(cityArrayAdapter.getItem(i))).equals(placeName)) {
-                    isPlaceAdded = true;
+
+    private void setCityName() {
+        int status = cityContent.getStatus();
+        city = null;
+        if (status == 200) {
+            city = cityContent.getCity();
+        } else if (status == 404) {
+            city = cityContent.getContext();
+        }
+        if (city != null) {
+            String placeName = city.getPlaceName();
+            if (!placeName.equals("Не найден")) {
+                boolean isPlaceAdded = false;
+                for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+                    String name = (String) Objects.requireNonNull(cityArrayAdapter.getItem(i));
+                    if (name.equals(getResources().getStringArray(R.array.cities)[0])) {
+                        cityArrayAdapter.remove(name);
+                    }
+                    if (name.contains(placeName)) {
+                        isPlaceAdded = true;
+                    }
                 }
-            }
-            if (!isPlaceAdded) {
-                cityArrayAdapter.insert(placeName, 0);
+                if (!isPlaceAdded) {
+                    cityArrayAdapter.insert(placeName, 0);
+                }
             }
         }
     }
 
-
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        String tag = childFragment.getTag();
+        Timber.e("OnAttachFragment tag = " + tag);
+        if (tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
+            articlesReceiver = (ArticlesReceiver) childFragment;
+            if (city != null) {
+                articlesReceiver.setArticles(city.getArticleLinks());
+            }
+        }
+    }
 
     @Override
     public void onPermissionResult(boolean granted) {
@@ -181,5 +266,9 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         int meters = 100;
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+    }
+
+    public interface ArticlesReceiver {
+        void setArticles(List<ArticleLink> articleLinks);
     }
 }
