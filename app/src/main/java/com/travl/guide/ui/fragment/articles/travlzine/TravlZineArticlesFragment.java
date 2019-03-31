@@ -1,4 +1,4 @@
-package com.travl.guide.ui.fragment.articles;
+package com.travl.guide.ui.fragment.articles.travlzine;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -16,10 +16,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
-import com.travl.guide.mvp.presenter.ArticlesPresenter;
-import com.travl.guide.mvp.view.ArticlesView;
+import com.travl.guide.mvp.presenter.articles.TravlZineArticlesPresenter;
+import com.travl.guide.mvp.view.articles.TravlZineArticlesView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.adapter.ArticlesAdapter;
+import com.travl.guide.ui.adapter.articles.travlzine.TravlZineArticlesAdapter;
 
 import javax.inject.Inject;
 
@@ -27,14 +27,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class ArticlesFragment extends MvpAppCompatFragment implements ArticlesView {
+public class TravlZineArticlesFragment extends MvpAppCompatFragment implements TravlZineArticlesView {
 
     private static final int SPAN_COUNT = 2;
     @InjectPresenter
-    ArticlesPresenter presenter;
+    TravlZineArticlesPresenter presenter;
     @Inject
     IImageLoader imageLoader;
-    @BindView(R.id.collection_recycler)
+    @BindView(R.id.travlzine_articles_recycler)
     RecyclerView recycler;
 
     @Nullable
@@ -54,13 +54,13 @@ public class ArticlesFragment extends MvpAppCompatFragment implements ArticlesVi
         } else {
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
         }
-        ArticlesAdapter adapter = new ArticlesAdapter(presenter.articleListPresenter, imageLoader);
+        TravlZineArticlesAdapter adapter = new TravlZineArticlesAdapter(presenter.travlZineArticlesListPresenter, imageLoader);
         recycler.setAdapter(adapter);
     }
 
     @ProvidePresenter
-    public ArticlesPresenter providePresenter() {
-        ArticlesPresenter presenter = new ArticlesPresenter(AndroidSchedulers.mainThread());
+    public TravlZineArticlesPresenter providePresenter() {
+        TravlZineArticlesPresenter presenter = new TravlZineArticlesPresenter(AndroidSchedulers.mainThread());
         App.getInstance().getAppComponent().inject(presenter);
         return presenter;
     }

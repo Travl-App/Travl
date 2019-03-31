@@ -64,9 +64,9 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        val dialogCreated = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
 
-        dialog.setOnShowListener { dialog ->
+        dialogCreated.setOnShowListener { dialog ->
             val dial = dialog as BottomSheetDialog
 
             val bottomSheet = dial.findViewById<View>(R.id.design_bottom_sheet) as FrameLayout?
@@ -89,7 +89,7 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
         }
 
-        return dialog
+        return dialogCreated
     }
 
     private fun disableNavigationViewScrollbars(navigationView: NavigationView?) {

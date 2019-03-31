@@ -2,7 +2,7 @@ package com.travl.guide.navigator;
 
 import android.support.v4.app.Fragment;
 
-import com.travl.guide.ui.fragment.articles.ArticlesFragment;
+import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
@@ -16,7 +16,7 @@ public class Screens extends Screen {
 
         @Override
         public Fragment getFragment() {
-            return new ArticlesFragment();
+            return new TravlZineArticlesFragment();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.maps;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -10,7 +10,7 @@ import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.api.places.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
-import com.travl.guide.mvp.view.MapsView;
+import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;

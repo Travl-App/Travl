@@ -1,8 +1,8 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.favourite;
 
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.favorite.FavoriteModel;
-import com.travl.guide.mvp.view.FavoriteView;
+import com.travl.guide.mvp.view.favourite.FavoriteView;
 
 import javax.inject.Inject;
 

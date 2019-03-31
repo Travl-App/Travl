@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.view;
+package com.travl.guide.mvp.view.start.page;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
@@ -12,4 +12,7 @@ public interface StartPageView extends MvpView {
     void initArticlesFragment();
 
     void setCityName(String placeName);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void initCityArticlesFragment();
 }

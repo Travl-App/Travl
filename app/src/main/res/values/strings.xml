@@ -26,6 +26,7 @@
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
     <string name="favorite">Избранное</string>
     <string name="share">Share</string>
+    <string name="interesting_nearby">Интересное здесь:</string>
     <string-array name="cities">
         <item>Санкт-Петербу́рг</item>
     </string-array>

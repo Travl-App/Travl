@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.start.page;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -6,7 +6,7 @@ import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
-import com.travl.guide.mvp.view.StartPageView;
+import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
@@ -61,7 +61,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
     }
 
 
-    public void initPlacesFragment() {
+    public void initTravlZineArticlesFragment() {
         getViewState().initArticlesFragment();
+    }
+
+    public void initCityArticlesFragment() {
+        getViewState().initCityArticlesFragment();
     }
 }

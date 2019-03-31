@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.place;
 
 import android.annotation.SuppressLint;
 
@@ -6,7 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
-import com.travl.guide.mvp.view.PlaceView;
+import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 

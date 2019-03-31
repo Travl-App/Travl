@@ -42,8 +42,8 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.user.User;
-import com.travl.guide.mvp.presenter.MapsPresenter;
-import com.travl.guide.mvp.view.MapsView;
+import com.travl.guide.mvp.presenter.maps.MapsPresenter;
+import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.ui.App;
 
 import java.util.HashMap;

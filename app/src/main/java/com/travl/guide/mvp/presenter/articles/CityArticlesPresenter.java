@@ -1,13 +1,11 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.articles;
 
-import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.Article;
-import com.travl.guide.mvp.model.api.articles.Articles;
 import com.travl.guide.mvp.model.repo.ArticlesRepo;
-import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
-import com.travl.guide.mvp.view.ArticlesView;
-import com.travl.guide.mvp.view.list.ArticlesItemView;
+import com.travl.guide.mvp.presenter.articles.list.CityArticlesListPresenter;
+import com.travl.guide.mvp.view.articles.CityArticlesView;
+import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
 
 import java.util.List;
 
@@ -15,67 +13,37 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
-import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
-@InjectViewState
-public class ArticlesPresenter extends MvpPresenter<ArticlesView> {
+public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
 
     @Inject
-    Router router;
-    private Scheduler scheduler;
-    public ArticleListPresenter articleListPresenter;
-    @Inject
-    ArticlesRepo repo;
+    ArticlesRepo articlesRepo;
     @Inject
     @Named("baseUrl")
     String baseUrl;
+    private Scheduler scheduler;
 
-    public ArticlesPresenter(Scheduler scheduler) {
+    public CityArticlesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        articleListPresenter = new ArticleListPresenterImpl();
-    }
-
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
     }
 
     public void loadArticles() {
-        Timber.d("Loading articles");
-        SingleObserver<Articles> articlesSingleObserver = new SingleObserver<Articles>() {
-            @Override
-            public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onSuccess(Articles articles) {
-                articleListPresenter.setArticleList(articles.getArticleList());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e);
-            }
-        };
-        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articlesSingleObserver);
     }
 
-    public class ArticleListPresenterImpl implements ArticleListPresenter {
-        PublishSubject<ArticlesItemView> clickSubject = PublishSubject.create();
+    public class CityArticlesListPresenterImpl implements CityArticlesListPresenter {
+        PublishSubject<TravlZineArticlesItemView> clickSubject = PublishSubject.create();
         private List<Article> articleList;
 
         @Override
-        public PublishSubject<ArticlesItemView> getClickSubject() {
+        public PublishSubject<TravlZineArticlesItemView> getClickSubject() {
             return clickSubject;
         }
 
         @Override
-        public void bindView(ArticlesItemView view) {
+        public void bindView(TravlZineArticlesItemView view) {
             Timber.d("BindView and set Description");
             Article article = articleList.get(view.getPos());
             view.setDescription(article.getTitle());

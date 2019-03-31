@@ -17,8 +17,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
-import com.travl.guide.mvp.presenter.PlacePresenter;
-import com.travl.guide.mvp.view.PlaceView;
+import com.travl.guide.mvp.presenter.place.PlacePresenter;
+import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;

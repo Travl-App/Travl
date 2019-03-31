@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.FavoritePresenter;
-import com.travl.guide.mvp.view.FavoriteView;
+import com.travl.guide.mvp.presenter.favourite.FavoritePresenter;
+import com.travl.guide.mvp.view.favourite.FavoriteView;
 import com.travl.guide.ui.App;
 
 //Created by Pereved on 29.03.2019.

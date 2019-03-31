@@ -1,8 +1,8 @@
-package com.travl.guide.mvp.presenter;
+package com.travl.guide.mvp.presenter.main;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.view.MainView;
+import com.travl.guide.mvp.view.main.MainView;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {

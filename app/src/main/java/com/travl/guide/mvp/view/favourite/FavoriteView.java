@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.view;
+package com.travl.guide.mvp.view.favourite;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy;

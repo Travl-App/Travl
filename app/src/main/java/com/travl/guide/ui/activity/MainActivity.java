@@ -13,11 +13,11 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.MainPresenter;
-import com.travl.guide.mvp.view.MainView;
+import com.travl.guide.mvp.presenter.main.MainPresenter;
+import com.travl.guide.mvp.view.main.MainView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.fragment.articles.ArticlesFragment;
+import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerListener;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
@@ -62,7 +62,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if (command instanceof Replace && nextFragment instanceof ArticlesFragment) {
+            if (command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 presenter.onMoveToPlaceScreen();
             } else if (command instanceof Replace && nextFragment instanceof MapsFragment) {

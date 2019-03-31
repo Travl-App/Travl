@@ -7,14 +7,16 @@ import com.travl.guide.di.modules.CityRepoModule;
 import com.travl.guide.di.modules.ImageLoaderModule;
 import com.travl.guide.di.modules.NetModule;
 import com.travl.guide.di.modules.PlacesRepoModule;
-import com.travl.guide.mvp.presenter.ArticlesPresenter;
-import com.travl.guide.mvp.presenter.FavoritePresenter;
-import com.travl.guide.mvp.presenter.MainPresenter;
-import com.travl.guide.mvp.presenter.MapsPresenter;
-import com.travl.guide.mvp.presenter.PlacePresenter;
-import com.travl.guide.mvp.presenter.StartPagePresenter;
+import com.travl.guide.mvp.presenter.articles.CityArticlesPresenter;
+import com.travl.guide.mvp.presenter.articles.TravlZineArticlesPresenter;
+import com.travl.guide.mvp.presenter.favourite.FavoritePresenter;
+import com.travl.guide.mvp.presenter.main.MainPresenter;
+import com.travl.guide.mvp.presenter.maps.MapsPresenter;
+import com.travl.guide.mvp.presenter.place.PlacePresenter;
+import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.ui.activity.MainActivity;
-import com.travl.guide.ui.fragment.articles.ArticlesFragment;
+import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
+import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
@@ -44,9 +46,13 @@ public interface AppComponent {
 
     void inject(MapsPresenter mapPresenter);
 
-    void inject(ArticlesPresenter presenter);
+    void inject(TravlZineArticlesPresenter presenter);
 
-    void inject(ArticlesFragment articlesFragment);
+    void inject(CityArticlesPresenter presenter);
+
+    void inject(TravlZineArticlesFragment travlZineArticlesFragment);
+
+    void inject(CityArticlesFragment travlZineArticlesFragment);
 
     void inject(BottomNavigationDrawerBehavior fragment);
 

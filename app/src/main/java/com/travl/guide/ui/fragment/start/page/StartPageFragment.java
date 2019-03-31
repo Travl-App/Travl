@@ -26,10 +26,10 @@ import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.user.User;
-import com.travl.guide.mvp.presenter.StartPagePresenter;
-import com.travl.guide.mvp.view.StartPageView;
+import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
+import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.fragment.articles.ArticlesFragment;
+import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,9 +41,6 @@ import timber.log.Timber;
 
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
-
-    //    @BindView(R.id.city_image_view)
-//    ImageView cityImageView;
     @BindView(R.id.user_city_spinner)
     Spinner userCitySpinner;
     @BindView(R.id.start_page_toolbar)
@@ -51,7 +48,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @InjectPresenter
     StartPagePresenter presenter;
     private ArrayAdapter<String> cityArrayAdapter;
-    private PermissionsManager permissionsManager;
     private LocationManager locationManager;
 
     @ProvidePresenter
@@ -69,17 +65,12 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-
         }
-
         @Override
         public void onProviderEnabled(String s) {
-
         }
-
         @Override
         public void onProviderDisabled(String s) {
-
         }
     };
 
@@ -90,10 +81,16 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         ButterKnife.bind(this, view);
         locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
         if (savedInstanceState == null) {
-            presenter.initPlacesFragment();
+            presenter.initCityArticlesFragment();
+            presenter.initTravlZineArticlesFragment();
         }
         requestCoordinates();
         presenter.loadCityContent(User.getInstance().getCoordinates());
+        initCitySpinner(view);
+        return view;
+    }
+
+    private void initCitySpinner(View view) {
         cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
         cityArrayAdapter.addAll(getResources().getStringArray(R.array.cities));
         userCitySpinner.setAdapter(cityArrayAdapter);
@@ -112,7 +109,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
             }
         });
-        return view;
     }
 
     private void setCoordinates(Location lastKnownLocation) {
@@ -124,9 +120,9 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void initArticlesFragment() {
-        Fragment articlesFragment = new ArticlesFragment();
+        Fragment articlesFragment = new TravlZineArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.start_page_articles_container, articlesFragment).commit();
+        transaction.replace(R.id.start_page_travl_zine_container, articlesFragment).commit();
     }
 
     @SuppressLint("MissingPermission")
@@ -134,7 +130,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             requestLocation();
         } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            permissionsManager = new PermissionsManager(this);
+            PermissionsManager permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(getActivity());
         }
     }
@@ -157,7 +153,11 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 cityArrayAdapter.insert(placeName, 0);
             }
         }
-        // cityNameTextView.setText(placeName);
+    }
+
+    @Override
+    public void initCityArticlesFragment() {
+
     }
 
     @Override

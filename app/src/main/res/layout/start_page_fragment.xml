@@ -66,18 +66,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
-                android:id="@+id/places_container_title"
+                android:id="@+id/start_page_city_articles_container_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="10dp"
+                android:fontFamily="monospace"
+                android:text="@string/interesting_nearby"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/start_page_text_size"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:id="@+id/start_page_city_articles_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/start_page_travl_zine_container_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
                 android:fontFamily="monospace"
                 android:text="@string/travl_zine_title"
                 android:textSize="@dimen/start_page_text_size" />
 
             <FrameLayout
-                android:id="@+id/start_page_articles_container"
+                android:id="@+id/start_page_travl_zine_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="150dp"

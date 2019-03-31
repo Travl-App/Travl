@@ -1,4 +1,4 @@
-package com.travl.guide.ui.adapter;
+package com.travl.guide.ui.adapter.articles.travlzine;
 
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
@@ -10,27 +10,27 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
-import com.travl.guide.mvp.presenter.list.ArticleListPresenter;
-import com.travl.guide.mvp.view.list.ArticlesItemView;
+import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresenter;
+import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
 
-public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticlesViewHolder> {
+public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArticlesAdapter.TravlZineArticlesViewHolder> {
 
-    private ArticleListPresenter presenter;
+    private TravlZineArticlesListPresenter presenter;
     private IImageLoader imageLoader;
 
-    public ArticlesAdapter(ArticleListPresenter presenter, IImageLoader imageLoader) {
+    public TravlZineArticlesAdapter(TravlZineArticlesListPresenter presenter, IImageLoader imageLoader) {
         this.presenter = presenter;
         this.imageLoader = imageLoader;
     }
 
     @NonNull
     @Override
-    public ArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
+    public TravlZineArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new TravlZineArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticlesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TravlZineArticlesViewHolder holder, int position) {
         RxView.clicks(holder.itemView).map(obj -> holder).subscribe(presenter.getClickSubject());
         holder.position = position;
         presenter.bindView(holder);
@@ -41,12 +41,12 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         return presenter.getListCount();
     }
 
-    public class ArticlesViewHolder extends RecyclerView.ViewHolder implements ArticlesItemView {
+    public class TravlZineArticlesViewHolder extends RecyclerView.ViewHolder implements TravlZineArticlesItemView {
 
         int position = 0;
         private MaterialCardView cardView;
 
-        ArticlesViewHolder(@NonNull MaterialCardView cardView) {
+        TravlZineArticlesViewHolder(@NonNull MaterialCardView cardView) {
             super(cardView);
             this.cardView = cardView;
         }
