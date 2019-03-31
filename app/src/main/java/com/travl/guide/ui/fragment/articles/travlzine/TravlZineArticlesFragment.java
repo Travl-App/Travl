@@ -34,13 +34,13 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
     TravlZineArticlesPresenter presenter;
     @Inject
     IImageLoader imageLoader;
-    @BindView(R.id.travlzine_articles_recycler)
-    RecyclerView recycler;
+    @BindView(R.id.travlzine_articles_preview_recycler)
+    RecyclerView travzineArticlesPreviewRecycler;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.articles_fragment, container, false);
+        View view = inflater.inflate(R.layout.travlzine_articles_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
@@ -50,12 +50,12 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
 
     private void setupRecycler() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            travzineArticlesPreviewRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         } else {
-            recycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
+            travzineArticlesPreviewRecycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
         }
         TravlZineArticlesAdapter adapter = new TravlZineArticlesAdapter(presenter.travlZineArticlesListPresenter, imageLoader);
-        recycler.setAdapter(adapter);
+        travzineArticlesPreviewRecycler.setAdapter(adapter);
     }
 
     @ProvidePresenter
@@ -67,8 +67,8 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
 
     @Override
     public void onChangedArticlesData() {
-        if (recycler != null && recycler.getAdapter() != null) {
-            recycler.getAdapter().notifyDataSetChanged();
+        if (travzineArticlesPreviewRecycler != null && travzineArticlesPreviewRecycler.getAdapter() != null) {
+            travzineArticlesPreviewRecycler.getAdapter().notifyDataSetChanged();
         }
     }
 }

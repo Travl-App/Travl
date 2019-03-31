@@ -3,9 +3,11 @@ package com.travl.guide.ui.adapter.articles.city;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.list.CityArticlesListPresenter;
@@ -23,17 +25,19 @@ public class CityArticlesAdapter extends RecyclerView.Adapter<CityArticlesAdapte
     @NonNull
     @Override
     public CityArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return null;
+        return new CityArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_city_article_preview, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CityArticlesViewHolder cityArticlesViewHolder, int i) {
-
+    public void onBindViewHolder(@NonNull CityArticlesViewHolder cityArticlesViewHolder, int position) {
+        RxView.clicks(cityArticlesViewHolder.itemView).map(obj -> cityArticlesViewHolder).subscribe(presenter.getClickSubject());
+        cityArticlesViewHolder.position = position;
+        presenter.bindView(cityArticlesViewHolder);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return presenter.getListCount();
     }
 
     public class CityArticlesViewHolder extends RecyclerView.ViewHolder implements CityArticlesItemView {
@@ -48,12 +52,12 @@ public class CityArticlesAdapter extends RecyclerView.Adapter<CityArticlesAdapte
 
         @Override
         public void setImage(String url) {
-            imageLoader.loadInto(cardView.findViewById(R.id.place_image_view), url);
+            imageLoader.loadInto(cardView.findViewById(R.id.city_article_preview_image_view), url);
         }
 
         @Override
         public void setDescription(String description) {
-            ((TextView) cardView.findViewById(R.id.place_description)).setText(description);
+            ((TextView) cardView.findViewById(R.id.city_article_preview_description)).setText(description);
         }
 
         @Override

@@ -26,7 +26,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
     @NonNull
     @Override
     public TravlZineArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new TravlZineArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_places, viewGroup, false));
+        return new TravlZineArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_travlzine_article_preview, viewGroup, false));
     }
 
     @Override
@@ -53,12 +53,12 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
 
         @Override
         public void setImage(String url) {
-            imageLoader.loadInto(cardView.findViewById(R.id.place_image_view), url);
+            imageLoader.loadInto(cardView.findViewById(R.id.travlzine_article_preview_image_view), url);
         }
 
         @Override
         public void setDescription(String description) {
-            ((TextView) cardView.findViewById(R.id.place_description)).setText(description);
+            ((TextView) cardView.findViewById(R.id.travlzine_article_preview_description)).setText(description);
         }
 
         @Override

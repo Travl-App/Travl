@@ -3,6 +3,8 @@ package com.travl.guide.ui.fragment.articles.city;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +13,25 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.CityArticlesPresenter;
 import com.travl.guide.mvp.view.articles.CityArticlesView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.adapter.articles.city.CityArticlesAdapter;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class CityArticlesFragment extends MvpAppCompatFragment implements CityArticlesView {
+
+    @BindView(R.id.city_articles_preview_recycler)
+    RecyclerView cityArticlesPreviewRecycler;
+
+    @Inject
+    IImageLoader imageLoader;
 
     @InjectPresenter
     CityArticlesPresenter presenter;
@@ -33,7 +46,7 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.articles_fragment, container, false);
+        View view = inflater.inflate(R.layout.city_articles_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupRecycler();
@@ -42,11 +55,17 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     }
 
     private void setupRecycler() {
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        cityArticlesPreviewRecycler.setLayoutManager(linearLayoutManager);
+        CityArticlesAdapter adapter = new CityArticlesAdapter(presenter.cityArticlesListPresenter, imageLoader);
+        cityArticlesPreviewRecycler.setAdapter(adapter);
     }
 
     @Override
     public void onChangedArticlesData() {
-
+        if (cityArticlesPreviewRecycler != null && cityArticlesPreviewRecycler.getAdapter() != null) {
+            cityArticlesPreviewRecycler.getAdapter().notifyDataSetChanged();
+        }
     }
 }

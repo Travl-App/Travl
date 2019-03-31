@@ -29,6 +29,7 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
 import java.util.List;
@@ -120,9 +121,16 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void initArticlesFragment() {
-        Fragment articlesFragment = new TravlZineArticlesFragment();
+        Fragment travlZineArticlesFragment = new TravlZineArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.start_page_travl_zine_container, articlesFragment).commit();
+        transaction.replace(R.id.start_page_travl_zine_container, travlZineArticlesFragment).commit();
+    }
+
+    @Override
+    public void initCityArticlesFragment() {
+        Fragment cityArticlesFragment = new CityArticlesFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.start_page_city_articles_container, cityArticlesFragment).commit();
     }
 
     @SuppressLint("MissingPermission")
@@ -155,10 +163,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
-    @Override
-    public void initCityArticlesFragment() {
 
-    }
 
     @Override
     public void onPermissionResult(boolean granted) {

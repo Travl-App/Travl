@@ -7,17 +7,18 @@
     app:cardCornerRadius="@dimen/card_corner_radius">
 
     <ImageView
-        android:id="@+id/place_image_view"
+        android:id="@+id/travlzine_article_preview_image_view"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:scaleType="centerCrop"
         android:src="@null" />
 
     <TextView
-        android:id="@+id/place_description"
+        android:id="@+id/travlzine_article_preview_description"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="bottom"
+        android:fontFamily="@font/roboto_slab_bold"
         android:gravity="center"
         android:textSize="@dimen/card_text_size" />
 </android.support.design.card.MaterialCardView>

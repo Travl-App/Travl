@@ -72,11 +72,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="10dp"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="@string/interesting_nearby"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/start_page_text_size"
-                android:textStyle="bold" />
+                android:textSize="@dimen/start_page_titles_text_size" />
 
             <FrameLayout
                 android:id="@+id/start_page_city_articles_container"
@@ -92,10 +91,9 @@
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="10dp"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="@string/travl_zine_title"
-                android:textSize="@dimen/start_page_text_size" />
+                android:textSize="@dimen/start_page_titles_text_size" />
 
             <FrameLayout
                 android:id="@+id/start_page_travl_zine_container"

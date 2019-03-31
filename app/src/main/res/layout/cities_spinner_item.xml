@@ -3,11 +3,11 @@
     android:id="@+id/city_spinner_text_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/standard_margin"
-    android:layout_marginEnd="@dimen/small_margin"
-    android:fontFamily="monospace"
+    android:layout_marginStart="@dimen/city_spinner_item_margin_start"
+    android:layout_marginEnd="@dimen/city_spinner_item_margin_end"
+    android:fontFamily="@font/roboto_slab_bold"
     android:gravity="center_horizontal"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp"
+    android:paddingStart="@dimen/city_spinner_item_padding_start"
+    android:paddingEnd="@dimen/city_spinner_item_padding_end"
     android:textColor="@android:color/white"
-    android:textSize="22sp"></TextView>
+    android:textSize="@dimen/city_spinner_item_text_size" />
