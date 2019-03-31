@@ -76,6 +76,7 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     @Override
     public void setArticles(List<ArticleLink> articleLinks) {
         Timber.e("Setting CityArticles to " + articleLinks);
-        presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
+        if (presenter != null)
+            presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
     }
 }
