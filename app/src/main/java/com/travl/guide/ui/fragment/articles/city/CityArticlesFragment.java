@@ -62,7 +62,7 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         cityArticlesPreviewRecycler.setLayoutManager(linearLayoutManager);
-        CityArticlesAdapter adapter = new CityArticlesAdapter(presenter.cityArticlesListPresenter, imageLoader);
+        CityArticlesAdapter adapter = new CityArticlesAdapter(presenter.getCityArticlesListPresenter(), imageLoader);
         cityArticlesPreviewRecycler.setAdapter(adapter);
     }
 
@@ -76,6 +76,6 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     @Override
     public void setArticles(List<ArticleLink> articleLinks) {
         Timber.e("Setting CityArticles to " + articleLinks);
-        presenter.cityArticlesListPresenter.setArticleLinkList(articleLinks);
+        presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
     }
 }

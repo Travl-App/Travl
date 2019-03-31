@@ -21,7 +21,8 @@ import timber.log.Timber;
 @InjectViewState
 public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
 
-    public CityArticlesListPresenterImpl cityArticlesListPresenter;
+
+    private CityArticlesListPresenterImpl cityArticlesListPresenter;
     @Inject
     ArticlesRepo articlesRepo;
     @Inject
@@ -31,7 +32,6 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
 
     public CityArticlesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        this.cityArticlesListPresenter = new CityArticlesListPresenterImpl();
     }
 
     public void setArticlesList(List<ArticleLink> articlesList) {
@@ -70,5 +70,11 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             }
             getViewState().onChangedArticlesData();
         }
+    }
+
+    public CityArticlesListPresenterImpl getCityArticlesListPresenter() {
+        if (cityArticlesListPresenter == null)
+            cityArticlesListPresenter = new CityArticlesListPresenterImpl();
+        return cityArticlesListPresenter;
     }
 }
