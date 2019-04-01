@@ -35,6 +35,14 @@ public class CitiesList {
         @SerializedName("place")
         @Expose
         private String place;
+        @SerializedName("area")
+        @Expose
+        private String area;
+
+        @SerializedName("country")
+        @Expose
+        private String country;
+
 
         public String getTitle() {
             return title;
@@ -74,6 +82,22 @@ public class CitiesList {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getArea() {
+            return area;
+        }
+
+        public void setArea(String area) {
+            this.area = area;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
         }
     }
 

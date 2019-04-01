@@ -7,6 +7,9 @@ import com.travl.guide.mvp.model.api.articles.ArticleLink;
 import java.util.List;
 
 public class City {
+    @SerializedName("area")
+    @Expose
+    private String area;
     @SerializedName("place")
     @Expose
     private String placeName;
@@ -57,5 +60,13 @@ public class City {
 
     public void setArticleLinks(List<ArticleLink> articleLinks) {
         this.articleLinks = articleLinks;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

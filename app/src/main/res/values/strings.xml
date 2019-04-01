@@ -27,6 +27,7 @@
     <string name="favorite">Избранное</string>
     <string name="share">Share</string>
     <string name="interesting_nearby">Интересное здесь:</string>
+    <string name="city_not_found">Не найден</string>
     <string-array name="cities">
         <item>Ваш город не найден</item>
     </string-array>
