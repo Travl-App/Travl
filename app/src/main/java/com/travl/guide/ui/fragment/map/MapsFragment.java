@@ -68,10 +68,13 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @BindView(R.id.mapView)
     MapView mapView;
+    @BindView(R.id.map_location_fab)
+    FloatingActionButton locationFab;
     @InjectPresenter
     MapsPresenter presenter;
 
     private MapboxMap mapBoxMap;
+    private List<Place> listPlaces;
     private HashMap<Integer, View> viewMap;
     private HashMap<String, Bitmap> bitmapMap;
     private LocationComponent locationComponent;
@@ -100,6 +103,12 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     private void setupViews() {
         presenter.setupMapView();
+        presenter.setupLocationFab();
+    }
+
+    @Override
+    public void setupFab() {
+        locationFab.setOnClickListener(view -> findUser());
     }
 
     public void fabClick() {
@@ -137,14 +146,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onRequestCompleted(List<Place> listPlaces) {
         viewMap = new HashMap<>();
         bitmapMap = new HashMap<>();
+        this.listPlaces = listPlaces;
 
         for(int i = 0; i < listPlaces.size(); i++) {
             View view = getLayoutInflater().inflate(R.layout.mapillary_layout_callout, null);
-
-//            TextView titleTv = view.findViewById(R.id.title);
-//            titleTv.setText(listPlaces.get(i).getDescription());
-//            ImageView imageView = view.findViewById(R.id.logoView);
-
             bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
             viewMap.put(listPlaces.get(i).getId(), view);
         }
@@ -164,15 +169,13 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 LatLng coordinates = convertToLatLng(feature);
                 PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(coordinates);
 
-                //Снизу должно передаваться id
-                new Bundle().putDoubleArray("marker_id", new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
                 Timber.d("Переданы координаты: " + String.valueOf(coordinates.getLatitude()) + " " + String.valueOf(coordinates.getLongitude()));
 
-                presenter.toCardScreen(1);
+                presenter.toCardScreen(listPlaces, new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
 
-            } else {
+            } /* else {
                 onMarkerClickCallback(point.toString());
-            }
+            } */
             return false;
         });
     }

@@ -13,11 +13,13 @@ import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -52,8 +54,23 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().findUser();
     }
 
-    public void toCardScreen(int placeId) {
-        router.navigateTo(new Screens.PlaceScreen(placeId));
+    public void toCardScreen(List<Place> listPlaces, double[] coordinates) {
+        Timber.d("Получены координаты: " + String.valueOf(coordinates[0]) + " " + String.valueOf(coordinates[1]));
+        router.navigateTo(new Screens.PlaceScreen(getId(listPlaces, coordinates)));
+    }
+
+    private int getId(List<Place> listPlaces, double[] coordinates) {
+        for(int i = 0; i < listPlaces.size(); i++) {
+            DecimalFormat roundTo = new DecimalFormat("#.###");
+            double[] local = listPlaces.get(i).getCoordinates();
+
+            if(roundTo.format(coordinates[0]).equals(roundTo.format(local[0])) && roundTo.format(coordinates[1]).equals(roundTo.format(local[1]))) {
+                Timber.d("Id маркера: %s", String.valueOf(listPlaces.get(i).getId()));
+                return listPlaces.get(i).getId();
+            }
+        }
+        Timber.d("Всё плохо, мы ничего не нашли и выводим рандомную статью");
+        return 1;
     }
 
     public void makeRequest() {
@@ -107,5 +124,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         }
 
         return placesMap;
+    }
+
+    public void setupLocationFab() {
+        getViewState().setupFab();
     }
 }

@@ -95,7 +95,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             presenter.toMapScreen();
         } else if (!(fragment instanceof StartPageFragment)) {
             presenter.toStartPageScreen();
-
         } else {
             finish();
         }
