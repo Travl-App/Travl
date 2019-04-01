@@ -7,7 +7,6 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.place.PlaceView;
-import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
@@ -47,9 +46,5 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
             getViewState().setTextView(place.getDescription());
             getViewState().setTitleTextView(place.getTitle());
         });
-    }
-
-    public void backPressure() {
-        router.replaceScreen(new Screens.MapScreen());
     }
 }

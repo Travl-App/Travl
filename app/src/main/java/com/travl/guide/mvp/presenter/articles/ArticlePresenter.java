@@ -3,7 +3,6 @@ package com.travl.guide.mvp.presenter.articles;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.view.articles.ArticleView;
-import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
@@ -39,7 +38,4 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
         getViewState().loadWebView("https://github.com/Travl-App/");
     }
 
-    public void backPressure() {
-        router.replaceScreen(new Screens.StartPageScreen());
-    }
 }

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -70,8 +69,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     private void setupToolbar() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         toolbar.setNavigationOnClickListener(v -> {
-            presenter.backPressure();
-            Toast.makeText(getContext(), "Назад", Toast.LENGTH_SHORT).show();
+            onBackPressed();
         });
     }
 
@@ -94,5 +92,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             view.loadUrl(url);
             return true;
         }
+    }
+
+    public void onBackPressed() {
+        if (articleWebVew.canGoBack()) {
+            articleWebVew.goBack();
+        } else if (getActivity() != null) getActivity().onBackPressed();
+        else throw new RuntimeException("Activity is null");
     }
 }
