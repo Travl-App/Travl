@@ -46,7 +46,7 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
     private void loadPlaceCardInfo() {
         placesRepo.loadPlace(placeId).observeOn(scheduler).subscribe(placeContainer -> {
             Place place = placeContainer.getPlace();
-            getViewState().setImageView(baseUrl + place.getImageUrls().get(0));
+//            getViewState().setImageSlider(baseUrl + place.getImageUrls().get(0));
             getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
             getViewState().setTextView(place.getDescription());
             getViewState().setTitleTextView(place.getTitle());

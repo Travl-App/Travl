@@ -3,7 +3,6 @@ package com.travl.guide.ui.fragment.place;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,10 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.smarteist.autoimageslider.DefaultSliderView;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.SliderLayout;
+import com.smarteist.autoimageslider.SliderView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
@@ -33,12 +36,12 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     @BindView(R.id.post_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.text_view_place_title)
+    TextView placeTitleTextView;
     @BindView(R.id.text_view_place_subtitle)
     TextView placeSubtitleTextView;
-    @BindView(R.id.image_view_place)
-    ImageView placeImageView;
+    @BindView(R.id.imageSlider)
+    SliderLayout placeSliderLayout;
     @BindView(R.id.text_view_place_address)
     TextView placeAddressTextView;
     @BindView(R.id.text_view_author_name)
@@ -73,7 +76,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         setupToolbar();
-        setupCollapsingToolbarLayout();
+        setupSliderLayout();
         return view;
     }
 
@@ -85,14 +88,47 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
         });
     }
 
-    private void setupCollapsingToolbarLayout() {
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorOrange));
+    private void setupSliderLayout() {
+        placeSliderLayout.setIndicatorAnimation(IndicatorAnimations.FILL);
+        placeSliderLayout.setScrollTimeInSec(1);
+
+        for (int i = 0; i <= 3; i++) {
+
+            SliderView sliderView = new DefaultSliderView(getActivity());
+
+            switch (i) {
+                case 0:
+                    sliderView.setImageUrl("https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+                    break;
+                case 1:
+                    sliderView.setImageUrl("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+                    break;
+                case 2:
+                    sliderView.setImageUrl("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260");
+                    break;
+                case 3:
+                    sliderView.setImageUrl("https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+                    break;
+            }
+
+            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+            sliderView.setDescription("setDescription " + (i + 1));
+            final int finalI = i;
+            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(SliderView sliderView) {
+                    Toast.makeText(getActivity(), "This is slider " + (finalI + 1), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            //at last add this view in your layout :
+            placeSliderLayout.addSliderView(sliderView);
+        }
     }
 
     @Override
     public void setTitleTextView(String title) {
-        collapsingToolbarLayout.setTitle(title);
+        placeTitleTextView.setText(title);
     }
 
     @Override
@@ -101,8 +137,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     }
 
     @Override
-    public void setImageView(String imageUrl) {
-        imageLoader.loadInto(placeImageView, imageUrl);
+    public void setImageSlider(String imageUrl) {
+//        imageLoader.loadInto(placeImageView, imageUrl);
     }
 
     @Override

@@ -78,4 +78,8 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-building-v7:0.5.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v7:0.7.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v7:0.8.0'
+
+    //image slider
+    implementation 'com.github.smarteist:autoimageslider:1.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
