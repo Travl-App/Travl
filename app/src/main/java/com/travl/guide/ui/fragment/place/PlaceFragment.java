@@ -19,12 +19,14 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderLayout;
 import com.smarteist.autoimageslider.SliderView;
 import com.travl.guide.R;
-import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
 
+import java.util.List;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +55,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     PlacePresenter presenter;
 
     @Inject
-    IImageLoader imageLoader;
+    @Named("baseUrl")
+    String baseUrl;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -90,40 +93,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     private void setupSliderLayout() {
         placeSliderLayout.setIndicatorAnimation(IndicatorAnimations.FILL);
-        placeSliderLayout.setScrollTimeInSec(1);
-
-        for (int i = 0; i <= 3; i++) {
-
-            SliderView sliderView = new DefaultSliderView(getActivity());
-
-            switch (i) {
-                case 0:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-                    break;
-                case 1:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-                    break;
-                case 2:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260");
-                    break;
-                case 3:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-                    break;
-            }
-
-            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
-            sliderView.setDescription("setDescription " + (i + 1));
-            final int finalI = i;
-            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(getActivity(), "This is slider " + (finalI + 1), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            //at last add this view in your layout :
-            placeSliderLayout.addSliderView(sliderView);
-        }
+        placeSliderLayout.setScrollTimeInSec(5);
     }
 
     @Override
@@ -137,8 +107,24 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     }
 
     @Override
-    public void setImageSlider(String imageUrl) {
-//        imageLoader.loadInto(placeImageView, imageUrl);
+    public void setImageSlider(List<String> imageUrls) {
+        for (String imageUrl : imageUrls) {
+
+            SliderView sliderView = new DefaultSliderView(getActivity());
+
+            sliderView.setImageUrl(baseUrl + imageUrl);
+
+            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+            sliderView.setDescription("setDescription");
+            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(SliderView sliderView) {
+                    Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            placeSliderLayout.addSliderView(sliderView);
+        }
     }
 
     @Override

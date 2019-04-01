@@ -11,7 +11,6 @@ import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
@@ -23,9 +22,6 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
     Router router;
     @Inject
     PlacesRepo placesRepo;
-    @Inject
-    @Named("baseUrl")
-    String baseUrl;
 
     private Scheduler scheduler;
     private int placeId;
@@ -46,7 +42,7 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
     private void loadPlaceCardInfo() {
         placesRepo.loadPlace(placeId).observeOn(scheduler).subscribe(placeContainer -> {
             Place place = placeContainer.getPlace();
-//            getViewState().setImageSlider(baseUrl + place.getImageUrls().get(0));
+            getViewState().setImageSlider(place.getImageUrls());
             getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
             getViewState().setTextView(place.getDescription());
             getViewState().setTitleTextView(place.getTitle());
