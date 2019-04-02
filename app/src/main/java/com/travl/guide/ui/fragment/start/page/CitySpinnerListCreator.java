@@ -48,7 +48,9 @@ public class CitySpinnerListCreator {
     }
 
 
+    @Nullable
     public static City getCityName(CityContent cityContent, ArrayAdapter<String> cityArrayAdapter) {
+        if (cityContent == null) return null;
         Resources resources = App.getInstance().getResources();
         int status = cityContent.getStatus();
         City city = null;

@@ -36,6 +36,7 @@ import com.travl.guide.ui.App;
 import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +67,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         public void onLocationChanged(Location location) {
             Timber.e("Location changed:" + location.getLatitude() + "," + location.getLongitude());
             setCoordinates(location);
-            presenter.loadCityContent(User.getInstance().getCoordinates());
+            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
         }
 
         @Override
@@ -97,10 +98,11 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (savedInstanceState == null) {
             presenter.initCityArticlesFragment();
             presenter.initTravlZineArticlesFragment();
+            presenter.requestCoordinates();
+            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
         }
-        requestCoordinates();
-        presenter.loadCityContent(User.getInstance().getCoordinates());
         presenter.loadCitiesList();
+
         initCitySpinner(view);
         return view;
     }
@@ -112,11 +114,33 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     private void initCitySpinnerList(View view) {
         cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
-        cityNames = CitySpinnerListCreator.citiesListToCitiesNameList(citiesList);
+        presenter.setCityNames(CitySpinnerListCreator.citiesListToCitiesNameList(citiesList));
         if (cityNames == null)
             cityNames = Arrays.asList(getResources().getStringArray(R.array.cities));
         cityArrayAdapter.addAll(cityNames);
         userCitySpinner.setAdapter(cityArrayAdapter);
+    }
+
+    @Override
+    public void setCityNames(ArrayList<String> cityNames) {
+        this.cityNames = cityNames;
+    }
+
+    @Override
+    public void onSpinnerItemClick(String selectedCity) {
+        Timber.e("OnItemSelected CityNames =" + cityNames + " \n City = " + selectedCity + "\n CitiesList = " + citiesList);
+        if (cityNames != null) {
+            if (citiesList != null && cityNames.contains(selectedCity)) {
+                for (CitiesList.CityLink link : citiesList.getCities()) {
+                    if (selectedCity.equals(CitySpinnerListCreator.formatCityLink(link))) {
+                        Timber.e("Loading city by id");
+                        presenter.loadCityContentByLinkId(link.getId());
+                    }
+                }
+            } else {
+                presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
+            }
+        }
     }
 
     private void initCitySpinnerClickListener() {
@@ -124,19 +148,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedCity = (String) adapterView.getItemAtPosition(i);
-                Timber.e("OnItemSelected CityNames =" + cityNames + " \n City = " + selectedCity + "\n CitiesList = " + citiesList);
-                if (cityNames != null) {
-                    if (citiesList != null && cityNames.contains(selectedCity)) {
-                        for (CitiesList.CityLink link : citiesList.getCities()) {
-                            if (selectedCity.equals(CitySpinnerListCreator.formatCityLink(link))) {
-                                Timber.e("Loading city by id");
-                                presenter.loadCityContent(link.getId());
-                            }
-                        }
-                    } else {
-                        presenter.loadCityContent(User.getInstance().getCoordinates());
-                    }
-                }
+                presenter.onSpinnerItemClick(selectedCity);
             }
 
             @Override
@@ -172,18 +184,34 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void setCitiesList(CitiesList citiesList) {
         this.citiesList = citiesList;
         cityNames = CitySpinnerListCreator.citiesListToCitiesNameList(citiesList);
+        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+            String name = cityArrayAdapter.getItem(i);
+            if (cityNames.contains(name)) {
+                cityArrayAdapter.remove(name);
+            }
+        }
         cityArrayAdapter.addAll(cityNames);
     }
 
     @Override
-    public void setCityContent(CityContent cityContent) {
+    public void setCityContentByLinkId(CityContent cityContent) {
+        setCityContent(cityContent);
+    }
+
+    @Override
+    public void setCityContentByCoordinates(CityContent cityContent) {
+        setCityContent(cityContent);
+    }
+
+    private void setCityContent(CityContent cityContent) {
         this.cityContent = cityContent;
-        setCityName();
+        presenter.setCityName(CitySpinnerListCreator.getCityName(cityContent, cityArrayAdapter));
         if (articlesReceiver != null && this.cityContent != null && city != null) {
             articlesReceiver.setArticles(city.getArticleLinks());
         }
     }
 
+    @Override
     @SuppressLint("MissingPermission")
     public void requestCoordinates() {
         if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
@@ -200,8 +228,9 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
 
-    private void setCityName() {
-        city = CitySpinnerListCreator.getCityName(cityContent, cityArrayAdapter);
+    @Override
+    public void setCityName(City city) {
+        this.city = city;
     }
 
     @Override
@@ -220,13 +249,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
-            requestLocation();
-            requestCoordinates();
+            presenter.requestLocation();
+            presenter.requestCoordinates();
         }
     }
 
+    @Override
     @SuppressLint("MissingPermission")
-    private void requestLocation() {
+    public void requestLocation() {
         int millisInSecond = 1000;
         int minutes = 5;
         int secondsInMinutes = 60;
