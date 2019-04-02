@@ -13,6 +13,7 @@ import ru.terrakok.cicerone.Screen;
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
 
 public class Screens extends Screen {
+
     public static class PlacesScreen extends SupportAppScreen {
 
         @Override

@@ -28,7 +28,7 @@
     <dimen name="bottom_sheet_corner_radius">16dp</dimen>
     <dimen name="bottom_sheet_top_padding">8dp</dimen>
 
-    <!--Start page dimens-->
+    <!--start page dimens-->
     <dimen name="standard_margin">10dp</dimen>
     <dimen name="top_text_margin">30dp</dimen>
     <dimen name="small_margin">5dp</dimen>
