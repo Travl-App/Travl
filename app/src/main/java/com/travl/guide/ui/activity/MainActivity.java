@@ -51,8 +51,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @BindView(R.id.bottom_app_bar)
     BottomAppBar bar;
 
-    private CurrentScreen screen;
     private Fragment fragmentContainer;
+    private CurrentScreen.Screen screen;
     private BottomNavigationDrawerBehavior navigationDrawer;
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
@@ -67,23 +67,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             fragmentTransaction.addToBackStack(null);
             if(command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.TravlzinePage;
+                screen = CurrentScreen.INSTANCE.travlzine();
                 presenter.onMoveToPlaceScreen();
             } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.MapPage;
+                screen = CurrentScreen.INSTANCE.map();
                 presenter.onMoveToMapScreen();
             } else if(command instanceof Replace && nextFragment instanceof StartPageFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.StartPage;
+                screen = CurrentScreen.INSTANCE.start();
                 presenter.onMoveToStartPageScreen();
             } else if(nextFragment instanceof PlaceFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.PostPage;
+                screen = CurrentScreen.INSTANCE.post();
                 presenter.onMoveToPostScreen();
             } else if(nextFragment instanceof FavoriteFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.FavoritePage;
+                screen = CurrentScreen.INSTANCE.favorite();
                 presenter.onMoveToFavoriteScreen();
             }
         }
@@ -128,6 +128,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void initUI() {
         Timber.d("initUI");
         navigationDrawer = new BottomNavigationDrawerBehavior();
+        screen = CurrentScreen.INSTANCE.getCurrentScreen();
         setSupportActionBar(bar);
     }
 
