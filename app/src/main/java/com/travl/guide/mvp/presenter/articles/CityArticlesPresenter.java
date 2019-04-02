@@ -66,7 +66,6 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 this.articleLinkList = new ArrayList<>();
-                this.articleLinkList.add(new ArticleLink("Не найдено статей по выбранному городу", "/media/article_cover/vlNEiCnDa4bIYc9QZAG3cQ.jpg"));
             }
             getViewState().onChangedArticlesData();
         }

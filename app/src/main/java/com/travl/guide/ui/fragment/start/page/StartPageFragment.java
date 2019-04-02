@@ -1,6 +1,7 @@
 package com.travl.guide.ui.fragment.start.page;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -207,6 +208,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         this.cityContent = cityContent;
         presenter.setCityName(CitySpinnerListCreator.getCityName(cityContent, cityArrayAdapter));
         if (articlesReceiver != null && this.cityContent != null && city != null) {
+            areThereArticles();
             articlesReceiver.setArticles(city.getArticleLinks());
         }
     }
@@ -241,9 +243,20 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
             articlesReceiver = (ArticlesReceiver) childFragment;
             if (city != null) {
+                areThereArticles();
                 articlesReceiver.setArticles(city.getArticleLinks());
             }
         }
+    }
+
+    private void areThereArticles() {
+        List<ArticleLink> links = city.getArticleLinks();
+        Activity activity = getActivity();
+        int visibility = View.INVISIBLE;
+        if (links != null && links.size() > 0 && activity != null) {
+            visibility = View.VISIBLE;
+        }
+        activity.findViewById(R.id.start_page_city_articles_container_title).setVisibility(visibility);
     }
 
     @Override
