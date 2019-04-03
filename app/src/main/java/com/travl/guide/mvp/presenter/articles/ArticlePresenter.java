@@ -35,7 +35,8 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
 
     private void loadArticleWebView() {
 //        getViewState().loadWebView(baseUrl + articleUrl.substring(5));
-        getViewState().loadWebView("https://github.com/Travl-App/");
+        getViewState().loadWebView("https://github.com/Travl-App/Travl");
+//        getViewState().loadWebView("https://travl.dev/articles/1/");
     }
 
 }

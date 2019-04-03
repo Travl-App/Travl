@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.articles;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -19,10 +21,14 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.articles.ArticlePresenter;
 import com.travl.guide.mvp.view.articles.ArticleView;
+import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.terrakok.cicerone.Router;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
 
@@ -32,6 +38,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     Toolbar toolbar;
     @BindView(R.id.article_web_view)
     WebView articleWebVew;
+
+    @Inject
+    Router router;
 
     @InjectPresenter
     ArticlePresenter presenter;
@@ -61,9 +70,15 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         return view;
     }
 
+    @SuppressLint({"ClickableViewAccessibility", "SetJavaScriptEnabled"})
     private void setupWebView() {
         articleWebVew.getSettings().setJavaScriptEnabled(true);
         articleWebVew.setWebViewClient(new MyWebViewClient());
+        articleWebVew.setOnTouchListener((v, event) -> {
+            WebView.HitTestResult hr = ((WebView) v).getHitTestResult();
+            Toast.makeText(getActivity(), hr.getExtra() + " " + hr.getType(), Toast.LENGTH_SHORT).show();
+            return false;
+        });
     }
 
     private void setupToolbar() {
@@ -82,7 +97,13 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         @TargetApi(Build.VERSION_CODES.N)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            view.loadUrl(request.getUrl().toString());
+            if (request.getUrl().toString().contains("https://github.com/Travl-App/Travl/blob/master/.gitignore")) {
+                Toast.makeText(getActivity(), "show place", Toast.LENGTH_SHORT).show();
+                router.navigateTo(new Screens.PlaceScreen(1));
+            } else {
+                view.loadUrl(request.getUrl().toString());
+//                Toast.makeText(getActivity(), request.getUrl().toString(), Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 
