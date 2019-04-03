@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,6 +24,7 @@ import com.travl.guide.ui.App;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
 
@@ -63,6 +65,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     private void setupWebView() {
         articleWebVew.getSettings().setJavaScriptEnabled(true);
+        articleWebVew.getSettings().setDomStorageEnabled(true);
         articleWebVew.setWebViewClient(new MyWebViewClient());
     }
 
@@ -84,6 +87,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             view.loadUrl(request.getUrl().toString());
             return true;
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            Timber.e("Webview " + error.toString());
+            super.onReceivedError(view, request, error);
         }
 
         // Для старых устройств

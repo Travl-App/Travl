@@ -18,7 +18,10 @@ public class ArticlesRepo {
 
     public Single<ArticleLinksContainer> getTravlZineArticles() {
         if (NetworkStatus.isOnline()) {
-            return netService.loadArticles(true).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+            return netService.loadArticles(true).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
         } else {
             return new Single<ArticleLinksContainer>() {
                 @Override

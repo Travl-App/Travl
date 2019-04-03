@@ -22,7 +22,10 @@ public class PlacesRepo {
     public Single<ManyPlacesContainer> loadPlacesForMap(CoordinatesRequest position, double radius, int detailed) {
         Timber.d("Loading Places");
         if (NetworkStatus.isOnline()) {
-            return netService.loadPlacesForMap(position, radius, detailed).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+            return netService.loadPlacesForMap(position, radius, detailed).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
         } else {
             return new Single<ManyPlacesContainer>() {
                 @Override
@@ -35,9 +38,9 @@ public class PlacesRepo {
     public Single<PlaceContainer> loadPlace(int id) {
         Timber.e("loading place with id = %s", id);
         if (NetworkStatus.isOnline()) {
-            return netService.loadPlace(id).subscribeOn(Schedulers.io()).doOnError(throwable -> {
-                Timber.e("LoadPlaceError");
+            return netService.loadPlace(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
                 Timber.e(throwable);
+                return null;
             });
         } else {
             return new Single<PlaceContainer>() {

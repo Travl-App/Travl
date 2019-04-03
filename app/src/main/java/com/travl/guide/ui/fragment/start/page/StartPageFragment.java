@@ -252,11 +252,13 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private void areThereArticles() {
         List<ArticleLink> links = city.getArticleLinks();
         Activity activity = getActivity();
-        int visibility = View.INVISIBLE;
-        if (links != null && links.size() > 0 && activity != null) {
+        int visibility = View.GONE;
+        if (links != null && links.size() > 0) {
             visibility = View.VISIBLE;
         }
-        activity.findViewById(R.id.start_page_city_articles_container_title).setVisibility(visibility);
+
+        if (activity != null)
+            activity.findViewById(R.id.start_page_city_articles_container_title).setVisibility(visibility);
     }
 
     @Override

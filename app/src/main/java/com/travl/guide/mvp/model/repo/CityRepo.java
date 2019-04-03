@@ -21,7 +21,10 @@ public class CityRepo {
 
     public Single<CityContent> getCityContent(CoordinatesRequest position) {
         if (NetworkStatus.isOnline()) {
-            return netService.loadCityContent(position).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+            return netService.loadCityContent(position).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
         } else {
             return new Single<CityContent>() {
                 @Override
@@ -33,7 +36,10 @@ public class CityRepo {
 
     public Single<CitiesList> getCitiesList() {
         if (NetworkStatus.isOnline()) {
-            return netService.loadCitiesList().subscribeOn(Schedulers.io()).doOnError(Timber::e);
+            return netService.loadCitiesList().subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
         } else {
             return new Single<CitiesList>() {
                 @Override
@@ -45,7 +51,10 @@ public class CityRepo {
 
     public Single<CityContent> loadCity(int id) {
         if (NetworkStatus.isOnline()) {
-            return netService.loadCity(id).subscribeOn(Schedulers.io()).doOnError(Timber::e);
+            return netService.loadCity(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
         } else {
             return new Single<CityContent>() {
                 @Override
