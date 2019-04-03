@@ -3,7 +3,7 @@ package com.travl.guide.navigator
 //Created by Pereved on 02.04.2019.
 object CurrentScreen {
 
-    private lateinit var selectedScreen: Screen
+    private var selectedScreen = Screen.StartPage
 
     val currentScreen: Screen
         get() = selectedScreen

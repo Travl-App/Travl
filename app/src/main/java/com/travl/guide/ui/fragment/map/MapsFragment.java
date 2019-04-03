@@ -75,8 +75,6 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     private MapboxMap mapBoxMap;
     private List<Place> listPlaces;
-    private HashMap<Integer, View> viewMap;
-    private HashMap<String, Bitmap> bitmapMap;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
 
@@ -129,12 +127,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
                 LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
                 localizationPlugin.matchMapLanguageWithDeviceDefault();
-
-                /* Отключение всякой херни мапбоксовской */
                 mapBoxMap.getUiSettings().setCompassEnabled(false);
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
-
                 presenter.makeRequest();
 //                presenter.showLocations();
             });
@@ -144,8 +139,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @SuppressLint("UseSparseArrays")
     @Override
     public void onRequestCompleted(List<Place> listPlaces) {
-        viewMap = new HashMap<>();
-        bitmapMap = new HashMap<>();
+        HashMap<Integer, View> viewMap = new HashMap<>();
+        HashMap<String, Bitmap> bitmapMap = new HashMap<>();
         this.listPlaces = listPlaces;
 
         for(int i = 0; i < listPlaces.size(); i++) {
@@ -217,7 +212,6 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(getActivity());
         }
-        setUserCoordinates();
     }
 
     @SuppressLint("MissingPermission")
