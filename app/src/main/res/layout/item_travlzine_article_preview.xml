@@ -6,19 +6,76 @@
     android:layout_margin="@dimen/travlzine_card_margin"
     app:cardCornerRadius="@dimen/travlzine_card_corner_radius">
 
-    <ImageView
-        android:id="@+id/travlzine_article_preview_image_view"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/travlzine_card_image_view_height"
-        android:scaleType="centerCrop"
-        android:src="@null" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/travlzine_article_preview_description"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/travlzine_card_preview_description"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/roboto_slab_bold"
-        android:gravity="center"
-        android:textSize="@dimen/travlzine_card_text_size" />
+        <ImageView
+            android:id="@+id/travlzine_article_preview_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/travlzine_card_image_view_height"
+            android:scaleType="centerCrop"
+            android:src="@null"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/travlzine_article_preview_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/travlzine_article_preview_category_margin_top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_image_view">
+
+            <ImageView
+                android:id="@+id/travlzine_article_preview_category_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@id/travlzine_article_preview_category_text_view"
+                android:layout_alignTop="@id/travlzine_article_preview_category_text_view"
+                android:layout_alignEnd="@id/travlzine_article_preview_category_text_view"
+                android:layout_alignBottom="@id/travlzine_article_preview_category_text_view"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_category_rectangle" />
+
+            <TextView
+                android:id="@+id/travlzine_article_preview_category_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_slab_bold"
+                android:gravity="center"
+                android:paddingStart="@dimen/travlzine_article_preview_category_text_view_padding_start"
+                android:paddingTop="@dimen/travlzine_article_preview_category_text_view_padding_top"
+                android:paddingEnd="@dimen/travlzine_article_preview_category_text_view_padding_end"
+                android:paddingBottom="@dimen/travlzine_article_preview_category_text_view_padding_bottom"
+                android:singleLine="true"
+                android:text="Питер"
+                android:textAllCaps="true"
+                android:textColor="@color/travlzine_preview_category_text_color"
+                android:textSize="@dimen/travlzine_preview_category_text_size" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/travlzine_article_preview_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/travlzine_card_preview_description"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/travlzine_preview_description_margin_start"
+            android:fontFamily="@font/roboto_slab_bold"
+            android:gravity="start"
+            android:textSize="@dimen/travlzine_card_text_size"
+            app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_category" />
+
+        <android.support.design.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/travlzine_preview_chip_margin_start"
+            android:layout_marginBottom="@dimen/travlzine_preview_chip_margin_bottom"
+            android:text="Travl"
+            app:chipBackgroundColor="@android:color/white"
+            app:chipIcon="@mipmap/travl_launcher_round"
+            app:chipIconSize="@dimen/travlzine_preview_chip_icon_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.design.card.MaterialCardView>
