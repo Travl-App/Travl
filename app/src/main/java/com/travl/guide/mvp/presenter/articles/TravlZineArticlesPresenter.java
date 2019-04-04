@@ -48,7 +48,7 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
     @SuppressLint("CheckResult")
     public void loadArticles() {
         Timber.d("Loading articles");
-        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()));
+        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()), Timber::e);
     }
 
     public class TravlZineArticlesListPresenterImpl implements TravlZineArticlesListPresenter {
@@ -69,7 +69,8 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             if (title != null) view.setDescription(title);
-            if (imageUrl != null) view.setImage(baseUrl + imageUrl.substring(1));
+            if (imageUrl != null)
+                view.setImage(baseUrl + imageUrl.substring(1));
         }
 
         @Override

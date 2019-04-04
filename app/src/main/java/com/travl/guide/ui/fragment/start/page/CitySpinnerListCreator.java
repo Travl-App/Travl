@@ -3,11 +3,11 @@ package com.travl.guide.ui.fragment.start.page;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
-import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
@@ -47,33 +47,21 @@ public class CitySpinnerListCreator {
         return title;
     }
 
-
-    @Nullable
-    public static City getCityName(CityContent cityContent, ArrayAdapter<String> cityArrayAdapter) {
-        if (cityContent == null) return null;
+    public static void editCityList(City city, ArrayAdapter<String> cityArrayAdapter, Spinner userCitySpinner) {
         Resources resources = App.getInstance().getResources();
-        int status = cityContent.getStatus();
-        City city = null;
         String placeName = null;
-        if (status == 200) {
-            city = cityContent.getCity();
-            if (city != null) {
-                String area = city.getArea();
-                String region = city.getRegion();
-                String country = city.getCountry();
+        if (city != null) {
+            String area = city.getArea();
+            String place = city.getPlaceName();
+            String region = city.getRegion();
+            String country = city.getCountry();
+            if (area != null) {
                 if (!area.equals(region)) {
                     placeName = area + COMMA + region + COMMA + country;
                 } else {
                     placeName = area + COMMA + country;
                 }
-
-            }
-        } else if (status == 404) {
-            city = cityContent.getContext();
-            if (city != null) {
-                String place = city.getPlaceName();
-                String region = city.getRegion();
-                String country = city.getCountry();
+            } else if (place != null) {
                 if (!place.equals(region)) {
                     placeName = place + COMMA + region + COMMA + country;
                 } else {
@@ -97,8 +85,8 @@ public class CitySpinnerListCreator {
                 cityArrayAdapter.remove(placeName);
             }
             cityArrayAdapter.insert(placeName, 0);
+            userCitySpinner.setSelection(0);
         }
-        return city;
     }
 
     @Nullable

@@ -21,7 +21,7 @@ public interface StartPageView extends MvpView {
     void initCityArticlesFragment();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCitiesList(CitiesList citiesList);
+    void setCityObjectList(CitiesList cityObjectList);
 
     @StateStrategyType(value = SkipStrategy.class)
     void setCityContentByCoordinates(CityContent cityContent);
@@ -30,13 +30,15 @@ public interface StartPageView extends MvpView {
     void setCityContentByLinkId(CityContent cityContent);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCityName(City city);
+    void setCityName(CityContent cityContent);
 
     void requestCoordinates();
 
     void requestLocation();
 
-    void setCityNames(ArrayList<String> citiesListToCitiesNameList);
+    void setCityStringNames(ArrayList<String> citiesListToCitiesNameList);
 
     void onSpinnerItemClick(String selectedCity);
+
+    void editCityList(City city);
 }

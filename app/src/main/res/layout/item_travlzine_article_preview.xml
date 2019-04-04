@@ -61,6 +61,8 @@
             android:layout_height="@dimen/travlzine_card_preview_description"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/travlzine_preview_description_margin_start"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
             android:fontFamily="@font/roboto_slab_bold"
             android:gravity="start"
             android:textSize="@dimen/travlzine_card_text_size"

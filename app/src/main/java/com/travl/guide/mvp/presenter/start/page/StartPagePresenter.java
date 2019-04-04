@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.city.content.City;
+import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import timber.log.Timber;
 
 @InjectViewState
 public class StartPagePresenter extends MvpPresenter<StartPageView> {
@@ -31,7 +33,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     @SuppressLint("CheckResult")
     public void loadCitiesList() {
-        cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCitiesList(citiesList));
+        cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCityObjectList(citiesList), Timber::e);
     }
 
     @SuppressLint("CheckResult")
@@ -39,7 +41,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         CoordinatesRequest position = new CoordinatesRequest(coordinates);
         cityRepo.getCityContent(position).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
-        });
+        }, Timber::e);
     }
 
 
@@ -53,12 +55,12 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     @SuppressLint("CheckResult")
     public void loadCityContentByLinkId(int id) {
-        cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent));
+        cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent), Timber::e);
 
     }
 
-    public void setCityName(City city) {
-        getViewState().setCityName(city);
+    public void setCityName(CityContent cityContent) {
+        getViewState().setCityName(cityContent);
     }
 
     public void requestCoordinates() {
@@ -70,10 +72,14 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
     }
 
     public void setCityNames(ArrayList<String> citiesListToCitiesNameList) {
-        getViewState().setCityNames(citiesListToCitiesNameList);
+        getViewState().setCityStringNames(citiesListToCitiesNameList);
     }
 
     public void onSpinnerItemClick(String selectedCity) {
         getViewState().onSpinnerItemClick(selectedCity);
+    }
+
+    public void editCityList(City city) {
+        getViewState().editCityList(city);
     }
 }

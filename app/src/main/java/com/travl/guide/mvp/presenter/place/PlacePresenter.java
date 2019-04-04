@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
+import timber.log.Timber;
 
 @InjectViewState
 public class PlacePresenter extends MvpPresenter<PlaceView> {
@@ -45,6 +46,6 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
             getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
             getViewState().setTextView(place.getDescription());
             getViewState().setTitleTextView(place.getTitle());
-        });
+        }, Timber::e);
     }
 }
