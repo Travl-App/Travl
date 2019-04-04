@@ -93,9 +93,10 @@ public class CitySpinnerListCreator {
                     isPlaceAdded = true;
                 }
             }
-            if (!isPlaceAdded) {
-                cityArrayAdapter.insert(placeName, 0);
+            if (isPlaceAdded) {
+                cityArrayAdapter.remove(placeName);
             }
+            cityArrayAdapter.insert(placeName, 0);
         }
         return city;
     }
