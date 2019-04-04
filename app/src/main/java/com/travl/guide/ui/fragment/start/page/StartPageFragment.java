@@ -278,9 +278,16 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         int secondsInMinutes = 60;
         int meters = 100;
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        locationManager.requestLocationUpdates(
-                locationManager.getBestProvider(criteria, false), minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(provider);
+        if (location == null) {
+            locationManager.requestLocationUpdates(
+                    provider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        } else {
+            setCoordinates(location);
+            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
+        }
     }
 
     public interface ArticlesReceiver {
