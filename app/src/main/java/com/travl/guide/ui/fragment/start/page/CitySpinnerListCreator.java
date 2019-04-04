@@ -3,11 +3,11 @@ package com.travl.guide.ui.fragment.start.page;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
+import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
@@ -17,8 +17,7 @@ import java.util.Objects;
 public class CitySpinnerListCreator {
     private static final String COMMA = ", ";
 
-
-    public static ArrayList<String> citiesListToCitiesNameList(CitiesList citiesList) {
+    public ArrayList<String> citiesListToCitiesNameList(CitiesList citiesList) {
         List<CitiesList.CityLink> cityLinks;
         ArrayList<String> cityNames = new ArrayList<>();
         String title = "";
@@ -33,7 +32,7 @@ public class CitySpinnerListCreator {
     }
 
     @Nullable
-    public static String formatCityLink(CitiesList.CityLink cityLink) {
+    public String formatCityLink(CitiesList.CityLink cityLink) {
         String title = null;
         String area = cityLink.getArea();
         String region = cityLink.getRegion();
@@ -47,8 +46,29 @@ public class CitySpinnerListCreator {
         return title;
     }
 
-    public static void editCityList(City city, ArrayAdapter<String> cityArrayAdapter, Spinner userCitySpinner) {
+    public void addToCityList(City city, ArrayAdapter<String> cityArrayAdapter, StartPagePresenter startPagePresenter) {
         Resources resources = App.getInstance().getResources();
+        String placeName = cityToString(city);
+        placeName = formatPlaceName(placeName);
+        if (city != null && placeName != null) {
+            boolean isPlaceAdded = false;
+            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+                String name = (String) Objects.requireNonNull(cityArrayAdapter.getItem(i));
+                if (name.equals(resources.getStringArray(R.array.cities)[0])) {
+                    startPagePresenter.removeFromCitySpinnerAdapter(name);
+                }
+                if (name.contains(placeName)) {
+                    isPlaceAdded = true;
+                }
+            }
+            if (isPlaceAdded) {
+                startPagePresenter.removeFromCitySpinnerAdapter(placeName);
+            }
+            startPagePresenter.placeSelectedCityOnTop(placeName);
+        }
+    }
+
+    public String cityToString(City city) {
         String placeName = null;
         if (city != null) {
             String area = city.getArea();
@@ -69,28 +89,11 @@ public class CitySpinnerListCreator {
                 }
             }
         }
-        placeName = formatPlaceName(placeName);
-        if (city != null && placeName != null) {
-            boolean isPlaceAdded = false;
-            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-                String name = (String) Objects.requireNonNull(cityArrayAdapter.getItem(i));
-                if (name.equals(resources.getStringArray(R.array.cities)[0])) {
-                    cityArrayAdapter.remove(name);
-                }
-                if (name.contains(placeName)) {
-                    isPlaceAdded = true;
-                }
-            }
-            if (isPlaceAdded) {
-                cityArrayAdapter.remove(placeName);
-            }
-            cityArrayAdapter.insert(placeName, 0);
-            userCitySpinner.setSelection(0);
-        }
+        return placeName;
     }
 
     @Nullable
-    private static String formatPlaceName(String placeName) {
+    public String formatPlaceName(String placeName) {
         if (placeName == null) return null;
         Resources resources = App.getInstance().getResources();
         String notFound = resources.getString(R.string.city_not_found);

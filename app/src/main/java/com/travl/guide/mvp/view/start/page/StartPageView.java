@@ -10,12 +10,13 @@ import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface StartPageView extends MvpView {
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void initArticlesFragment();
+    void initTravlZineFragment();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void initCityArticlesFragment();
@@ -30,15 +31,44 @@ public interface StartPageView extends MvpView {
     void setCityContentByLinkId(CityContent cityContent);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCityName(CityContent cityContent);
+    void setCity(CityContent cityContent);
 
     void requestCoordinates();
 
     void requestLocation();
 
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityStringNames(ArrayList<String> citiesListToCitiesNameList);
 
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
     void onSpinnerItemClick(String selectedCity);
 
-    void editCityList(City city);
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void addToCityList(City city);
+
+    void initCitySpinner();
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void setCitySelectedName(String citySelected);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void setSpinnerPositionSelected(int position);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void placeSelectedCityOnTop(String placeName);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void removePlaceIfIsAdded(String placeName);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void addNamesToCitySpinner(List<String> cityStringNames);
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void setCityArrayAdapter();
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void addCityArrayAdapterToSpinner();
+
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    void setCityArticles();
 }

@@ -8,10 +8,12 @@ import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
+import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,7 +48,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
 
     public void initTravlZineArticlesFragment() {
-        getViewState().initArticlesFragment();
+        getViewState().initTravlZineFragment();
     }
 
     public void initCityArticlesFragment() {
@@ -59,8 +61,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     }
 
-    public void setCityName(CityContent cityContent) {
-        getViewState().setCityName(cityContent);
+    public void setCity(CityContent cityContent) {
+        getViewState().setCity(cityContent);
     }
 
     public void requestCoordinates() {
@@ -71,7 +73,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().requestLocation();
     }
 
-    public void setCityNames(ArrayList<String> citiesListToCitiesNameList) {
+    public void setCityStringNames(ArrayList<String> citiesListToCitiesNameList) {
         getViewState().setCityStringNames(citiesListToCitiesNameList);
     }
 
@@ -79,7 +81,47 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().onSpinnerItemClick(selectedCity);
     }
 
-    public void editCityList(City city) {
-        getViewState().editCityList(city);
+    public void addToCityList(City city) {
+        getViewState().addToCityList(city);
+    }
+
+    public void initCitySpinner() {
+        getViewState().initCitySpinner();
+    }
+
+    public void setCitySelectedName(String citySelected) {
+        getViewState().setCitySelectedName(citySelected);
+    }
+
+    public void setSpinnerPositionSelected(int position) {
+        getViewState().setSpinnerPositionSelected(position);
+    }
+
+    public void placeSelectedCityOnTop(String placeName) {
+        getViewState().placeSelectedCityOnTop(placeName);
+    }
+
+    public void removeFromCitySpinnerAdapter(String placeName) {
+        getViewState().removePlaceIfIsAdded(placeName);
+    }
+
+    public void addNamesToCitySpinner(List<String> cityStringNames) {
+        getViewState().addNamesToCitySpinner(cityStringNames);
+    }
+
+    public void setCityArrayAdapter() {
+        getViewState().setCityArrayAdapter();
+    }
+
+    public void addCityArrayAdapterToSpinner() {
+        getViewState().addCityArrayAdapterToSpinner();
+    }
+
+    public void setUserCoordinates(double[] coordinates) {
+        User.getInstance().setCoordinates(coordinates);
+    }
+
+    public void setCityArcticles() {
+        getViewState().setCityArticles();
     }
 }
