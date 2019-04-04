@@ -3,6 +3,7 @@ package com.travl.guide.ui.fragment.start.page;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -276,8 +277,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         int minutes = 5;
         int secondsInMinutes = 60;
         int meters = 100;
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
         locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                locationManager.getBestProvider(criteria, false), minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 
     public interface ArticlesReceiver {
