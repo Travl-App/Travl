@@ -1,89 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/place_root_layout"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/card_margin"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/text_view_place_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:padding="@dimen/place_padding"
-        android:text="@string/title" />
-
-    <TextView
-        android:id="@+id/text_view_place_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:padding="@dimen/place_padding"
-        android:text="@string/subtitle" />
-
-    <ImageView
-        android:id="@+id/image_view_place"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/image_view_content_description"
-        android:padding="@dimen/place_padding"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fireman_1" />
+        android:fitsSystemWindows="false"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <LinearLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/post_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:orientation="horizontal"
-        android:padding="@dimen/place_padding">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/place_root_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/address" />
+            android:layout_margin="5dp"
+            android:divider="@drawable/separator"
+            android:dividerPadding="4dp"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
-        <TextView
-            android:id="@+id/text_view_place_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/place_address" />
+            <TextView
+                android:id="@+id/text_view_place_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_slab_bold"
+                android:padding="1dp"
+                android:text="@string/title"
+                android:textSize="30sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/text_view_place_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_slab_regular"
+                android:padding="2dp"
+                android:text="@string/subtitle"
+                android:textSize="24sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:orientation="horizontal"
-        android:padding="@dimen/place_padding">
+            <com.smarteist.autoimageslider.SliderLayout
+                android:id="@+id/imageSlider"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="5dp"
+                android:scaleType="centerCrop" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/author" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/text_view_author_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/author_name" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_slab_bold"
+                    android:padding="4dp"
+                    android:scrollbarSize="16sp"
+                    android:text="@string/address" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/text_view_place_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_slab_regular"
+                    android:padding="4dp"
+                    android:scrollbarSize="16sp"
+                    android:text="@string/place_address" />
 
-    <TextView
-        android:id="@+id/text_view_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="@dimen/place_padding"
-        android:text="@string/first_text" />
+            </LinearLayout>
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_slab_bold"
+                    android:padding="4dp"
+                    android:scrollbarSize="16sp"
+                    android:text="@string/author" />
+
+                <TextView
+                    android:id="@+id/text_view_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_slab_regular"
+                    android:padding="4dp"
+                    android:scrollbarSize="16sp"
+                    android:text="@string/author_name" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:scrollbarSize="16sp" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

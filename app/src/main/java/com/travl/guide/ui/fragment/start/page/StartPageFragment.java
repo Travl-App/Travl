@@ -1,44 +1,89 @@
 package com.travl.guide.ui.fragment.start.page;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.travl.guide.R;
-import com.travl.guide.mvp.presenter.StartPagePresenter;
-import com.travl.guide.mvp.view.StartPageView;
-import com.travl.guide.ui.fragment.places.ArticlesFragment;
+import com.travl.guide.mvp.model.api.articles.ArticleLink;
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
+import com.travl.guide.mvp.model.api.city.content.City;
+import com.travl.guide.mvp.model.api.city.content.CityContent;
+import com.travl.guide.mvp.model.user.User;
+import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
+import com.travl.guide.mvp.view.start.page.StartPageView;
+import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
+import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
-public class StartPageFragment extends MvpAppCompatFragment implements StartPageView {
+public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
-    @BindView(R.id.map_image_view)
-    ImageView mapImageView;
-    @BindView(R.id.places_image_view)
-    ImageView placesImageView;
+    public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
+
+    @BindView(R.id.user_city_spinner)
+    Spinner userCitySpinner;
+    @BindView(R.id.start_page_toolbar)
+    Toolbar toolbar;
     @InjectPresenter
     StartPagePresenter presenter;
-    private StartPageEventsListener startPageEventsListener;
+    private ArrayAdapter<String> cityArrayAdapter;
+    private LocationManager locationManager;
+    private CitiesList citiesList;
+    private City city;
+    private List<String> cityNames;
+    private CityContent cityContent;
+    private LocationListener mListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Timber.e("Location changed:" + location.getLatitude() + "," + location.getLongitude());
+            setCoordinates(location);
+            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
+        }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        startPageEventsListener = (StartPageEventsListener) context;
-    }
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+        }
+    };
+    private ArticlesReceiver articlesReceiver;
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -50,36 +95,192 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
+        locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
         if (savedInstanceState == null) {
-            presenter.initPlacesFragment();
+            presenter.initCityArticlesFragment();
+            presenter.initTravlZineArticlesFragment();
+            presenter.requestCoordinates();
+            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
         }
+        presenter.loadCitiesList();
+
+        initCitySpinner(view);
         return view;
     }
 
-    @OnClick(R.id.places_image_view)
-    public void onPlaceCollectionsClick() {
-        if (startPageEventsListener != null) {
-            startPageEventsListener.onPlaceCollectionsClick();
+    private void initCitySpinner(View view) {
+        initCitySpinnerList(view);
+        initCitySpinnerClickListener();
+    }
+
+    private void initCitySpinnerList(View view) {
+        cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
+        presenter.setCityNames(CitySpinnerListCreator.citiesListToCitiesNameList(citiesList));
+        if (cityNames == null)
+            cityNames = Arrays.asList(getResources().getStringArray(R.array.cities));
+        cityArrayAdapter.addAll(cityNames);
+        userCitySpinner.setAdapter(cityArrayAdapter);
+    }
+
+    @Override
+    public void setCityNames(ArrayList<String> cityNames) {
+        this.cityNames = cityNames;
+    }
+
+    @Override
+    public void onSpinnerItemClick(String selectedCity) {
+        Timber.e("OnItemSelected CityNames =" + cityNames + " \n City = " + selectedCity + "\n CitiesList = " + citiesList);
+        if (cityNames != null) {
+            if (citiesList != null && cityNames.contains(selectedCity)) {
+                for (CitiesList.CityLink link : citiesList.getCities()) {
+                    if (selectedCity.equals(CitySpinnerListCreator.formatCityLink(link))) {
+                        Timber.e("Loading city by id");
+                        presenter.loadCityContentByLinkId(link.getId());
+                    }
+                }
+            } else {
+                presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
+            }
         }
     }
 
-    @OnClick(R.id.map_image_view)
-    public void onMapClick() {
-        if (startPageEventsListener != null) {
-            startPageEventsListener.onMapClick();
+    private void initCitySpinnerClickListener() {
+        userCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedCity = (String) adapterView.getItemAtPosition(i);
+                presenter.onSpinnerItemClick(selectedCity);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+
+    private void setCoordinates(Location lastKnownLocation) {
+        if (lastKnownLocation != null) {
+            Timber.e("Setting coordinates to " + lastKnownLocation.getLatitude() + "," + lastKnownLocation.getLongitude());
+            User.getInstance().setCoordinates(new double[]{lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()});
         }
     }
 
     @Override
-    public void initPlacesFragment() {
-        Fragment placesFragment = new ArticlesFragment();
+    public void initArticlesFragment() {
+        Fragment travlZineArticlesFragment = new TravlZineArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.start_page_places_container, placesFragment).commit();
+        transaction.replace(R.id.start_page_travl_zine_container, travlZineArticlesFragment).commit();
     }
 
-    public interface StartPageEventsListener {
-        void onPlaceCollectionsClick();
+    @Override
+    public void initCityArticlesFragment() {
+        Fragment cityArticlesFragment = new CityArticlesFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.start_page_city_articles_container, cityArticlesFragment, CITY_ARTICLES_FRAGMENT_TAG).commit();
+    }
 
-        void onMapClick();
+    @Override
+    public void setCitiesList(CitiesList citiesList) {
+        this.citiesList = citiesList;
+        cityNames = CitySpinnerListCreator.citiesListToCitiesNameList(citiesList);
+        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+            String name = cityArrayAdapter.getItem(i);
+            if (cityNames.contains(name)) {
+                cityArrayAdapter.remove(name);
+            }
+        }
+        cityArrayAdapter.addAll(cityNames);
+    }
+
+    @Override
+    public void setCityContentByLinkId(CityContent cityContent) {
+        setCityContent(cityContent);
+    }
+
+    @Override
+    public void setCityContentByCoordinates(CityContent cityContent) {
+        setCityContent(cityContent);
+    }
+
+    private void setCityContent(CityContent cityContent) {
+        this.cityContent = cityContent;
+        presenter.setCityName(CitySpinnerListCreator.getCityName(cityContent, cityArrayAdapter));
+        if (articlesReceiver != null && this.cityContent != null && city != null) {
+            areThereArticles();
+            articlesReceiver.setArticles(city.getArticleLinks());
+        }
+    }
+
+    @Override
+    @SuppressLint("MissingPermission")
+    public void requestCoordinates() {
+        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            requestLocation();
+        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            PermissionsManager permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(getActivity());
+        }
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.fragment_container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    public void setCityName(City city) {
+        this.city = city;
+    }
+
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        String tag = childFragment.getTag();
+        Timber.e("OnAttachFragment tag = " + tag);
+        if (tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
+            articlesReceiver = (ArticlesReceiver) childFragment;
+            if (city != null) {
+                areThereArticles();
+                articlesReceiver.setArticles(city.getArticleLinks());
+            }
+        }
+    }
+
+    private void areThereArticles() {
+        List<ArticleLink> links = city.getArticleLinks();
+        Activity activity = getActivity();
+        int visibility = View.GONE;
+        if (links != null && links.size() > 0) {
+            visibility = View.VISIBLE;
+        }
+
+        if (activity != null)
+            activity.findViewById(R.id.start_page_city_articles_container_title).setVisibility(visibility);
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if (granted) {
+            presenter.requestLocation();
+            presenter.requestCoordinates();
+        }
+    }
+
+    @Override
+    @SuppressLint("MissingPermission")
+    public void requestLocation() {
+        int millisInSecond = 1000;
+        int minutes = 5;
+        int secondsInMinutes = 60;
+        int meters = 100;
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+    }
+
+    public interface ArticlesReceiver {
+        void setArticles(List<ArticleLink> articleLinks);
     }
 }

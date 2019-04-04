@@ -8,4 +8,16 @@
     mapbox:mapbox_cameraTargetLng="30.3141300"
     mapbox:mapbox_cameraTilt="0"
     mapbox:mapbox_cameraZoom="12"
-    mapbox:mapbox_uiRotateGestures="false" />
+    mapbox:mapbox_uiRotateGestures="false">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/map_location_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="66dp"
+        android:src="@drawable/ic_location"
+        mapbox:backgroundTint="@android:color/white" />
+
+</com.mapbox.mapboxsdk.maps.MapView>

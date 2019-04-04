@@ -13,6 +13,11 @@ public class CoordinatesRequest {
         this.longitude = longitude;
     }
 
+    public CoordinatesRequest(double[] coordinates) {
+        setLatitude(coordinates[0]);
+        setLongitude(coordinates[1]);
+    }
+
     @NotNull
     @Override
     public String toString() {

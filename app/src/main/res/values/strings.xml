@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Travl</string>
-    <string name="collections">Подборки</string>
+    <string name="travlzine">TravlZine</string>
     <string name="location">Местоположение</string>
     <string name="search">Поиск</string>
     <string name="map">Карта</string>
@@ -23,16 +23,12 @@
     <string name="title"> title</string>
     <string name="subtitle"> subtitle</string>
     <string name="image_view_content_description">image_view</string>
-    <string name="first_text">Товарищ, я вахты не в силах стоять,\n
-                            Сказал кочегар кочегару.\n
-                            Огни в моих топках совсем не горят,\n
-                            В котлах не сдержать мне уж пару…\n
-                            -\n
-                            Нет ветра сегодня, нет мочи стоять.\n
-                            Согрелась вода. Душно. Жарко.\n
-                            Термометр поднялся аж на сорок пять,\n
-                            Без воздуха вся кочегарка.\n
-    </string>
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
-
+    <string name="favorite">Избранное</string>
+    <string name="share">Share</string>
+    <string name="interesting_nearby">Интересное здесь:</string>
+    <string name="city_not_found">Не найден</string>
+    <string-array name="cities">
+        <item>Ваш город не найден</item>
+    </string-array>
 </resources>

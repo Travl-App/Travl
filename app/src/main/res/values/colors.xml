@@ -3,4 +3,17 @@
     <color name="colorAccent">#ff01579b</color>
     <color name="colorPrimary">#ff424242</color>
     <color name="colorPrimaryDark">#ff2b2b2b</color>
+    <color name="transparent">#0000</color>
+
+    <!--main colors-->
+    <color name="colorDarkBackground">#333333</color>
+    <color name="colorButtonsAndDividersPartition">#ba8f27</color>
+    <color name="colorTextDelimitersInsideText">#000000</color>
+    <color name="colorTextOnDarkBackground">#ffffff</color>
+    <color name="colorBackgroundArticlesCityOnMainPage">#f9f9f9</color>
+
+    <!--cards colors-->
+    <color name="colorStroke">#f4f4f4</color>
+    <color name="colorShadow">#dbdbdb</color>
+
 </resources>

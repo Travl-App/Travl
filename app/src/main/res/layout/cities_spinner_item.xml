@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/city_spinner_text_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/city_spinner_item_margin_start"
+    android:layout_marginEnd="@dimen/city_spinner_item_margin_end"
+    android:fontFamily="@font/roboto_slab_bold"
+    android:gravity="center_horizontal"
+    android:paddingStart="@dimen/city_spinner_item_padding_start"
+    android:paddingEnd="@dimen/city_spinner_item_padding_end"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/city_spinner_item_text_size" />
