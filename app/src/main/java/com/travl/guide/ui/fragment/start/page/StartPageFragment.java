@@ -39,7 +39,6 @@ import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,7 +117,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         cityArrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.cities_spinner_item);
         presenter.setCityNames(CitySpinnerListCreator.citiesListToCitiesNameList(cityObjectList));
         if (cityStringNames == null)
-            cityStringNames = Arrays.asList(getResources().getStringArray(R.array.cities));
+            cityStringNames = new ArrayList<>();
         cityArrayAdapter.addAll(cityStringNames);
         userCitySpinner.setAdapter(cityArrayAdapter);
     }
@@ -294,7 +293,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         String provider = locationManager.getBestProvider(criteria, true);
         locationManager.requestLocationUpdates(
-                provider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                LocationManager.NETWORK_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 
     public interface ArticlesReceiver {
