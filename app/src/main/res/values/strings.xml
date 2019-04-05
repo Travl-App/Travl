@@ -28,6 +28,7 @@
     <string name="share">Share</string>
     <string name="interesting_nearby">Интересное здесь</string>
     <string name="city_not_found">Не найден</string>
+    <string name="user_location_marker">Вы здесь:</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>

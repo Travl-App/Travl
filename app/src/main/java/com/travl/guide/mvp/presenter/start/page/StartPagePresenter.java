@@ -40,6 +40,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     @SuppressLint("CheckResult")
     public void loadCityContentByCoordinates(double[] coordinates) {
+        Timber.e("loadCityContentByCoordinates");
         CoordinatesRequest position = new CoordinatesRequest(coordinates);
         cityRepo.getCityContent(position).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
@@ -81,8 +82,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().onSpinnerItemClick(selectedCity);
     }
 
-    public void addToCityList(City city) {
-        getViewState().addToCityList(city);
+    public void addToCityList(City city, boolean isUserCity) {
+        getViewState().addToCityList(city, isUserCity);
     }
 
     public void initCitySpinner() {

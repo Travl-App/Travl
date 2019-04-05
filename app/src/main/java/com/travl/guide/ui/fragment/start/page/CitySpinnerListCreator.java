@@ -46,10 +46,12 @@ public class CitySpinnerListCreator {
         return title;
     }
 
-    public void addToCityList(City city, ArrayAdapter<String> cityArrayAdapter, StartPagePresenter startPagePresenter) {
+    public void addToCityList(City city, ArrayAdapter<String> cityArrayAdapter, StartPagePresenter startPagePresenter, boolean isUserCity) {
         Resources resources = App.getInstance().getResources();
         String placeName = cityToString(city);
         placeName = formatPlaceName(placeName);
+        if (isUserCity && placeName != null)
+            placeName = resources.getString(R.string.user_location_marker) + " " + placeName;
         if (city != null && placeName != null) {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {

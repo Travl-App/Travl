@@ -3,7 +3,6 @@ package com.travl.guide.mvp.view.start.page;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
@@ -24,7 +23,7 @@ public interface StartPageView extends MvpView {
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityObjectList(CitiesList cityObjectList);
 
-    @StateStrategyType(value = SkipStrategy.class)
+    @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityContentByCoordinates(CityContent cityContent);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
@@ -44,7 +43,7 @@ public interface StartPageView extends MvpView {
     void onSpinnerItemClick(String selectedCity);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void addToCityList(City city);
+    void addToCityList(City city, boolean isUserCity);
 
     void initCitySpinner();
 
