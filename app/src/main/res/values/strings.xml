@@ -29,6 +29,8 @@
     <string name="interesting_nearby">Интересное здесь</string>
     <string name="city_not_found">Не найден</string>
     <string name="user_location_marker">Вы здесь:</string>
+    <string name="getting_articles">Получение статей</string>
+    <string name="city_definition">Определение города</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>
