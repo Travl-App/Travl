@@ -71,4 +71,6 @@ public interface StartPageView extends MvpView {
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityArticles();
+
+    void decideCityArticlesTitleVisibility();
 }

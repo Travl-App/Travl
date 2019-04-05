@@ -47,7 +47,7 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
     @SuppressLint("CheckResult")
     public void loadArticles() {
-        Timber.d("Loading articles");
+        Timber.e("Loading articles");
         repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()), Timber::e);
     }
 
@@ -63,7 +63,7 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
-            Timber.d("BindView and set Description");
+            Timber.e("BindView and set Description");
             ArticleLink articleLink = articleLinkList.get(view.getPos());
             clickSubject.subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())));
             String title = articleLink.getTitle();
@@ -75,12 +75,13 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
         @Override
         public int getListCount() {
-            Timber.d("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
+            Timber.e("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
             return articleLinkList == null ? 0 : articleLinkList.size();
         }
 
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
+            Timber.e("setArticleLinkList");
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 articleLinkList = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.travl.guide.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -53,6 +54,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment != null) {
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     private BottomNavigationDrawerBehavior navigationDrawer;
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {

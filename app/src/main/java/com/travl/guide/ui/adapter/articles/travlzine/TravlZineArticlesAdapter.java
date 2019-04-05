@@ -12,6 +12,7 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
+import com.travl.guide.ui.App;
 
 public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArticlesAdapter.TravlZineArticlesViewHolder> {
 
@@ -53,7 +54,11 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
 
         @Override
         public void setImage(String url) {
-            imageLoader.loadInto(cardView.findViewById(R.id.travlzine_article_preview_image_view), url);
+            if (url != null) {
+                imageLoader.loadInto(cardView.findViewById(R.id.travlzine_article_preview_image_view), url);
+            } else {
+                imageLoader.loadInto(cardView.findViewById(R.id.travlzine_article_preview_image_view), App.getInstance().getResources().getDrawable(R.drawable.ic_under_maintenance));
+            }
         }
 
         @Override

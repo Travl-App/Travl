@@ -124,4 +124,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
     public void setCityArcticles() {
         getViewState().setCityArticles();
     }
+
+    public void decideCityArticlesTitleVisibility() {
+        getViewState().decideCityArticlesTitleVisibility();
+    }
 }

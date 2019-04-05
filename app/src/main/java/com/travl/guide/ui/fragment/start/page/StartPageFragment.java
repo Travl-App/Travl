@@ -1,8 +1,10 @@
 package com.travl.guide.ui.fragment.start.page;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,8 +12,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +28,6 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.mapbox.android.core.permissions.PermissionsListener;
-import com.mapbox.android.core.permissions.PermissionsManager;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
@@ -50,7 +53,8 @@ import timber.log.Timber;
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
-
+    public static final int LOCATION_PERMISSIONS_REQUEST_CODE = 0;
+    private static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
     @BindView(R.id.user_city_spinner)
     Spinner userCitySpinner;
     @BindView(R.id.start_page_toolbar)
@@ -282,13 +286,25 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Timber.e("onRequestPermissionsResult");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSIONS_REQUEST_CODE) {
+            boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            onPermissionResult(granted);
+        }
+    }
+
+    @Override
     @SuppressLint("MissingPermission")
     public void requestCoordinates() {
-        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+        if (ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
             requestLocation();
-        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            PermissionsManager permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(getActivity());
+        } else if (!(ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+            }
         }
     }
 
@@ -328,12 +344,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void setCityArticles() {
         Timber.e("setCityArticles");
         if (city != null) {
-            areThereArticles();
+            presenter.decideCityArticlesTitleVisibility();
             articlesReceiver.setArticles(city.getArticleLinks());
         }
     }
 
-    private void areThereArticles() {
+
+    @Override
+    public void decideCityArticlesTitleVisibility() {
         if (city != null) {
             List<ArticleLink> links = city.getArticleLinks();
             Activity activity = getActivity();
@@ -349,8 +367,8 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void onPermissionResult(boolean granted) {
+        Timber.e("onPermissionResult " + granted);
         if (granted) {
-            presenter.requestLocation();
             presenter.requestCoordinates();
         }
     }
@@ -358,12 +376,13 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     @SuppressLint("MissingPermission")
     public void requestLocation() {
+        Timber.e("requestLocation");
         int millisInSecond = 1000;
         int minutes = 5;
         int secondsInMinutes = 60;
         int meters = 100;
         locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 
     public interface ArticlesReceiver {
