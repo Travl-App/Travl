@@ -16,12 +16,12 @@
     <string name="start_page_title">Главная</string>
     <string name="travl_zine_title">Travl Zine</string>
     <!--Place strings-->
-    <string name="author">Author: </string>
-    <string name="author_name">author_name</string>
-    <string name="address">Address: </string>
-    <string name="place_address"> place_address</string>
-    <string name="title"> title</string>
-    <string name="subtitle"> subtitle</string>
+    <string name="author">Автор: </string>
+    <string name="author_name">Имя Автора</string>
+    <string name="address">Адрес: </string>
+    <string name="place_address"> Шуховская ул.5г.</string>
+    <string name="title"> Заголовок</string>
+    <string name="subtitle"> Тот самый гиперболоид инженера Гарина, который нужно увидеть.</string>
     <string name="image_view_content_description">image_view</string>
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
     <string name="favorite">Избранное</string>

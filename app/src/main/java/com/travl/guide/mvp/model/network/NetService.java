@@ -3,6 +3,7 @@ package com.travl.guide.mvp.model.network;
 import com.travl.guide.mvp.model.api.articles.ArticleLinksContainer;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
+import com.travl.guide.mvp.model.api.newPlaces.Root;
 import com.travl.guide.mvp.model.api.places.ManyPlacesContainer;
 import com.travl.guide.mvp.model.api.places.PlaceContainer;
 
@@ -29,4 +30,7 @@ public interface NetService {
 
     @GET("api/cities/{id}")
     Single<CityContent> loadCity(@Path("id") int id);
+
+    @GET("api/places/{id}/")
+    Single<Root> loadNewPlace(@Path("id") int id);
 }
