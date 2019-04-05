@@ -14,6 +14,8 @@ import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresente
 import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
 import com.travl.guide.ui.App;
 
+import timber.log.Timber;
+
 public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArticlesAdapter.TravlZineArticlesViewHolder> {
 
     private TravlZineArticlesListPresenter presenter;
@@ -32,7 +34,8 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
 
     @Override
     public void onBindViewHolder(@NonNull TravlZineArticlesViewHolder holder, int position) {
-        RxView.clicks(holder.itemView).map(obj -> holder).subscribe(presenter.getClickSubject());
+        Timber.e("position = " + position);
+        RxView.clicks(holder.itemView).map(obj -> holder).subscribe(presenter.getClickSubject(position));
         holder.position = position;
         presenter.bindView(holder);
     }

@@ -216,7 +216,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             if (!userCitySpinner.getItemAtPosition(0).equals(placeName)) {
                 cityArrayAdapter.insert(placeName, 0);
                 presenter.setSpinnerPositionSelected(0);
-
             }
         }
     }

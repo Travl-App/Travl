@@ -56,8 +56,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @ProvidePresenter
     public ArticlePresenter providePresenter() {
-        String articleUrl = getArguments().getString(ARTICLE_ID_KEY);
-        return new ArticlePresenter(articleUrl);
+        return new ArticlePresenter();
     }
 
     @Nullable
@@ -68,6 +67,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         ButterKnife.bind(this, view);
         setupWebView();
         setupToolbar();
+        String articleUrl = getArguments().getString(ARTICLE_ID_KEY);
+        presenter.setArticleUrl(articleUrl);
+        presenter.loadUrl();
         return view;
     }
 

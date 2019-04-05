@@ -8,7 +8,7 @@ import java.util.List;
 import io.reactivex.subjects.PublishSubject;
 
 public interface TravlZineArticlesListPresenter {
-    PublishSubject<TravlZineArticlesItemView> getClickSubject();
+    PublishSubject<TravlZineArticlesItemView> getClickSubject(int position);
 
     void bindView(TravlZineArticlesItemView itemView);
 

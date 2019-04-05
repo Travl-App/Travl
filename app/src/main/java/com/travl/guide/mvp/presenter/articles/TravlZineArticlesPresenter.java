@@ -52,20 +52,34 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
     }
 
     public class TravlZineArticlesListPresenterImpl implements TravlZineArticlesListPresenter {
-        PublishSubject<TravlZineArticlesItemView> clickSubject = PublishSubject.create();
+        List<PublishSubject<TravlZineArticlesItemView>> publishSubjectList;
         private List<ArticleLink> articleLinkList;
 
+        private void createPublishSubjects() {
+            int elementsToUpdate = 0;
+            if (publishSubjectList == null) {
+                publishSubjectList = new ArrayList<>();
+                elementsToUpdate = getListCount();
+            } else {
+                elementsToUpdate = getListCount() - publishSubjectList.size();
+            }
+            for (int i = 0; i < elementsToUpdate; i++) {
+                publishSubjectList.add(PublishSubject.create());
+            }
+        }
+
         @Override
-        public PublishSubject<TravlZineArticlesItemView> getClickSubject() {
-            return clickSubject;
+        public PublishSubject<TravlZineArticlesItemView> getClickSubject(int position) {
+            return publishSubjectList.get(position);
         }
 
         @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
             Timber.e("BindView and set Description");
-            ArticleLink articleLink = articleLinkList.get(view.getPos());
-            clickSubject.subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())));
+            int position = view.getPos();
+            ArticleLink articleLink = articleLinkList.get(position);
+            publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             if (title != null) view.setDescription(title);
@@ -87,6 +101,7 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
                 articleLinkList = new ArrayList<>();
                 articleLinkList.add(new ArticleLink("Проверьте соединение", null));
             }
+            createPublishSubjects();
             getViewState().onChangedArticlesData();
         }
     }
