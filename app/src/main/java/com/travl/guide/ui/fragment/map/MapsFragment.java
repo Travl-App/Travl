@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.fede987.statusbaralert.StatusBarAlert;
+import com.fede987.statusbaralert.StatusBarAlertView;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -45,6 +47,7 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +110,21 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Override
     public void setupFab() {
         locationFab.setOnClickListener(view -> findUser());
+    }
+
+    @Override
+    public void showLoadInfo() {
+        new StatusBarAlert.Builder(Objects.requireNonNull(getActivity()))
+                .withAlertColor(R.color.colorPrimaryDark)
+                .withText("Загрузка...")
+                .showProgress(true)
+                .autoHide(false)
+                .build();
+    }
+
+    @Override
+    public void hideLoadInfo() {
+        StatusBarAlert.Companion.hide(Objects.requireNonNull(getActivity()), () -> {});
     }
 
     public void fabClick() {

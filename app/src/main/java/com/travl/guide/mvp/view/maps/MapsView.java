@@ -21,4 +21,8 @@ public interface MapsView extends MvpView {
     void findUser();
 
     void setupFab();
+
+    void showLoadInfo();
+
+    void hideLoadInfo();
 }

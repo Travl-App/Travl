@@ -73,12 +73,14 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     @SuppressLint("CheckResult")
     public void makeRequest() {
+        getViewState().showLoadInfo();
         placesRepo.loadPlacesForMap(
                 new CoordinatesRequest(60, 31), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placesMap.getPlaces()));
                     getViewState().onRequestCompleted(creatingPlacesList(placesMap.getPlaces()));
+                    getViewState().hideLoadInfo();
                 }, Timber::e);
     }
 
