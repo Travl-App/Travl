@@ -1,10 +1,8 @@
 package com.travl.guide.ui.fragment.articles.travlzine;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,11 +47,9 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
     }
 
     private void setupRecycler() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            travzineArticlesPreviewRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        } else {
-            travzineArticlesPreviewRecycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
-        }
+
+        travzineArticlesPreviewRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         TravlZineArticlesAdapter adapter = new TravlZineArticlesAdapter(presenter.travlZineArticlesListPresenter, imageLoader);
         travzineArticlesPreviewRecycler.setAdapter(adapter);
     }
