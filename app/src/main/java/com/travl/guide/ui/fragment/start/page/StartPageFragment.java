@@ -27,8 +27,6 @@ import android.widget.Spinner;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.fede987.statusbaralert.StatusBarAlert;
-import com.fede987.statusbaralert.StatusBarAlertView;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
@@ -67,7 +65,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private CitiesList cityObjectList;
     private List<String> cityStringNames;
     private LocationManager locationManager;
-    private StatusBarAlertView statusBarInfo;
     private CitySpinnerListCreator listCreator;
     private ArrayAdapter<String> cityArrayAdapter;
     public static final int LOCATION_PERMISSIONS_REQUEST_CODE = 0;
@@ -308,13 +305,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     @SuppressLint("MissingPermission")
     public void requestCoordinates() {
-        statusBarInfo = new StatusBarAlert.Builder(Objects.requireNonNull(getActivity()))
-                .withAlertColor(R.color.colorPrimaryDark)
-                .withText(R.string.getting_articles)
-                .showProgress(true)
-                .withDuration(700)
-                .build();
-
         if(ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
             requestLocation();
         } else if(! (ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {

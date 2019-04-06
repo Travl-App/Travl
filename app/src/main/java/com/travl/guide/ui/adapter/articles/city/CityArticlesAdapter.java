@@ -30,7 +30,7 @@ public class CityArticlesAdapter extends RecyclerView.Adapter<CityArticlesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull CityArticlesViewHolder cityArticlesViewHolder, int position) {
-        RxView.clicks(cityArticlesViewHolder.itemView).map(obj -> cityArticlesViewHolder).subscribe(presenter.getClickSubject());
+        RxView.clicks(cityArticlesViewHolder.itemView).map(obj -> cityArticlesViewHolder).subscribe(presenter.getClickSubject(position));
         cityArticlesViewHolder.position = position;
         presenter.bindView(cityArticlesViewHolder);
     }

@@ -8,7 +8,7 @@ import java.util.List;
 import io.reactivex.subjects.PublishSubject;
 
 public interface CityArticlesListPresenter {
-    PublishSubject<CityArticlesItemView> getClickSubject();
+    PublishSubject<CityArticlesItemView> getClickSubject(int position);
 
     void bindView(CityArticlesItemView itemView);
 
