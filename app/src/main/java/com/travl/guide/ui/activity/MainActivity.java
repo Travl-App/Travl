@@ -123,7 +123,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         App.getInstance().getAppComponent().inject(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
         presenter.initUI();
         presenter.initEvents();

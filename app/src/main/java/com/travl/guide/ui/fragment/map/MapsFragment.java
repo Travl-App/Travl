@@ -154,7 +154,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         this.listPlaces = listPlaces;
 
         for(int i = 0; i < listPlaces.size(); i++) {
-            View view = getLayoutInflater().inflate(R.layout.mapillary_layout_callout, null);
+            View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);
             bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
             viewMap.put(listPlaces.get(i).getId(), view);
         }

@@ -142,7 +142,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void setCityArrayAdapter() {
         Timber.e("setCityArrayAdapter");
-        cityArrayAdapter = new ArrayAdapter<>(App.getInstance(), R.layout.cities_spinner_item);
+        cityArrayAdapter = new ArrayAdapter<>(App.getInstance(), R.layout.start_page_cities_spinner_item);
     }
 
     @Override
@@ -350,17 +350,17 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void setCityArticles() {
         Timber.e("setCityArticles");
-        if(city != null) {
+        if (city != null && city.getArticleLinksContainer() != null) {
             presenter.decideCityArticlesTitleVisibility();
-            articlesReceiver.setArticles(city.getArticleLinks());
+            articlesReceiver.setArticles(city.getArticleLinksContainer().getArticleLinkList());
         }
     }
 
 
     @Override
     public void decideCityArticlesTitleVisibility() {
-        if(city != null) {
-            List<ArticleLink> links = city.getArticleLinks();
+        if (city != null && city.getArticleLinksContainer() != null) {
+            List<ArticleLink> links = city.getArticleLinksContainer().getArticleLinkList();
             Activity activity = getActivity();
             int visibility = View.GONE;
             if(links != null && links.size() > 0) {

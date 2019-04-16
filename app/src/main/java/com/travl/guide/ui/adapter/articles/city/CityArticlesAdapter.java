@@ -25,7 +25,7 @@ public class CityArticlesAdapter extends RecyclerView.Adapter<CityArticlesAdapte
     @NonNull
     @Override
     public CityArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new CityArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_city_article_preview, viewGroup, false));
+        return new CityArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.city_article_preview, viewGroup, false));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
     @NonNull
     @Override
     public TravlZineArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new TravlZineArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_travlzine_article_preview, viewGroup, false));
+        return new TravlZineArticlesViewHolder((MaterialCardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.travlzine_article_preview, viewGroup, false));
     }
 
     @Override
