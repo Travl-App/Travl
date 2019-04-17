@@ -7,8 +7,8 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
-import com.travl.guide.mvp.model.api.places.Place;
-import com.travl.guide.mvp.model.api.places.PlaceLink;
+import com.travl.guide.mvp.model.api.places.map.Place;
+import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.maps.MapsView;
@@ -78,8 +78,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 new CoordinatesRequest(60, 31), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
-                    getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placesMap.getPlaces()));
-                    getViewState().onRequestCompleted(creatingPlacesList(placesMap.getPlaces()));
+                    List<PlaceLink> placeLinks = placesMap.getPlaces().getPlaceLinkList();
+                    getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
+                    getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
                     getViewState().hideLoadInfo();
                 }, Timber::e);
     }

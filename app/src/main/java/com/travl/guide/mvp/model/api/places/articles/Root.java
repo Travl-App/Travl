@@ -1,26 +1,26 @@
-package com.travl.guide.mvp.model.api.places;
+package com.travl.guide.mvp.model.api.places.articles;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-public class PlaceContainer {
-    @SerializedName("status")
+public class Root {
     @Expose
     private int status;
-    @SerializedName("place")
     @Expose
     private Place place;
+    @Expose
+    private String user;
 
-    public PlaceContainer() {
+    public Root() {
     }
 
-    public PlaceContainer(int status, Place place) {
+    public Root(int status, Place place, String user) {
         this.status = status;
         this.place = place;
+        this.user = user;
     }
 
     public int getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(int status) {
@@ -28,10 +28,18 @@ public class PlaceContainer {
     }
 
     public Place getPlace() {
-        return place;
+        return this.place;
     }
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

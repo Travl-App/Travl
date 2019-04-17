@@ -1,8 +1,7 @@
 package com.travl.guide.mvp.model.repo;
 
-import com.travl.guide.mvp.model.api.newPlaces.Root;
-import com.travl.guide.mvp.model.api.places.ManyPlacesContainer;
-import com.travl.guide.mvp.model.api.places.PlaceContainer;
+import com.travl.guide.mvp.model.api.places.articles.Root;
+import com.travl.guide.mvp.model.api.places.map.ManyPlacesContainer;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.network.NetService;
 import com.travl.guide.ui.utils.NetworkStatus;
@@ -31,22 +30,6 @@ public class PlacesRepo {
             return new Single<ManyPlacesContainer>() {
                 @Override
                 protected void subscribeActual(SingleObserver<? super ManyPlacesContainer> observer) {
-                }
-            };
-        }
-    }
-
-    public Single<PlaceContainer> loadPlace(int id) {
-        Timber.e("loading place with id = %s", id);
-        if (NetworkStatus.isOnline()) {
-            return netService.loadPlace(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
-                Timber.e(throwable);
-                return null;
-            });
-        } else {
-            return new Single<PlaceContainer>() {
-                @Override
-                protected void subscribeActual(SingleObserver<? super PlaceContainer> observer) {
                 }
             };
         }

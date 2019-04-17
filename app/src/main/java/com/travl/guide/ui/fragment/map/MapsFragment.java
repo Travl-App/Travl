@@ -40,7 +40,7 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
-import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.map.Place;
 import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
@@ -141,7 +141,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
                 presenter.makeRequest();
-//                presenter.showLocations();
+                presenter.showLocations();
             });
         });
     }

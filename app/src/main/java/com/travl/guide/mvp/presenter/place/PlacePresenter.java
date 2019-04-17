@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.model.api.newPlaces.Place;
+import com.travl.guide.mvp.model.api.places.articles.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;

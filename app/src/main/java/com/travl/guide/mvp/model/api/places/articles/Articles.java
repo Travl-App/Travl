@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.model.api.newPlaces;
+package com.travl.guide.mvp.model.api.places.articles;
 
 import com.google.gson.annotations.Expose;
 
