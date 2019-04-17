@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.articles.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
+import timber.log.Timber;
 
 @InjectViewState
 public class PlacePresenter extends MvpPresenter<PlaceView> {
@@ -39,12 +40,13 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
 
     @SuppressLint("CheckResult")
     private void loadPlaceCardInfo() {
-        placesRepo.loadPlace(placeId).observeOn(scheduler).subscribe(placeContainer -> {
-            Place place = placeContainer.getPlace();
-            getViewState().setImageSlider(place.getImageUrls());
-            getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUserName());
-            getViewState().setTextView(place.getDescription());
+        placesRepo.loadNewPlace(placeId).observeOn(scheduler).subscribe(root -> {
+            Place place = root.getPlace();
             getViewState().setTitleTextView(place.getTitle());
-        });
+            getViewState().setImageSlider(place.getImages());
+            getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUsername());
+            getViewState().setTextView(place.getDescription());
+
+        }, Timber::e);
     }
 }

@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ru.terrakok.cicerone.Router;
+import timber.log.Timber;
 
 @InjectViewState
 public class ArticlePresenter extends MvpPresenter<ArticleView> {
@@ -22,21 +23,21 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
 
     private String articleUrl;
 
-    public ArticlePresenter(String articleUrl) {
-        this.articleUrl = articleUrl;
+    public ArticlePresenter() {
         App.getInstance().getAppComponent().inject(this);
     }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        loadArticleWebView();
     }
 
-    private void loadArticleWebView() {
-//        getViewState().loadWebView(baseUrl + articleUrl.substring(5));
-        getViewState().loadWebView("https://github.com/Travl-App/Travl");
-//        getViewState().loadWebView("https://travl.dev/articles/1/");
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
     }
 
+    public void loadUrl() {
+        Timber.e("Url = " + articleUrl.substring(5));
+        getViewState().loadWebView(baseUrl + articleUrl.substring(5));
+    }
 }

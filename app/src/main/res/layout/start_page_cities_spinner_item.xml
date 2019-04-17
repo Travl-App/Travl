@@ -9,5 +9,7 @@
     android:gravity="center_horizontal"
     android:paddingStart="@dimen/city_spinner_item_padding_start"
     android:paddingEnd="@dimen/city_spinner_item_padding_end"
+    android:textAllCaps="true"
     android:textColor="@android:color/white"
     android:textSize="@dimen/city_spinner_item_text_size" />
+

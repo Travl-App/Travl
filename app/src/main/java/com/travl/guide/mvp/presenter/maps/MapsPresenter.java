@@ -1,13 +1,14 @@
 package com.travl.guide.mvp.presenter.maps;
 
+import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
-import com.travl.guide.mvp.model.api.places.ManyPlacesContainer;
-import com.travl.guide.mvp.model.api.places.Place;
-import com.travl.guide.mvp.model.api.places.PlaceLink;
+import com.travl.guide.mvp.model.api.places.map.Place;
+import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
 import com.travl.guide.mvp.view.maps.MapsView;
@@ -20,8 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
@@ -72,28 +71,18 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         return 1;
     }
 
+    @SuppressLint("CheckResult")
     public void makeRequest() {
-        SingleObserver<ManyPlacesContainer> observer = new SingleObserver<ManyPlacesContainer>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(ManyPlacesContainer placesMap) {
-                getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placesMap.getPlaces()));
-                getViewState().onRequestCompleted(creatingPlacesList(placesMap.getPlaces()));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e);
-            }
-        };
+        getViewState().showLoadInfo();
         placesRepo.loadPlacesForMap(
                 new CoordinatesRequest(60, 31), 2000, 1)
                 .observeOn(scheduler)
-                .subscribe(observer);
+                .subscribe(placesMap -> {
+                    List<PlaceLink> placeLinks = placesMap.getPlaces().getPlaceLinkList();
+                    getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
+                    getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
+                    getViewState().hideLoadInfo();
+                }, Timber::e);
     }
 
     private List<Feature> parsePlaceLinksListToFeatures(List<PlaceLink> places) {
@@ -118,7 +107,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             place.setImageUrls(places.get(i).getImageUrls());
             place.setDescription(places.get(i).getDescription());
             place.setCoordinates(places.get(i).getCoordinates());
-
             placesMap.add(place);
         }
 

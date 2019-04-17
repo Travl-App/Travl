@@ -54,6 +54,7 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
         } else {
             travzineArticlesPreviewRecycler.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
         }
+
         TravlZineArticlesAdapter adapter = new TravlZineArticlesAdapter(presenter.travlZineArticlesListPresenter, imageLoader);
         travzineArticlesPreviewRecycler.setAdapter(adapter);
     }

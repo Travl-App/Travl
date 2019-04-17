@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/city_article_card_width"
+    android:layout_height="@dimen/city_articles_card_height"
+    android:layout_margin="@dimen/city_articles_card_margin">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/city_article_preview_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/city_articles_card_image_view_height"
+            android:scaleType="centerCrop"
+            android:src="@null"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/city_article_preview_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/city_articles_card_preview_description"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/city_article_preview_description_margin_start"
+            android:fontFamily="@font/roboto_slab_regular"
+            android:textSize="@dimen/city_articles_card_text_size"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toBottomOf="@id/city_article_preview_image_view" />
+
+        <android.support.design.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/city_article_preview_chip_margin_start"
+            android:layout_marginBottom="@dimen/city_article_preview_chip_margin_bottom"
+            android:text="Travl"
+            app:chipBackgroundColor="@android:color/white"
+            app:chipIcon="@mipmap/travl_launcher_round"
+            app:chipIconSize="@dimen/city_article_chip_icon_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.card.MaterialCardView>

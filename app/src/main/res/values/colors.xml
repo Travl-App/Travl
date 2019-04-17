@@ -15,5 +15,6 @@
     <!--cards colors-->
     <color name="colorStroke">#f4f4f4</color>
     <color name="colorShadow">#dbdbdb</color>
+    <color name="travlzine_preview_category_text_color">#7ec999</color>
 
 </resources>

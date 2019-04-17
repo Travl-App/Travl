@@ -5,4 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity"
-    tools:showIn="@layout/activity_main" />
+    tools:showIn="@layout/main_activity" />

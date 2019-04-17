@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:divider="@drawable/separator"
             android:dividerPadding="4dp"
             android:orientation="vertical"
             android:showDividers="middle">
@@ -59,30 +58,37 @@
                 android:layout_margin="5dp"
                 android:scaleType="centerCrop" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="@color/colorTextDelimitersInsideText" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="4dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/roboto_slab_bold"
-                    android:padding="4dp"
                     android:scrollbarSize="16sp"
-                    android:text="@string/address" />
+                    android:text="@string/address"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/text_view_place_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/roboto_slab_regular"
-                    android:padding="4dp"
                     android:scrollbarSize="16sp"
-                    android:text="@string/place_address" />
+                    android:text="@string/place_address"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -90,16 +96,83 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/roboto_slab_bold"
+                    android:scrollbarSize="16sp"
+                    android:text="Как добраться: "
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/roboto_slab_regular"
+                    android:scrollbarSize="16sp"
+                    android:text="От г. Дзержинска на электричке до станции Сады, далее пешком (дорога хорошая). Можно взять такси, стоит это -500 руб."
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/roboto_slab_bold"
+                    android:scrollbarSize="16sp"
+                    android:text="Популярность: "
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="@color/colorTextDelimitersInsideText" />
+
+            <TextView
+                android:id="@+id/text_view_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_slab_regular"
+                android:padding="4dp"
+                android:scrollbarSize="16sp"
+                android:text="текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:padding="4dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/roboto_slab_bold"
-                    android:padding="4dp"
                     android:scrollbarSize="16sp"
-                    android:text="@string/author" />
+                    android:text="Автор: "
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/text_view_author_name"
@@ -107,19 +180,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/roboto_slab_regular"
-                    android:padding="4dp"
                     android:scrollbarSize="16sp"
-                    android:text="@string/author_name" />
+                    android:text="@string/author_name"
+                    android:textSize="11sp" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_view_place"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="4dp"
-                android:scrollbarSize="16sp" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

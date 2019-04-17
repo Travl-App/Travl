@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.travl.guide.R
 import com.travl.guide.ui.App
-import kotlinx.android.synthetic.main.fragment_navigation_drawer.*
+import kotlinx.android.synthetic.main.main_fragment_navigation_drawer.*
 
 class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
 
@@ -23,7 +23,7 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
+        val view: View = inflater.inflate(R.layout.main_fragment_navigation_drawer, container, false)
         App.getInstance().appComponent.inject(this)
         return view
     }

@@ -5,7 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.mapbox.geojson.Feature;
-import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.map.Place;
 
 import java.util.List;
 
@@ -21,4 +21,8 @@ public interface MapsView extends MvpView {
     void findUser();
 
     void setupFab();
+
+    void showLoadInfo();
+
+    void hideLoadInfo();
 }

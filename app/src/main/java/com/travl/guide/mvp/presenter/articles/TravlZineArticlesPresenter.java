@@ -47,44 +47,61 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
     @SuppressLint("CheckResult")
     public void loadArticles() {
-        Timber.d("Loading articles");
-        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()));
+        Timber.e("Loading articles");
+        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()), Timber::e);
     }
 
     public class TravlZineArticlesListPresenterImpl implements TravlZineArticlesListPresenter {
-        PublishSubject<TravlZineArticlesItemView> clickSubject = PublishSubject.create();
+        List<PublishSubject<TravlZineArticlesItemView>> publishSubjectList;
         private List<ArticleLink> articleLinkList;
 
+        private void createPublishSubjects() {
+            int elementsToUpdate = 0;
+            if (publishSubjectList == null) {
+                publishSubjectList = new ArrayList<>();
+                elementsToUpdate = getListCount();
+            } else {
+                elementsToUpdate = getListCount() - publishSubjectList.size();
+            }
+            for (int i = 0; i < elementsToUpdate; i++) {
+                publishSubjectList.add(PublishSubject.create());
+            }
+        }
+
         @Override
-        public PublishSubject<TravlZineArticlesItemView> getClickSubject() {
-            return clickSubject;
+        public PublishSubject<TravlZineArticlesItemView> getClickSubject(int position) {
+            return publishSubjectList.get(position);
         }
 
         @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
-            Timber.d("BindView and set Description");
-            ArticleLink articleLink = articleLinkList.get(view.getPos());
-            clickSubject.subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())));
+            Timber.e("BindView and set Description");
+            int position = view.getPos();
+            ArticleLink articleLink = articleLinkList.get(position);
+            publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             if (title != null) view.setDescription(title);
-            if (imageUrl != null) view.setImage(baseUrl + imageUrl.substring(1));
+            if (imageUrl != null)
+                view.setImage(baseUrl + imageUrl.substring(1));
         }
 
         @Override
         public int getListCount() {
-            Timber.d("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
+            Timber.e("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
             return articleLinkList == null ? 0 : articleLinkList.size();
         }
 
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
+            Timber.e("setArticleLinkList");
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 articleLinkList = new ArrayList<>();
                 articleLinkList.add(new ArticleLink("Проверьте соединение", null));
             }
+            createPublishSubjects();
             getViewState().onChangedArticlesData();
         }
     }

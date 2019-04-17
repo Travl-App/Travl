@@ -40,7 +40,7 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
-import com.travl.guide.mvp.model.api.places.Place;
+import com.travl.guide.mvp.model.api.places.map.Place;
 import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
@@ -109,6 +109,16 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         locationFab.setOnClickListener(view -> findUser());
     }
 
+    @Override
+    public void showLoadInfo() {
+
+    }
+
+    @Override
+    public void hideLoadInfo() {
+
+    }
+
     public void fabClick() {
         Intent intent = new PlaceAutocomplete.IntentBuilder()
                 .accessToken(getString(R.string.mapbox_access_token))
@@ -131,7 +141,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
                 presenter.makeRequest();
-//                presenter.showLocations();
+                presenter.showLocations();
             });
         });
     }
@@ -144,7 +154,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         this.listPlaces = listPlaces;
 
         for(int i = 0; i < listPlaces.size(); i++) {
-            View view = getLayoutInflater().inflate(R.layout.mapillary_layout_callout, null);
+            View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);
             bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
             viewMap.put(listPlaces.get(i).getId(), view);
         }

@@ -1,5 +1,7 @@
 package com.travl.guide.mvp.presenter.articles;
 
+import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
@@ -7,6 +9,7 @@ import com.travl.guide.mvp.model.repo.ArticlesRepo;
 import com.travl.guide.mvp.presenter.articles.list.CityArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.CityArticlesView;
 import com.travl.guide.mvp.view.articles.list.CityArticlesItemView;
+import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,7 @@ import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
+import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
@@ -28,6 +32,8 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
     @Inject
     @Named("baseUrl")
     String baseUrl;
+    @Inject
+    Router router;
     private Scheduler scheduler;
 
     public CityArticlesPresenter(Scheduler scheduler) {
@@ -39,18 +45,34 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
     }
 
     public class CityArticlesListPresenterImpl implements CityArticlesListPresenter {
-        PublishSubject<CityArticlesItemView> clickSubject = PublishSubject.create();
         private List<ArticleLink> articleLinkList;
+        private List<PublishSubject<CityArticlesItemView>> publishSubjectList;
 
-        @Override
-        public PublishSubject<CityArticlesItemView> getClickSubject() {
-            return clickSubject;
+        private void createPublishSubjects() {
+            int elementsToUpdate = 0;
+            if (publishSubjectList == null) {
+                publishSubjectList = new ArrayList<>();
+                elementsToUpdate = getListCount();
+            } else {
+                elementsToUpdate = getListCount() - publishSubjectList.size();
+            }
+            for (int i = 0; i < elementsToUpdate; i++) {
+                publishSubjectList.add(PublishSubject.create());
+            }
         }
 
         @Override
+        public PublishSubject<CityArticlesItemView> getClickSubject(int position) {
+            return publishSubjectList.get(position);
+        }
+
+        @SuppressLint("CheckResult")
+        @Override
         public void bindView(CityArticlesItemView view) {
             Timber.d("BindView and set Description");
-            ArticleLink articleLink = articleLinkList.get(view.getPos());
+            int position = view.getPos();
+            ArticleLink articleLink = articleLinkList.get(position);
+            publishSubjectList.get(position).subscribe(cityArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
             view.setDescription(articleLink.getTitle());
             view.setImage(baseUrl + articleLink.getImageCoverUrl().substring(1));
         }
@@ -67,6 +89,7 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 this.articleLinkList = new ArrayList<>();
             }
+            createPublishSubjects();
             getViewState().onChangedArticlesData();
         }
     }

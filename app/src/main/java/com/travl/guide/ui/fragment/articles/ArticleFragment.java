@@ -14,7 +14,6 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -29,8 +28,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 import ru.terrakok.cicerone.Router;
+import timber.log.Timber;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
 
@@ -57,8 +56,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @ProvidePresenter
     public ArticlePresenter providePresenter() {
-        String articleUrl = getArguments().getString(ARTICLE_ID_KEY);
-        return new ArticlePresenter(articleUrl);
+        return new ArticlePresenter();
     }
 
     @Nullable
@@ -69,19 +67,17 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         ButterKnife.bind(this, view);
         setupWebView();
         setupToolbar();
+        String articleUrl = getArguments().getString(ARTICLE_ID_KEY);
+        presenter.setArticleUrl(articleUrl);
+        presenter.loadUrl();
         return view;
     }
 
-    @SuppressLint({"ClickableViewAccessibility", "SetJavaScriptEnabled"})
+    @SuppressLint({"SetJavaScriptEnabled"})
     private void setupWebView() {
         articleWebVew.getSettings().setJavaScriptEnabled(true);
         articleWebVew.getSettings().setDomStorageEnabled(true);
         articleWebVew.setWebViewClient(new MyWebViewClient());
-        articleWebVew.setOnTouchListener((v, event) -> {
-            WebView.HitTestResult hr = ((WebView) v).getHitTestResult();
-            Toast.makeText(getActivity(), hr.getExtra() + " " + hr.getType(), Toast.LENGTH_SHORT).show();
-            return false;
-        });
     }
 
     private void setupToolbar() {
@@ -96,17 +92,30 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         articleWebVew.loadUrl(url);
     }
 
+    public void onBackPressed() {
+        if (articleWebVew.canGoBack()) {
+            articleWebVew.goBack();
+        } else if (getActivity() != null) getActivity().onBackPressed();
+        else throw new RuntimeException("Activity is null");
+    }
+
     private class MyWebViewClient extends WebViewClient {
         @TargetApi(Build.VERSION_CODES.N)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if (request.getUrl().toString().contains("https://github.com/Travl-App/Travl/blob/master/.gitignore")) {
-                Toast.makeText(getActivity(), "show place", Toast.LENGTH_SHORT).show();
-                router.navigateTo(new Screens.PlaceScreen(1));
+            String url = request.getUrl().toString();
+            if (url.contains("https://travl.dev/api/places")) {
+                router.navigateTo(new Screens.PlaceScreen(Integer.parseInt(url.substring(0, url.length() - 1).substring(29))));
             } else {
-                view.loadUrl(request.getUrl().toString());
-//                Toast.makeText(getActivity(), request.getUrl().toString(), Toast.LENGTH_SHORT).show();
+                view.loadUrl(url);
             }
+            return true;
+        }
+
+        // Для старых устройств
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
             return true;
         }
 
@@ -116,18 +125,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             super.onReceivedError(view, request, error);
         }
 
-        // Для старых устройств
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
     }
 
-    public void onBackPressed() {
-        if (articleWebVew.canGoBack()) {
-            articleWebVew.goBack();
-        } else if (getActivity() != null) getActivity().onBackPressed();
-        else throw new RuntimeException("Activity is null");
-    }
 }
