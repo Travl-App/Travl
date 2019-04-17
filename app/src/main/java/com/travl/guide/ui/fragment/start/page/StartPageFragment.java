@@ -1,21 +1,13 @@
 package com.travl.guide.ui.fragment.start.page;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,33 +56,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private CityContent cityContent;
     private CitiesList cityObjectList;
     private List<String> cityStringNames;
-    private LocationManager locationManager;
     private CitySpinnerListCreator listCreator;
     private ArrayAdapter<String> cityArrayAdapter;
-    public static final int LOCATION_PERMISSIONS_REQUEST_CODE = 0;
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
-    private static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
-
-    private LocationListener mListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            Timber.e("Location changed:" + location.getLatitude() + "," + location.getLongitude());
-            setCoordinates(location);
-            presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-        }
-    };
+    private StartPageLocationManager startPageLocationManager;
     private ArticlesReceiver articlesReceiver;
 
     @ProvidePresenter
@@ -103,10 +72,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
-        locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
+        startPageLocationManager = new StartPageLocationManager(presenter);
+        startPageLocationManager.initLocationListener();
         listCreator = new CitySpinnerListCreator();
         if(savedInstanceState == null) {
-            //Timber.e("SavedInstance null");
             presenter.initCityArticlesFragment();
             presenter.initTravlZineArticlesFragment();
             presenter.initCitySpinner();
@@ -126,7 +95,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCitySelectedName(String citySelected) {
-        Timber.e("setCitySelectedName " + citySelected);
+        Timber.e("setCitySelectedName %s", citySelected);
         this.selectedCity = citySelected;
     }
 
@@ -153,7 +122,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCityStringNames(ArrayList<String> cityStringNames) {
-        Timber.e("setCityStringNames " + Arrays.toString(cityStringNames.toArray()));
+        Timber.e("setCityStringNames %s", Arrays.toString(cityStringNames.toArray()));
         this.cityStringNames = cityStringNames;
     }
 
@@ -201,30 +170,24 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void removePlaceIfIsAdded(String placeName) {
-        Timber.e("Removing " + placeName);
+        Timber.e("Removing %s", placeName);
         cityArrayAdapter.remove(placeName);
     }
 
     @Override
     public void setSpinnerPositionSelected(int position) {
-        Timber.e("setSpinner selection position " + position);
+        Timber.e("setSpinner selection position %s", position);
         userCitySpinner.setSelection(position, false);
     }
 
     @Override
     public void placeSelectedCityOnTop(String placeName) {
-        Timber.e("Inserting " + placeName);
+        Timber.e("Inserting %s", placeName);
         if(userCitySpinner != null && cityArrayAdapter != null && userCitySpinner.getCount() > 0) {
             if(! userCitySpinner.getItemAtPosition(0).equals(placeName)) {
                 cityArrayAdapter.insert(placeName, 0);
                 presenter.setSpinnerPositionSelected(0);
             }
-        }
-    }
-
-    private void setCoordinates(Location lastKnownLocation) {
-        if(lastKnownLocation != null) {
-            presenter.setUserCoordinates(new double[] {lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()});
         }
     }
 
@@ -254,7 +217,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void addNamesToCitySpinner(List<String> cityStringNames) {
-        Timber.e("addNamesToCitySpinner" + cityStringNames);
+        Timber.e("addNamesToCitySpinner%s", cityStringNames);
         for(int i = 0; i < cityArrayAdapter.getCount(); i++) {
             String item = cityArrayAdapter.getItem(i);
             cityStringNames.remove(item);
@@ -296,23 +259,13 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Timber.e("onRequestPermissionsResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == LOCATION_PERMISSIONS_REQUEST_CODE) {
-            boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-            onPermissionResult(granted);
-        }
+        startPageLocationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     @SuppressLint("MissingPermission")
     public void requestCoordinates() {
-        if(ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-            requestLocation();
-        } else if(! (ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {
-            Activity activity = getActivity();
-            if(activity != null) {
-                ActivityCompat.requestPermissions(activity, new String[] {COARSE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
-            }
-        }
+        startPageLocationManager.requestCoordinates(this.getActivity());
     }
 
     @Override
@@ -338,7 +291,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
         String tag = childFragment.getTag();
-        Timber.e("OnAttachFragment tag = " + tag);
+        Timber.e("OnAttachFragment tag = %s", tag);
         if(tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
             articlesReceiver = (ArticlesReceiver) childFragment;
             if(presenter != null) {
@@ -374,22 +327,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void onPermissionResult(boolean granted) {
-        Timber.e("onPermissionResult " + granted);
-        if(granted) {
-            presenter.requestCoordinates();
-        }
+        Timber.e("onPermissionResult %s", granted);
+        startPageLocationManager.onPermissionResult(granted);
     }
 
     @Override
     @SuppressLint("MissingPermission")
     public void requestLocation() {
-        Timber.e("requestLocation");
-        int millisInSecond = 1000;
-        int minutes = 1;
-        int secondsInMinutes = 30;
-        int meters = 100;
-        locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        startPageLocationManager.requestLocation();
     }
 
     public interface ArticlesReceiver {
