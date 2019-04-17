@@ -39,7 +39,7 @@
     <dimen name="travlzine_article_preview_category_text_view_padding_bottom">4dp</dimen>
     <dimen name="travlzine_article_preview_category_text_view_padding_top">4dp</dimen>
     <dimen name="travlzine_article_preview_category_margin_top">10dp</dimen>
-
+    <dimen name="travlzine_card_margin_horizontal">0dp</dimen>
 
     <!--BottomSheet dimens-->
     <dimen name="bottom_sheet_corner_radius">16dp</dimen>
@@ -72,7 +72,6 @@
     <dimen name="user_city_spinner_elevation">4dp</dimen>
     <dimen name="user_city_spinner_translation_z">4dp</dimen>
     <dimen name="user_city_spinner_margin_bottom">10dp</dimen>
-    <dimen name="travlzine_card_margin_horizontal">0dp</dimen>
 
 
 </resources>
