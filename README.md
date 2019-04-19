@@ -1,6 +1,5 @@
 # Travl
 App for travelers
-Приложение для путешественников.
 
 Tech Stack:
 1. Moxy
