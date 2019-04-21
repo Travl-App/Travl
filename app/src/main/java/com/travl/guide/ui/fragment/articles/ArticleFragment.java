@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -24,12 +26,16 @@ import com.travl.guide.mvp.view.articles.ArticleView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
+
+import static android.os.Looper.getMainLooper;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
 
@@ -100,10 +106,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     }
 
     private class MyWebViewClient extends WebViewClient {
+
         @TargetApi(Build.VERSION_CODES.N)
-        @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
+            String[] urlSpilt = url.split("/");
+            Timber.e("Override: " + url + "; length: " + urlSpilt.length);
             if (url.contains("https://travl.dev/api/places")) {
                 router.navigateTo(new Screens.PlaceScreen(Integer.parseInt(url.substring(0, url.length() - 1).substring(29))));
             } else {
@@ -115,8 +123,39 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         // Для старых устройств
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Timber.e("OldOverride" + url);
             view.loadUrl(url);
             return true;
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            String refererUrl;
+            String[] refererUrlSplit = {};
+            String url = request.getUrl().toString();
+            String[] urlSpilt = url.split("/");
+//            Timber.e("Intercepted: " + url + "; length: " + urlSpilt.length);
+//            for (int i = 0; i < urlSpilt.length; i++) {
+//                Timber.e("urlSplit[" + i + "]: " + urlSpilt[i]);
+//            }
+            Map<String, String> headers = request.getRequestHeaders();
+            refererUrl = headers.get("Referer");
+            refererUrlSplit = refererUrl.split("/");
+            if (urlSpilt.length > 5 && refererUrlSplit.length > 4) {
+                if (urlSpilt[4].equals("places") && refererUrlSplit[3].equals("places")) {
+                    int placeId = Integer.parseInt(urlSpilt[5]);
+                    Timber.e("PlaceId: " + placeId);
+                    Handler handler = new Handler(getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.stopLoading();
+                            router.navigateTo(new Screens.PlaceScreen(placeId));
+                        }
+                    });
+                }
+            }
+            return super.shouldInterceptRequest(view, request);
         }
 
         @Override
