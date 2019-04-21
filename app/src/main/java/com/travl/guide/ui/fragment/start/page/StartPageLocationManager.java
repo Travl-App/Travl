@@ -91,6 +91,6 @@ class StartPageLocationManager {
         int secondsInMinutes = 30;
         int meters = 100;
         locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                LocationManager.GPS_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 }
