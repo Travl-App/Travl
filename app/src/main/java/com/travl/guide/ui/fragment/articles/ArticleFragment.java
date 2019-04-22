@@ -134,13 +134,18 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             String[] refererUrlSplit = {};
             String url = request.getUrl().toString();
             String[] urlSpilt = url.split("/");
-//            Timber.e("Intercepted: " + url + "; length: " + urlSpilt.length);
+            Timber.e("Intercepted: " + url + "; length: " + urlSpilt.length);
 //            for (int i = 0; i < urlSpilt.length; i++) {
 //                Timber.e("urlSplit[" + i + "]: " + urlSpilt[i]);
 //            }
             Map<String, String> headers = request.getRequestHeaders();
-            refererUrl = headers.get("Referer");
-            refererUrlSplit = refererUrl.split("/");
+            for (Map.Entry<String, String> entry: headers.entrySet()) {
+//                Timber.w(entry.getKey() + ":" + entry.getValue());
+                if (entry.getKey().toLowerCase().contains("referer")) {
+                    refererUrl = entry.getValue();
+                    refererUrlSplit = refererUrl.split("/");
+                }
+            }
             if (urlSpilt.length > 5 && refererUrlSplit.length > 4) {
                 if (urlSpilt[4].equals("places") && refererUrlSplit[3].equals("places")) {
                     int placeId = Integer.parseInt(urlSpilt[5]);
