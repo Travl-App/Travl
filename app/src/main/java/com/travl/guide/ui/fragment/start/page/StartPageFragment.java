@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -223,7 +224,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void setCityContentByCoordinates(CityContent cityContent) {
         this.cityContent = cityContent;
-
+        hideCityArticlesFragment();
         //If no city is selected or loaded and if the info is related to the city selected
         presenter.setCity(cityContent);
         presenter.addToCityList(city, true);
@@ -234,9 +235,31 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
+    private void hideCityArticlesFragment() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.start_page_city_articles_container);
+        if (fragment != null) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.hide(fragment).commit();
+            setContainerTitleVisibility(View.GONE);
+
+        }
+    }
+
+    private void showCityArticlesFragment() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.start_page_city_articles_container);
+        if (fragment != null) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.show(fragment).commit();
+            setContainerTitleVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void setCityContentByLinkId(CityContent cityContent) {
         this.cityContent = cityContent;
+        hideCityArticlesFragment();
         String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
         //If no city is selected or loaded and if the info is related to the city selected
         if (selectedCity == null || cityName != null && cityName.equals(selectedCity)) {
@@ -294,6 +317,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void setCityArticles() {
         if (city != null && city.getArticleLinksContainer() != null) {
             articlesReceiver.setArticles(city.getArticleLinksContainer().getArticleLinkList());
+            showCityArticlesFragment();
             decideCityFragmentContainerTitleVisibility();
         }
     }

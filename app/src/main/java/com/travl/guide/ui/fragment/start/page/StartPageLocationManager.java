@@ -71,6 +71,7 @@ class StartPageLocationManager {
         if (locationPermissionGranted) {
             requestLocation();
         } else if (!locationPermissionGranted) {
+            Timber.e("PermissionNotGranted");
             if (activity != null) {
                 ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
             }
