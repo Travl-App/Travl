@@ -6,4 +6,6 @@ public interface TravlZineArticlesItemView {
     void setImage(String url);
 
     void setDescription(String title);
+
+    void setCategory(String category);
 }

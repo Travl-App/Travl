@@ -82,9 +82,11 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
+            String category = articleLink.getCategories().get(0).getName();
             if (title != null) view.setDescription(title);
             if (imageUrl != null)
                 view.setImage(baseUrl + imageUrl.substring(1));
+            if (category != null) view.setCategory(category);
         }
 
         @Override

@@ -50,8 +50,7 @@ public class CitySpinnerListCreator {
         Resources resources = App.getInstance().getResources();
         String placeName = cityToString(city);
         placeName = formatPlaceName(placeName);
-        if (isUserCity && placeName != null)
-            placeName = resources.getString(R.string.user_location_marker) + " " + placeName;
+
         if (city != null && placeName != null) {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
@@ -59,13 +58,15 @@ public class CitySpinnerListCreator {
                 if (name.equals(resources.getStringArray(R.array.cities)[0])) {
                     startPagePresenter.removeFromCitySpinnerAdapter(name);
                 }
-                if (name.contains(placeName)) {
+                if (name.contains(placeName) || name.contains(resources.getString(R.string.user_location_marker) + " " + placeName)) {
                     isPlaceAdded = true;
                 }
             }
             if (isPlaceAdded) {
                 startPagePresenter.removeFromCitySpinnerAdapter(placeName);
             }
+            if (isUserCity && placeName != null)
+                placeName = resources.getString(R.string.user_location_marker) + " " + placeName;
             startPagePresenter.placeSelectedCityOnTop(placeName);
         }
     }

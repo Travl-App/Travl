@@ -172,6 +172,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void removePlaceIfIsAdded(String placeName) {
         cityArrayAdapter.remove(placeName);
+        cityArrayAdapter.remove(getString(R.string.user_location_marker) + " " + placeName);
     }
 
     @Override

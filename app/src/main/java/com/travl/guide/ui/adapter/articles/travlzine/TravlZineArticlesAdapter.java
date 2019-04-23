@@ -65,6 +65,11 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
         }
 
         @Override
+        public void setCategory(String category) {
+            ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view)).setText(category);
+        }
+
+        @Override
         public void setDescription(String description) {
             ((TextView) cardView.findViewById(R.id.travlzine_article_preview_description)).setText(description);
         }
