@@ -21,6 +21,7 @@ import timber.log.Timber;
 
 class StartPageLocationManager {
     private static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String FINE_LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int LOCATION_PERMISSIONS_REQUEST_CODE = 0;
     private LocationListener mListener;
     private StartPagePresenter presenter;
@@ -66,9 +67,11 @@ class StartPageLocationManager {
 
     @SuppressLint("MissingPermission")
     void requestCoordinates(Activity activity) {
-        if (ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+        boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+        if (locationPermissionGranted) {
             requestLocation();
-        } else if (!(ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED)) {
+        } else if (!locationPermissionGranted) {
             if (activity != null) {
                 ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
             }
@@ -90,7 +93,14 @@ class StartPageLocationManager {
         int minutes = 1;
         int secondsInMinutes = 30;
         int meters = 100;
-        locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        String networkProvider = LocationManager.NETWORK_PROVIDER;
+        String gpsProvider = LocationManager.GPS_PROVIDER;
+        if (locationManager.isProviderEnabled(networkProvider)) {
+            locationManager.requestLocationUpdates(
+                    networkProvider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        } else {
+            locationManager.requestLocationUpdates(
+                    gpsProvider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        }
     }
 }
