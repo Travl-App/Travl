@@ -67,13 +67,12 @@ class StartPageLocationManager {
 
     @SuppressLint("MissingPermission")
     void requestCoordinates(Activity activity) {
-        boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), COARSE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+        boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
         if (locationPermissionGranted) {
             requestLocation();
         } else if (!locationPermissionGranted) {
             if (activity != null) {
-                ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+                ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
             }
         }
     }
