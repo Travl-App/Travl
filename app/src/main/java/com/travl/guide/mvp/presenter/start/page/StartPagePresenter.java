@@ -12,9 +12,6 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
@@ -47,15 +44,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         }, Timber::e);
     }
 
-
-    public void initTravlZineArticlesFragment() {
-        getViewState().initTravlZineFragment();
-    }
-
-    public void initCityArticlesFragment() {
-        getViewState().initCityArticlesFragment();
-    }
-
     @SuppressLint("CheckResult")
     public void loadCityContentByLinkId(int id) {
         cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent), Timber::e);
@@ -70,28 +58,12 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().requestCoordinates();
     }
 
-    public void requestLocation() {
-        getViewState().requestLocation();
-    }
-
-    public void setCityStringNames(ArrayList<String> citiesListToCitiesNameList) {
-        getViewState().setCityStringNames(citiesListToCitiesNameList);
-    }
-
     public void onSpinnerItemClick(String selectedCity) {
         getViewState().onSpinnerItemClick(selectedCity);
     }
 
     public void addToCityList(City city, boolean isUserCity) {
         getViewState().addToCityList(city, isUserCity);
-    }
-
-    public void initCitySpinner() {
-        getViewState().initCitySpinner();
-    }
-
-    public void setCitySelectedName(String citySelected) {
-        getViewState().setCitySelectedName(citySelected);
     }
 
     public void setSpinnerPositionSelected(int position) {
@@ -104,18 +76,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
 
     public void removeFromCitySpinnerAdapter(String placeName) {
         getViewState().removePlaceIfIsAdded(placeName);
-    }
-
-    public void addNamesToCitySpinner(List<String> cityStringNames) {
-        getViewState().addNamesToCitySpinner(cityStringNames);
-    }
-
-    public void setCityArrayAdapter() {
-        getViewState().setCityArrayAdapter();
-    }
-
-    public void addCityArrayAdapterToSpinner() {
-        getViewState().addCityArrayAdapterToSpinner();
     }
 
     public void setUserCoordinates(double[] coordinates) {

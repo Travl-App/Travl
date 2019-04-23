@@ -9,16 +9,10 @@ import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface StartPageView extends MvpView {
 
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void initTravlZineFragment();
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void initCityArticlesFragment();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityObjectList(CitiesList cityObjectList);
@@ -39,16 +33,11 @@ public interface StartPageView extends MvpView {
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityStringNames(ArrayList<String> citiesListToCitiesNameList);
 
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
+    @StateStrategyType(value = AddToEndSingleStrategy.class)
     void onSpinnerItemClick(String selectedCity);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void addToCityList(City city, boolean isUserCity);
-
-    void initCitySpinner();
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCitySelectedName(String citySelected);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setSpinnerPositionSelected(int position);
@@ -58,15 +47,6 @@ public interface StartPageView extends MvpView {
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void removePlaceIfIsAdded(String placeName);
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void addNamesToCitySpinner(List<String> cityStringNames);
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCityArrayAdapter();
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void addCityArrayAdapterToSpinner();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityArticles();

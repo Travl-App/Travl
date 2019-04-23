@@ -46,6 +46,8 @@ import timber.log.Timber;
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
 
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
+    public static final int CODE_OK = 200;
+    public static final int CODE_ERROR = 404;
     @InjectPresenter
     StartPagePresenter presenter;
     @BindView(R.id.user_city_spinner)
@@ -76,46 +78,44 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         startPageLocationManager.initLocationListener();
         listCreator = new CitySpinnerListCreator();
         if (savedInstanceState == null) {
-            presenter.initCityArticlesFragment();
-            presenter.initTravlZineArticlesFragment();
-            presenter.initCitySpinner();
+            initCityArticlesFragment();
+            initTravlZineFragment();
         }
-        presenter.requestCoordinates();
-        presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
-        presenter.loadCitiesList();
+        initCitySpinner();
         decideCityFragmentContainerTitleVisibility();
-        Timber.e("OnCreateView");
+        presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
+        presenter.requestCoordinates();
+        presenter.loadCitiesList();
+
         return view;
     }
 
-    @Override
     public void initCitySpinner() {
         initCitySpinnerList();
         initCitySpinnerClickListener();
     }
 
-    @Override
     public void setCitySelectedName(String citySelected) {
         Timber.e("setCitySelectedName %s", citySelected);
         this.selectedCity = citySelected;
     }
 
     private void initCitySpinnerList() {
-        presenter.setCityArrayAdapter();
-        presenter.setCityStringNames(listCreator.citiesListToCitiesNameList(cityObjectList));
+        setCityArrayAdapter();
+        setCityStringNames(listCreator.citiesListToCitiesNameList(cityObjectList));
         if (this.cityStringNames == null)
             this.cityStringNames = Arrays.asList(getResources().getStringArray(R.array.cities));
-        presenter.addNamesToCitySpinner(cityStringNames);
-        presenter.addCityArrayAdapterToSpinner();
+        addNamesToCitySpinner(cityStringNames);
+        addCityArrayAdapterToSpinner();
     }
 
-    @Override
+
     public void setCityArrayAdapter() {
         Timber.e("setCityArrayAdapter");
         cityArrayAdapter = new ArrayAdapter<>(App.getInstance(), R.layout.start_page_cities_spinner_item);
     }
 
-    @Override
+
     public void addCityArrayAdapterToSpinner() {
         Timber.e("addCityArrayAdapterToSpinner");
         userCitySpinner.setAdapter(cityArrayAdapter);
@@ -130,6 +130,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void onSpinnerItemClick(String selectedCity) {
         Timber.e("OnItemSelected CityNames =" + cityStringNames + " \n City = " + selectedCity + "\n CitiesList = " + cityObjectList);
+        setCitySelectedName(selectedCity);
         if (cityStringNames != null) {
             if (cityObjectList != null && cityStringNames.contains(selectedCity)) {
                 for (CitiesList.CityLink link : cityObjectList.getCities()) {
@@ -157,11 +158,9 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 String spinnerCityName = (String) adapterView.getItemAtPosition(position);
                 if (selectedCity != null && selectedCity.equals(spinnerCityName))
                     return;
-                presenter.setCitySelectedName(spinnerCityName);
+                setCitySelectedName(spinnerCityName);
                 presenter.onSpinnerItemClick(selectedCity);
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -171,19 +170,16 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void removePlaceIfIsAdded(String placeName) {
-        Timber.e("Removing %s", placeName);
         cityArrayAdapter.remove(placeName);
     }
 
     @Override
     public void setSpinnerPositionSelected(int position) {
-        Timber.e("setSpinner selection position %s", position);
         userCitySpinner.setSelection(position, false);
     }
 
     @Override
     public void placeSelectedCityOnTop(String placeName) {
-        Timber.e("Inserting %s", placeName);
         if (userCitySpinner != null && cityArrayAdapter != null && userCitySpinner.getCount() > 0) {
             if (!userCitySpinner.getItemAtPosition(0).equals(placeName)) {
                 cityArrayAdapter.insert(placeName, 0);
@@ -192,17 +188,15 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
-    @Override
+
     public void initTravlZineFragment() {
-        Timber.e("initTravlZineFragment");
         Fragment travlZineArticlesFragment = new TravlZineArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.start_page_travl_zine_container, travlZineArticlesFragment).commit();
     }
 
-    @Override
+
     public void initCityArticlesFragment() {
-        Timber.e("initCityArticlesFragment");
         Fragment cityArticlesFragment = new CityArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.start_page_city_articles_container, cityArticlesFragment, CITY_ARTICLES_FRAGMENT_TAG).commit();
@@ -210,20 +204,19 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCityObjectList(CitiesList cityObjectList) {
-        Timber.e("setCityObjectList");
         this.cityObjectList = cityObjectList;
         cityStringNames = listCreator.citiesListToCitiesNameList(cityObjectList);
-        presenter.addNamesToCitySpinner(cityStringNames);
+        addNamesToCitySpinner(cityStringNames);
     }
 
-    @Override
     public void addNamesToCitySpinner(List<String> cityStringNames) {
-        Timber.e("addNamesToCitySpinner%s", cityStringNames);
-        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-            String item = cityArrayAdapter.getItem(i);
-            cityStringNames.remove(item);
+        if (cityArrayAdapter != null) {
+            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+                String item = cityArrayAdapter.getItem(i);
+                cityStringNames.remove(item);
+            }
+            cityArrayAdapter.addAll(cityStringNames);
         }
-        cityArrayAdapter.addAll(cityStringNames);
     }
 
 
@@ -235,7 +228,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         presenter.setCity(cityContent);
         presenter.addToCityList(city, true);
         String cityName = listCreator.formatPlaceName(listCreator.cityToString(city));
-        presenter.setCitySelectedName(cityName);
+        setCitySelectedName(cityName);
         if (articlesReceiver != null && this.cityContent != null && city != null) {
             presenter.setCityArcticles();
         }
@@ -243,7 +236,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCityContentByLinkId(CityContent cityContent) {
-        Timber.e("setCityContent");
         this.cityContent = cityContent;
         String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
         //If no city is selected or loaded and if the info is related to the city selected
@@ -258,7 +250,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Timber.e("onRequestPermissionsResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         startPageLocationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -277,12 +268,11 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCity(CityContent cityContent) {
-        Timber.e("setCity");
         if (cityContent != null) {
             int status = cityContent.getStatus();
-            if (status == 200) {
+            if (status == CODE_OK) {
                 city = cityContent.getCity();
-            } else if (status == 404) {
+            } else if (status == CODE_ERROR) {
                 city = cityContent.getContext();
             }
         }
@@ -292,7 +282,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
         String tag = childFragment.getTag();
-        Timber.e("OnAttachFragment tag = %s", tag);
         if (tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
             articlesReceiver = (ArticlesReceiver) childFragment;
             if (presenter != null) {
@@ -303,7 +292,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void setCityArticles() {
-        Timber.e("setCityArticles");
         if (city != null && city.getArticleLinksContainer() != null) {
             articlesReceiver.setArticles(city.getArticleLinksContainer().getArticleLinkList());
             decideCityFragmentContainerTitleVisibility();
@@ -312,7 +300,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void onPermissionResult(boolean granted) {
-        Timber.e("onPermissionResult %s", granted);
         startPageLocationManager.onPermissionResult(granted);
     }
 
@@ -323,27 +310,39 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     public void decideCityFragmentContainerTitleVisibility() {
-        if (articlesReceiver != null) {
-            if (articlesReceiver.getArticlesNumber() > 0) {
-                setContainerTitleVisibility(View.VISIBLE);
-            } else {
-                setContainerTitleVisibility(View.GONE);
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.start_page_city_articles_container);
+        if (fragment != null) {
+            setContainerTitleVisibility(View.VISIBLE);
+        } else {
+            if (articlesReceiver != null) {
+                if (articlesReceiver.getArticlesNumber() > 0) {
+                    setContainerTitleVisibility(View.VISIBLE);
+                } else {
+                    setContainerTitleVisibility(View.GONE);
+                }
             }
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        decideCityFragmentContainerTitleVisibility();
     }
 
     private void setContainerTitleVisibility(int visibility) {
         Activity activity = getActivity();
         if (activity != null) {
             TextView titleTextView = activity.findViewById(R.id.start_page_city_articles_container_title);
-            if (titleTextView != null) titleTextView.setVisibility(visibility);
+            if (titleTextView != null) {
+                titleTextView.setVisibility(visibility);
+            }
         }
 
     }
 
     public interface ArticlesReceiver {
         void setArticles(List<ArticleLink> articleLinks);
-
         int getArticlesNumber();
     }
 }
