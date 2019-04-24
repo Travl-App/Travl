@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
+import com.travl.guide.mvp.model.api.articles.Author;
 import com.travl.guide.mvp.model.repo.ArticlesRepo;
 import com.travl.guide.mvp.presenter.articles.list.CityArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.CityArticlesView;
@@ -26,7 +27,6 @@ import timber.log.Timber;
 public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
 
 
-    private CityArticlesListPresenterImpl cityArticlesListPresenter;
     @Inject
     ArticlesRepo articlesRepo;
     @Inject
@@ -34,6 +34,7 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
     String baseUrl;
     @Inject
     Router router;
+    private CityArticlesListPresenterImpl cityArticlesListPresenter;
     private Scheduler scheduler;
 
     public CityArticlesPresenter(Scheduler scheduler) {
@@ -42,6 +43,12 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
 
     public void setArticlesList(List<ArticleLink> articlesList) {
         cityArticlesListPresenter.setArticleLinkList(articlesList);
+    }
+
+    public CityArticlesListPresenterImpl getCityArticlesListPresenter() {
+        if (cityArticlesListPresenter == null)
+            cityArticlesListPresenter = new CityArticlesListPresenterImpl();
+        return cityArticlesListPresenter;
     }
 
     public class CityArticlesListPresenterImpl implements CityArticlesListPresenter {
@@ -73,8 +80,16 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
             publishSubjectList.get(position).subscribe(cityArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
-            view.setDescription(articleLink.getTitle());
-            view.setImage(baseUrl + articleLink.getImageCoverUrl().substring(1));
+            if (articleLink != null) {
+                view.setDescription(articleLink.getTitle());
+                String imageUrl = articleLink.getImageCoverUrl();
+                if (imageUrl != null)
+                    view.setImage(baseUrl + imageUrl.substring(1));
+                Author author = articleLink.getAuthor();
+                if (author != null) {
+                    view.setAuthor(author.getUserName());
+                }
+            }
         }
 
         @Override
@@ -92,11 +107,5 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             createPublishSubjects();
             getViewState().onChangedArticlesData();
         }
-    }
-
-    public CityArticlesListPresenterImpl getCityArticlesListPresenter() {
-        if (cityArticlesListPresenter == null)
-            cityArticlesListPresenter = new CityArticlesListPresenterImpl();
-        return cityArticlesListPresenter;
     }
 }

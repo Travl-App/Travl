@@ -23,6 +23,10 @@ public class ArticleLink {
     @Expose
     private String link;
 
+    @SerializedName("author")
+    @Expose
+    private Author author;
+
 
     public ArticleLink(String title, String imageCoverUrl) {
         this.title = title;
@@ -59,5 +63,13 @@ public class ArticleLink {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

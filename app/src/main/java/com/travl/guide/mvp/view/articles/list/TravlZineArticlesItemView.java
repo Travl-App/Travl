@@ -8,4 +8,6 @@ public interface TravlZineArticlesItemView {
     void setDescription(String title);
 
     void setCategory(String category);
+
+    void setAuthor(String author);
 }
