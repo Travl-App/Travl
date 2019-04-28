@@ -10,6 +10,7 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface NetService {
 
@@ -33,9 +34,6 @@ public interface NetService {
     @GET("api/places/{id}/")
     Single<Root> loadNewPlace(@Path("id") int id);
 
-    @GET("api/map/")
-    Single<ManyPlacesContainer> loadNextPlaces(@Query("place_page_num") int page,
-                                               @Query("detailed") int detailed,
-                                               @Query(value = "position", encoded = true) CoordinatesRequest position,
-                                               @Query("radius") double radius);
+    @GET
+    Single<ManyPlacesContainer> loadNextPlaces(@Url String url);
 }

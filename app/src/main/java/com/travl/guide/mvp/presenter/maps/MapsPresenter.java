@@ -101,24 +101,17 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     @SuppressLint("CheckResult")
     private void loadNextPlaces(String nextUrl) {
-//        int page = Integer.parseInt(nextUrl.substring(nextUrl.indexOf("place_page_num=")+15,nextUrl.indexOf("&")));
-//        int detailed = Integer.parseInt(nextUrl.substring(nextUrl.indexOf("detailed=")+9,nextUrl.indexOf("&")));
-//        String position = nextUrl.substring(nextUrl.indexOf("position=") + 9, nextUrl.indexOf("&"));
-//        double latitudePos = Double.parseDouble(position.substring(0,position.indexOf(",")));
-//        double longitutePos = Double.parseDouble(position.substring(position.indexOf(",")));
-//        CoordinatesRequest positionRequest = new CoordinatesRequest(new double[]{latitudePos,longitutePos});
-//        double radius = Double.parseDouble(nextUrl.substring(nextUrl.indexOf("radius=") + 7, nextUrl.indexOf("&")));
-//        placesRepo.loadNextPlaces(page,detailed,positionRequest,radius)
-//                .observeOn(scheduler)
-//                .subscribe(placesMap -> {
-//                    PlaceContainer placeContainer = placesMap.getPlaces();
-//                    if (placeContainer!=null) {
-//                        String next;
-//                        if ((next = placeContainer.getNext()) != null) {
-//                            loadNextPlaces(next);
-//                        }
-//                    }
-//                }, Timber::e);
+        placesRepo.loadNextPlaces(nextUrl)
+                .observeOn(scheduler)
+                .subscribe(placesMap -> {
+                    PlaceContainer placeContainer = placesMap.getPlaces();
+                    if (placeContainer != null) {
+                        String next;
+                        if ((next = placeContainer.getNext()) != null) {
+                            loadNextPlaces(next);
+                        }
+                    }
+                }, Timber::e);
     }
 
 

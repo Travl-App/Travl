@@ -51,9 +51,9 @@ public class PlacesRepo {
         }
     }
 
-    public Single<ManyPlacesContainer> loadNextPlaces(int page, int detailed, CoordinatesRequest position, double radius) {
+    public Single<ManyPlacesContainer> loadNextPlaces(String url) {
         if (NetworkStatus.isOnline()) {
-            return netService.loadNextPlaces(page, detailed, position, radius).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+            return netService.loadNextPlaces(url).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
                 Timber.e(throwable);
                 return null;
             });
