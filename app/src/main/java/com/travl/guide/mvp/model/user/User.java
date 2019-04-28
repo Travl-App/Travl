@@ -2,6 +2,7 @@ package com.travl.guide.mvp.model.user;
 
 public class User {
     private static User instance;
+    // first item = latitude, second item = longitude
     private double[] coordinates;
 
     private User() {

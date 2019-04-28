@@ -8,9 +8,11 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
 import com.travl.guide.mvp.model.api.places.map.Place;
+import com.travl.guide.mvp.model.api.places.map.PlaceContainer;
 import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
+import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
@@ -74,24 +76,59 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     @SuppressLint("CheckResult")
     public void makeRequest() {
         getViewState().showLoadInfo();
+        User user = User.getInstance();
+        double[] coordinates = user.getCoordinates();
+        double latitude = coordinates[0];
+        double longitude = coordinates[1];
         placesRepo.loadPlacesForMap(
-                new CoordinatesRequest(60, 31), 2000, 1)
+                new CoordinatesRequest(latitude, longitude), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
-                    List<PlaceLink> placeLinks = placesMap.getPlaces().getPlaceLinkList();
-                    getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
-                    getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
-                    getViewState().hideLoadInfo();
+                    PlaceContainer placeContainer = placesMap.getPlaces();
+                    if (placeContainer != null) {
+                        String nextUrl;
+                        if ((nextUrl = placeContainer.getNext()) != null) {
+                            Timber.e("Next url = " + nextUrl);
+                            loadNextPlaces(nextUrl);
+                        }
+                        List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
+                        getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
+                        getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
+                        getViewState().hideLoadInfo();
+                    }
                 }, Timber::e);
     }
+
+    @SuppressLint("CheckResult")
+    private void loadNextPlaces(String nextUrl) {
+//        int page = Integer.parseInt(nextUrl.substring(nextUrl.indexOf("place_page_num=")+15,nextUrl.indexOf("&")));
+//        int detailed = Integer.parseInt(nextUrl.substring(nextUrl.indexOf("detailed=")+9,nextUrl.indexOf("&")));
+//        String position = nextUrl.substring(nextUrl.indexOf("position=") + 9, nextUrl.indexOf("&"));
+//        double latitudePos = Double.parseDouble(position.substring(0,position.indexOf(",")));
+//        double longitutePos = Double.parseDouble(position.substring(position.indexOf(",")));
+//        CoordinatesRequest positionRequest = new CoordinatesRequest(new double[]{latitudePos,longitutePos});
+//        double radius = Double.parseDouble(nextUrl.substring(nextUrl.indexOf("radius=") + 7, nextUrl.indexOf("&")));
+//        placesRepo.loadNextPlaces(page,detailed,positionRequest,radius)
+//                .observeOn(scheduler)
+//                .subscribe(placesMap -> {
+//                    PlaceContainer placeContainer = placesMap.getPlaces();
+//                    if (placeContainer!=null) {
+//                        String next;
+//                        if ((next = placeContainer.getNext()) != null) {
+//                            loadNextPlaces(next);
+//                        }
+//                    }
+//                }, Timber::e);
+    }
+
 
     private List<Feature> parsePlaceLinksListToFeatures(List<PlaceLink> places) {
         Timber.d("Parsing coordinates");
         List<Feature> features = new ArrayList<>();
         for(int i = 0; i < places.size(); i++) {
             double[] coordinates = places.get(i).getCoordinates();
-            double longitude = coordinates[1];
             double latitude = coordinates[0];
+            double longitude = coordinates[1];
             features.add(Feature.fromGeometry(Point.fromLngLat(longitude, latitude)));
         }
 

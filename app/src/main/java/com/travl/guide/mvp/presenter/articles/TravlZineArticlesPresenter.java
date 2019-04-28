@@ -101,13 +101,11 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
         @Override
         public int getListCount() {
-            Timber.e("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
             return articleLinkList == null ? 0 : articleLinkList.size();
         }
 
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
-            Timber.e("setArticleLinkList");
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 articleLinkList = new ArrayList<>();

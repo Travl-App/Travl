@@ -12,8 +12,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NetService {
+
     @GET("api/map/")
-    Single<ManyPlacesContainer> loadPlacesForMap(@Query(value = "position", encoded = true) CoordinatesRequest position, @Query("radius") double radius, @Query("detailed") int detailed);
+    Single<ManyPlacesContainer> loadPlacesForMap(@Query(value = "position", encoded = true) CoordinatesRequest position,
+                                                 @Query("radius") double radius,
+                                                 @Query("detailed") int detailed);
 
     @GET("api/query/")
     Single<CityContent> loadCityContent(@Query(value = "position", encoded = true) CoordinatesRequest position);
@@ -29,4 +32,10 @@ public interface NetService {
 
     @GET("api/places/{id}/")
     Single<Root> loadNewPlace(@Path("id") int id);
+
+    @GET("api/map/")
+    Single<ManyPlacesContainer> loadNextPlaces(@Query("place_page_num") int page,
+                                               @Query("detailed") int detailed,
+                                               @Query(value = "position", encoded = true) CoordinatesRequest position,
+                                               @Query("radius") double radius);
 }

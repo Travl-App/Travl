@@ -50,4 +50,19 @@ public class PlacesRepo {
             };
         }
     }
+
+    public Single<ManyPlacesContainer> loadNextPlaces(int page, int detailed, CoordinatesRequest position, double radius) {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadNextPlaces(page, detailed, position, radius).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
+        } else {
+            return new Single<ManyPlacesContainer>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super ManyPlacesContainer> observer) {
+                }
+            };
+        }
+    }
 }
