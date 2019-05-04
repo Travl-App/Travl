@@ -11,6 +11,18 @@ public class PlaceContainer {
     @Expose
     private List<PlaceLink> placeLinkList;
 
+    @SerializedName("next")
+    @Expose
+    private String next;
+
+    public String getNext() {
+        return next;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
     public List<PlaceLink> getPlaceLinkList() {
         return placeLinkList;
     }

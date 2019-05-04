@@ -6,4 +6,6 @@ public interface CityArticlesItemView {
     void setImage(String url);
 
     void setDescription(String title);
+
+    void setAuthor(String author);
 }

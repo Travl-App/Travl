@@ -21,20 +21,22 @@
         <TextView
             android:id="@+id/city_article_preview_description"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/city_articles_card_preview_description"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="@dimen/city_article_preview_description_margin_start"
             android:fontFamily="@font/roboto_slab_regular"
             android:textSize="@dimen/city_articles_card_text_size"
             android:textColor="@android:color/black"
-            app:layout_constraintTop_toBottomOf="@id/city_article_preview_image_view" />
+            android:maxLines="3"
+            app:layout_constraintTop_toBottomOf="@id/city_article_preview_image_view"
+            />
 
         <android.support.design.chip.Chip
+            android:id="@+id/city_article_preview_author_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/city_article_preview_chip_margin_start"
             android:layout_marginBottom="@dimen/city_article_preview_chip_margin_bottom"
-            android:text="Travl"
             app:chipBackgroundColor="@android:color/white"
             app:chipIcon="@mipmap/travl_launcher_round"
             app:chipIconSize="@dimen/city_article_chip_icon_size"

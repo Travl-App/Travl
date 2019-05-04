@@ -3,7 +3,14 @@ package com.travl.guide.mvp.model.api.articles;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class ArticleLink {
+
+    @SerializedName("categories")
+    @Expose
+    private List<Category> categories;
+
     @SerializedName("title")
     @Expose
     private String title;
@@ -16,10 +23,22 @@ public class ArticleLink {
     @Expose
     private String link;
 
+    @SerializedName("author")
+    @Expose
+    private Author author;
+
 
     public ArticleLink(String title, String imageCoverUrl) {
         this.title = title;
         this.imageCoverUrl = imageCoverUrl;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public String getTitle() {
@@ -44,5 +63,13 @@ public class ArticleLink {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

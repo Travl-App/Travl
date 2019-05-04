@@ -34,12 +34,12 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
 
     @BindView(R.id.city_articles_preview_recycler)
     RecyclerView cityArticlesPreviewRecycler;
-
     @Inject
     IImageLoader imageLoader;
-
     @InjectPresenter
     CityArticlesPresenter presenter;
+    private int articlesNumber;
+
 
     @ProvidePresenter
     public CityArticlesPresenter providePresenter() {
@@ -76,7 +76,15 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     @Override
     public void setArticles(List<ArticleLink> articleLinks) {
         Timber.e("Setting CityArticles to " + articleLinks);
-        if (presenter != null)
+        if (presenter != null) {
             presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
+            articlesNumber = articleLinks.size();
+        }
     }
+
+    @Override
+    public int getArticlesNumber() {
+        return articlesNumber;
+    }
+
 }

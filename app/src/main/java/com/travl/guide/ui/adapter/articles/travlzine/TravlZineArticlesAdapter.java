@@ -2,6 +2,7 @@ package com.travl.guide.ui.adapter.articles.travlzine;
 
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
+import android.support.design.chip.Chip;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -65,8 +66,18 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<TravlZineArti
         }
 
         @Override
+        public void setCategory(String category) {
+            ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view)).setText(category);
+        }
+
+        @Override
         public void setDescription(String description) {
             ((TextView) cardView.findViewById(R.id.travlzine_article_preview_description)).setText(description);
+        }
+
+        @Override
+        public void setAuthor(String author) {
+            ((Chip) cardView.findViewById(R.id.travlzine_article_preview_author_chip)).setText(author);
         }
 
         @Override

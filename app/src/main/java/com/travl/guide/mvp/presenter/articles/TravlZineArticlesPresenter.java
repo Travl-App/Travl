@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
+import com.travl.guide.mvp.model.api.articles.Author;
+import com.travl.guide.mvp.model.api.articles.Category;
 import com.travl.guide.mvp.model.repo.ArticlesRepo;
 import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.TravlZineArticlesView;
@@ -82,20 +84,28 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
+            List<Category> categories = articleLink.getCategories();
+            Category category = null;
+            String categoryName = null;
+            if (categories != null) category = categories.get(0);
             if (title != null) view.setDescription(title);
             if (imageUrl != null)
                 view.setImage(baseUrl + imageUrl.substring(1));
+            if (category != null && (categoryName = category.getName()) != null)
+                view.setCategory(categoryName);
+            Author author = articleLink.getAuthor();
+            String authorName = null;
+            if (author != null && (authorName = author.getUserName()) != null)
+                view.setAuthor(authorName);
         }
 
         @Override
         public int getListCount() {
-            Timber.e("PlaceList size = %s", (articleLinkList == null ? null : articleLinkList.size()));
             return articleLinkList == null ? 0 : articleLinkList.size();
         }
 
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
-            Timber.e("setArticleLinkList");
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 articleLinkList = new ArrayList<>();

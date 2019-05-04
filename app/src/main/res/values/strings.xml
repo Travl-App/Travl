@@ -31,6 +31,7 @@
     <string name="user_location_marker">Вы здесь:</string>
     <string name="getting_articles">Получение статей</string>
     <string name="city_definition">Определение города</string>
+    <string name="no_category_text">Нет категории</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>

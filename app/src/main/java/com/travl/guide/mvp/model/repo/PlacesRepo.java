@@ -50,4 +50,19 @@ public class PlacesRepo {
             };
         }
     }
+
+    public Single<ManyPlacesContainer> loadNextPlaces(String url) {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadNextPlaces(url).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
+        } else {
+            return new Single<ManyPlacesContainer>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super ManyPlacesContainer> observer) {
+                }
+            };
+        }
+    }
 }
