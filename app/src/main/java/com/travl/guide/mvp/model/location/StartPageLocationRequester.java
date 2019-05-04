@@ -81,7 +81,6 @@ public class StartPageLocationRequester implements LocationRequester {
         }
     }
 
-
     @SuppressLint("MissingPermission")
     public void requestLocation() {
         Timber.e("requestLocation");

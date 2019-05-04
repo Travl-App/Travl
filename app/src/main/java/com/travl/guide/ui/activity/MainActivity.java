@@ -108,12 +108,16 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void onBackPressed() {
+        Timber.e("OnBackPressed");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if(fragment instanceof PlaceFragment) {
+            Timber.e("to map screen");
             presenter.toMapScreen();
-        } else if(! (fragment instanceof StartPageFragment)) {
+        } else if (!(fragment instanceof StartPageFragment)) {
+            Timber.e("To start page");
             presenter.toStartPageScreen();
         } else {
+            Timber.e("Finish");
             finish();
         }
     }
@@ -193,7 +197,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void toMapScreen() {
-        router.replaceScreen(new Screens.MapScreen());
+        router.navigateTo(new Screens.MapScreen());
     }
 
     @Override

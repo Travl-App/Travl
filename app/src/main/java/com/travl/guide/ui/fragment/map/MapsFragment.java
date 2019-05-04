@@ -73,10 +73,13 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @InjectPresenter
     MapsPresenter presenter;
 
+
     private MapboxMap mapBoxMap;
     private List<Place> listPlaces;
+    private List<Feature> markerCoordinates;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
+    private GeoJsonSource geoJsonSource;
 
     @Override
     public void onAttach(Context context) {
@@ -140,7 +143,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setCompassEnabled(false);
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
-                presenter.makeRequest();
+                presenter.makeRequestForPlaces();
                 presenter.showLocations();
             });
         });
@@ -197,14 +200,20 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
                         .withProperties(iconImage(PLACE_IMAGE),
                                 iconOffset(new Float[] {0f, - 9f}));
-
-                GeoJsonSource geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(markerCoordinates));
-                style.addSource(geoJsonSource);
-
-                style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
-                style.addLayer(layer);
-
-                setupOnMapViewClickListener();
+                if (this.markerCoordinates == null) {
+                    this.markerCoordinates = markerCoordinates;
+                } else {
+                    this.markerCoordinates.addAll(markerCoordinates);
+                }
+                if (geoJsonSource == null) {
+                    geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(this.markerCoordinates));
+                    style.addSource(geoJsonSource);
+                    style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
+                    style.addLayer(layer);
+                    setupOnMapViewClickListener();
+                } else {
+                    geoJsonSource.setGeoJson(FeatureCollection.fromFeatures(this.markerCoordinates));
+                }
             }
         }
     }

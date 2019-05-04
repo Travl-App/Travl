@@ -74,7 +74,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     @SuppressLint("CheckResult")
-    public void makeRequest() {
+    public void makeRequestForPlaces() {
+        Timber.e("Make request");
         getViewState().showLoadInfo();
         User user = User.getInstance();
         double[] coordinates = user.getCoordinates();
@@ -92,10 +93,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                             Timber.e("Next url = " + nextUrl);
                             loadNextPlaces(nextUrl);
                         }
-                        List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
-                        getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
-                        getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
-                        getViewState().hideLoadInfo();
+                        addPlacesToMap(placeContainer);
                     }
                 }, Timber::e);
     }
@@ -111,8 +109,16 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                         if ((next = placeContainer.getNext()) != null) {
                             loadNextPlaces(next);
                         }
+                        addPlacesToMap(placeContainer);
                     }
                 }, Timber::e);
+    }
+
+    private void addPlacesToMap(PlaceContainer placeContainer) {
+        List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
+        getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
+        getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
+        getViewState().hideLoadInfo();
     }
 
 
