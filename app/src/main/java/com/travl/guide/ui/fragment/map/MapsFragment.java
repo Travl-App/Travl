@@ -94,6 +94,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Timber.e("OnCreateView MapsFragment");
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
@@ -154,7 +155,11 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onRequestCompleted(List<Place> listPlaces) {
         HashMap<Integer, View> viewMap = new HashMap<>();
         HashMap<String, Bitmap> bitmapMap = new HashMap<>();
-        this.listPlaces = listPlaces;
+        if (this.listPlaces == null) {
+            this.listPlaces = listPlaces;
+        } else {
+            this.listPlaces.addAll(listPlaces);
+        }
 
         for(int i = 0; i < listPlaces.size(); i++) {
             View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);

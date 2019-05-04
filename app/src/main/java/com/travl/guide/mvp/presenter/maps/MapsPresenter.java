@@ -38,7 +38,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     public MapsPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        if(model == null) this.model = new MapsModel();
+        if (model == null) this.model = new MapsModel();
     }
 
     @Override
@@ -60,17 +60,30 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     private int getId(List<Place> listPlaces, double[] coordinates) {
-        for(int i = 0; i < listPlaces.size(); i++) {
-            DecimalFormat roundTo = new DecimalFormat("#.###");
+        for (int i = 0; i < listPlaces.size(); i++) {
             double[] local = listPlaces.get(i).getCoordinates();
-
-            if(roundTo.format(coordinates[0]).equals(roundTo.format(local[0])) && roundTo.format(coordinates[1]).equals(roundTo.format(local[1]))) {
+            if (coarseEqualsCheck(coordinates[0], local[0]) && coarseEqualsCheck(coordinates[1], local[1])) {
                 Timber.d("Id маркера: %s", String.valueOf(listPlaces.get(i).getId()));
                 return listPlaces.get(i).getId();
             }
         }
         Timber.d("Всё плохо, мы ничего не нашли и выводим рандомную статью");
         return 1;
+    }
+
+    private boolean coarseEqualsCheck(double first, double second) {
+        DecimalFormat roundTo = new DecimalFormat("#.##");
+        int gap = 3;
+        double precision = 0.01;
+        for (int i = -gap; i < gap; i++) {
+            String firstNumber = roundTo.format(first + i * precision);
+            String secondNumber = roundTo.format(second);
+            Timber.e("First coordinate =" + firstNumber + "Second coordinate =" + secondNumber);
+            if (firstNumber.equals(secondNumber)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @SuppressLint("CheckResult")
@@ -125,7 +138,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     private List<Feature> parsePlaceLinksListToFeatures(List<PlaceLink> places) {
         Timber.d("Parsing coordinates");
         List<Feature> features = new ArrayList<>();
-        for(int i = 0; i < places.size(); i++) {
+        for (int i = 0; i < places.size(); i++) {
             double[] coordinates = places.get(i).getCoordinates();
             double latitude = coordinates[0];
             double longitude = coordinates[1];
@@ -138,7 +151,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     private List<Place> creatingPlacesList(List<PlaceLink> places) {
         Timber.d("Creating places list");
         List<Place> placesMap = new ArrayList<>();
-        for(int i = 0; i < places.size(); i++) {
+        for (int i = 0; i < places.size(); i++) {
             Place place = new Place();
             place.setId(places.get(i).getId());
             place.setImageUrls(places.get(i).getImageUrls());

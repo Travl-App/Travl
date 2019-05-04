@@ -88,7 +88,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.start();
                 presenter.onMoveToStartPageScreen();
-            } else if(nextFragment instanceof PlaceFragment) {
+            } else if (command instanceof Forward && nextFragment instanceof PlaceFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.post();
                 presenter.onMoveToPostScreen();
@@ -208,7 +208,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void toPlaceScreen() {
-        router.replaceScreen(new Screens.PlacesScreen());
+        router.navigateTo(new Screens.PlacesScreen());
     }
 
     @Override
