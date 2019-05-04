@@ -28,7 +28,6 @@ import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.location.LocationReceiver;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
@@ -86,10 +85,8 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
         initCitySpinner();
         decideCityFragmentContainerTitleVisibility();
-        presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
         presenter.requestLocationPermissions();
         presenter.loadCitiesList();
-
         return view;
     }
 
@@ -142,8 +139,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                         presenter.loadCityContentByLinkId(link.getId());
                     }
                 }
-            } else {
-                presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
             }
         }
     }
@@ -381,5 +376,11 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public interface ArticlesReceiver {
         void setArticles(List<ArticleLink> articleLinks);
         int getArticlesNumber();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDispose();
     }
 }

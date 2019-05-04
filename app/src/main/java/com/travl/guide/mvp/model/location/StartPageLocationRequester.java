@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.ui.App;
 
 import timber.log.Timber;
@@ -29,12 +28,12 @@ public class StartPageLocationRequester implements LocationRequester {
 
     public void initLocationListener(LocationPresenter presenter) {
         Timber.e("InitLocationListener");
+        presenter.observeUserCoordinates();
         mListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 Timber.e("Location changed:" + location.getLatitude() + "," + location.getLongitude());
                 presenter.setUserCoordinates(new double[]{location.getLatitude(), location.getLongitude()});
-                presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
             }
 
             @Override
@@ -98,14 +97,15 @@ public class StartPageLocationRequester implements LocationRequester {
             locationManager.requestLocationUpdates(passiveProvider,
                     minutes * secondsInMinutes * millisInSecond, meters, mListener);
         }
-
         if (locationManager.isProviderEnabled(networkProvider)) {
             Timber.e("Network provider");
             locationManager.requestLocationUpdates(networkProvider,
                     minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        } else {
+            Timber.e("GPS provider");
+            locationManager.requestLocationUpdates(gpsProvider,
+                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
         }
-        Timber.e("GPS provider");
-        locationManager.requestLocationUpdates(gpsProvider,
-                minutes * secondsInMinutes * millisInSecond, meters, mListener);
+
     }
 }

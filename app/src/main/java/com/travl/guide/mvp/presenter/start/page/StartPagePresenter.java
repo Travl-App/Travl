@@ -15,9 +15,13 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 @InjectViewState
@@ -28,16 +32,17 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     private Scheduler scheduler;
     @Inject
     LocationRequester locationRequester;
+    private List<Disposable> disposables;
 
     public StartPagePresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
         App.getInstance().getAppComponent().inject(this);
-
+        disposables = new ArrayList<>();
     }
 
     @SuppressLint("CheckResult")
     public void loadCitiesList() {
-        cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCityObjectList(citiesList), Timber::e);
+        disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCityObjectList(citiesList), Timber::e));
     }
 
     @Override
@@ -48,18 +53,22 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     @SuppressLint("CheckResult")
-    public void loadCityContentByCoordinates(double[] coordinates) {
+    public void loadCityContentByCoordinates(CoordinatesRequest coordinatesRequest) {
         Timber.e("loadCityContentByCoordinates");
-        if (coordinates == null) return;
-        CoordinatesRequest position = new CoordinatesRequest(coordinates);
-        cityRepo.getCityContent(position).observeOn(scheduler).subscribe(cityContent -> {
+        disposables.add(cityRepo.getCityContent(coordinatesRequest).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
-        }, Timber::e);
+        }, Timber::e));
+    }
+
+    @Override
+    public void observeUserCoordinates() {
+        disposables.add(User.getInstance().getCoordinatesRequestPublishSubject()
+                .subscribe(this::loadCityContentByCoordinates, Timber::e));
     }
 
     @SuppressLint("CheckResult")
     public void loadCityContentByLinkId(int id) {
-        cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent), Timber::e);
+        disposables.add(cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent), Timber::e));
 
     }
 
@@ -117,5 +126,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     public void requestLocation() {
         locationRequester.requestLocation();
+    }
+
+    public void onDispose() {
+        for (Disposable disposable : disposables) {
+            disposable.dispose();
+        }
     }
 }
