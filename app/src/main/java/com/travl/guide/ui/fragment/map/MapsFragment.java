@@ -214,10 +214,12 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void findUser() {
         if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             locationComponent = mapBoxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(App.getInstance(), Objects.requireNonNull(mapBoxMap.getStyle()));
-            locationComponent.setLocationComponentEnabled(true);
-            locationComponent.setCameraMode(CameraMode.TRACKING);
-            locationComponent.setRenderMode(RenderMode.NORMAL);
+            if(mapBoxMap.getStyle() != null) {
+                locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
+                locationComponent.setLocationComponentEnabled(true);
+                locationComponent.setCameraMode(CameraMode.TRACKING);
+                locationComponent.setRenderMode(RenderMode.NORMAL);
+            }
         } else if(! PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(getActivity());
@@ -257,8 +259,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                     }
                     mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()
-                                    .target(new LatLng(((Point) Objects.requireNonNull(selectedCarmenFeature.geometry())).latitude(),
-                                            ((Point) Objects.requireNonNull(selectedCarmenFeature.geometry())).longitude()))
+                                    .target(new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
+                                            ((Point) selectedCarmenFeature.geometry()).longitude()))
                                     .zoom(14)
                                     .build()), 4000);
                 }

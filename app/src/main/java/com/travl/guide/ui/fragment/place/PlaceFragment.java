@@ -85,9 +85,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     private void setupToolbar() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setupSliderLayout() {
@@ -108,20 +106,9 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Override
     public void setImageSlider(List<String> imageUrls) {
         for (String imageUrl : imageUrls) {
-
             SliderView sliderView = new DefaultSliderView(getActivity());
-
             sliderView.setImageUrl(baseUrl + imageUrl);
-
-            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
-//            sliderView.setDescription("setDescription");
-            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+            sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
             placeSliderLayout.addSliderView(sliderView);
         }
     }
