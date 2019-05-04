@@ -78,6 +78,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().showLoadInfo();
         User user = User.getInstance();
         double[] coordinates = user.getCoordinates();
+        if (coordinates == null) return;
         double latitude = coordinates[0];
         double longitude = coordinates[1];
         placesRepo.loadPlacesForMap(

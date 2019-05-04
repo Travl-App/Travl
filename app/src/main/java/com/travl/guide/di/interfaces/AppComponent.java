@@ -5,6 +5,7 @@ import com.travl.guide.di.modules.ArticlesRepoModule;
 import com.travl.guide.di.modules.CiceroneModule;
 import com.travl.guide.di.modules.CityRepoModule;
 import com.travl.guide.di.modules.ImageLoaderModule;
+import com.travl.guide.di.modules.LocationModule;
 import com.travl.guide.di.modules.NetModule;
 import com.travl.guide.di.modules.PlacesRepoModule;
 import com.travl.guide.mvp.presenter.articles.ArticlePresenter;
@@ -36,7 +37,8 @@ import dagger.Component;
         PlacesRepoModule.class,
         ImageLoaderModule.class,
         CityRepoModule.class,
-        ArticlesRepoModule.class
+        ArticlesRepoModule.class,
+        LocationModule.class
 })
 public interface AppComponent {
 

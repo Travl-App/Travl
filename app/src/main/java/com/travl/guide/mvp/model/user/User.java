@@ -1,5 +1,7 @@
 package com.travl.guide.mvp.model.user;
 
+import io.reactivex.annotations.Nullable;
+
 public class User {
     private static User instance;
     // first item = latitude, second item = longitude
@@ -15,8 +17,8 @@ public class User {
         return instance;
     }
 
+    @Nullable
     public double[] getCoordinates() {
-        if (coordinates == null) coordinates = new double[]{0, 0};
         return coordinates;
     }
 

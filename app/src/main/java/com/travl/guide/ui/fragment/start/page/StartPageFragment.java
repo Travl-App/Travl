@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,12 +22,12 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.articles.ArticleLink;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
+import com.travl.guide.mvp.model.location.LocationReceiver;
 import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
@@ -37,14 +38,17 @@ import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, PermissionsListener {
+import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
+import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
+import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CODE;
+
+public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, LocationReceiver {
 
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
     public static final int CODE_OK = 200;
@@ -62,7 +66,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private List<String> cityStringNames;
     private CitySpinnerListCreator listCreator;
     private ArrayAdapter<String> cityArrayAdapter;
-    private StartPageLocationManager startPageLocationManager;
     private ArticlesReceiver articlesReceiver;
 
     @ProvidePresenter
@@ -75,8 +78,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.start_page_fragment, container, false);
         ButterKnife.bind(this, view);
-        startPageLocationManager = new StartPageLocationManager(presenter);
-        startPageLocationManager.initLocationListener();
+        presenter.initLocationListener();
         listCreator = new CitySpinnerListCreator();
         if (savedInstanceState == null) {
             initCityArticlesFragment();
@@ -85,7 +87,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         initCitySpinner();
         decideCityFragmentContainerTitleVisibility();
         presenter.loadCityContentByCoordinates(User.getInstance().getCoordinates());
-        presenter.requestCoordinates();
+        presenter.requestLocationPermissions();
         presenter.loadCitiesList();
 
         return view;
@@ -162,6 +164,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 setCitySelectedName(spinnerCityName);
                 presenter.onSpinnerItemClick(selectedCity);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -275,20 +278,30 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        startPageLocationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     @SuppressLint("MissingPermission")
-    public void requestCoordinates() {
-        startPageLocationManager.requestCoordinates(this.getActivity());
+    public void requestLocationPermissions() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.fragment_container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
+        Activity activity = getActivity();
+        if (activity != null) {
+            Snackbar.make(activity.findViewById(R.id.fragment_container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
+        }
     }
 
+    @Override
+    public void onLocationPermissionRequestGranted() {
+        presenter.requestCoordinates(this);
+    }
 
     @Override
     public void setCity(CityContent cityContent) {
@@ -324,14 +337,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     @Override
-    public void onPermissionResult(boolean granted) {
-        startPageLocationManager.onPermissionResult(granted);
+    public void onLocationPermissionResult(boolean granted) {
+        presenter.onLocationPermissionResult(granted);
     }
 
     @Override
     @SuppressLint("MissingPermission")
     public void requestLocation() {
-        startPageLocationManager.requestLocation();
+        presenter.requestLocation();
     }
 
     public void decideCityFragmentContainerTitleVisibility() {
@@ -363,7 +376,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 titleTextView.setVisibility(visibility);
             }
         }
-
     }
 
     public interface ArticlesReceiver {

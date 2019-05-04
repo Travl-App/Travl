@@ -6,6 +6,9 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
+import com.travl.guide.mvp.model.location.LocationPresenter;
+import com.travl.guide.mvp.model.location.LocationReceiver;
+import com.travl.guide.mvp.model.location.LocationRequester;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.model.user.User;
@@ -18,11 +21,13 @@ import io.reactivex.Scheduler;
 import timber.log.Timber;
 
 @InjectViewState
-public class StartPagePresenter extends MvpPresenter<StartPageView> {
+public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter {
 
     @Inject
     CityRepo cityRepo;
     private Scheduler scheduler;
+    @Inject
+    LocationRequester locationRequester;
 
     public StartPagePresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -35,9 +40,17 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCityObjectList(citiesList), Timber::e);
     }
 
+    @Override
+    public void setUserCoordinates(double[] coordinates) {
+        if (coordinates != null) {
+            User.getInstance().setCoordinates(coordinates);
+        }
+    }
+
     @SuppressLint("CheckResult")
     public void loadCityContentByCoordinates(double[] coordinates) {
         Timber.e("loadCityContentByCoordinates");
+        if (coordinates == null) return;
         CoordinatesRequest position = new CoordinatesRequest(coordinates);
         cityRepo.getCityContent(position).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
@@ -54,8 +67,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().setCity(cityContent);
     }
 
-    public void requestCoordinates() {
-        getViewState().requestCoordinates();
+    public void requestLocationPermissions() {
+        getViewState().requestLocationPermissions();
     }
 
     public void onSpinnerItemClick(String selectedCity) {
@@ -78,12 +91,31 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> {
         getViewState().removePlaceIfIsAdded(placeName);
     }
 
-    public void setUserCoordinates(double[] coordinates) {
-        User.getInstance().setCoordinates(coordinates);
-    }
-
     public void setCityArcticles() {
         getViewState().setCityArticles();
     }
 
+    public void initLocationListener() {
+        locationRequester.initLocationListener(this);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        locationRequester.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    public void onLocationPermissionResultGranted() {
+        getViewState().onLocationPermissionRequestGranted();
+    }
+
+    public void requestCoordinates(LocationReceiver locationReceiver) {
+        locationRequester.requestCoordinates(locationReceiver);
+    }
+
+    public void onLocationPermissionResult(boolean granted) {
+        locationRequester.onPermissionResult(this, granted);
+    }
+
+    public void requestLocation() {
+        locationRequester.requestLocation();
+    }
 }

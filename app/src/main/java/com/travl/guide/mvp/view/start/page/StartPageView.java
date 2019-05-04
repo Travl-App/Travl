@@ -26,7 +26,7 @@ public interface StartPageView extends MvpView {
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCity(CityContent cityContent);
 
-    void requestCoordinates();
+    void requestLocationPermissions();
 
     void requestLocation();
 
@@ -51,4 +51,5 @@ public interface StartPageView extends MvpView {
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityArticles();
 
+    void onLocationPermissionRequestGranted();
 }

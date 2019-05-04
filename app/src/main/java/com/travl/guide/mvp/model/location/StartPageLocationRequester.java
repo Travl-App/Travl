@@ -1,8 +1,6 @@
-package com.travl.guide.ui.fragment.start.page;
+package com.travl.guide.mvp.model.location;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,29 +8,27 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.travl.guide.mvp.model.user.User;
-import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.ui.App;
 
 import timber.log.Timber;
 
-class StartPageLocationManager {
-    private static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final String FINE_LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final int LOCATION_PERMISSIONS_REQUEST_CODE = 0;
+import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
+import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
+import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CODE;
+
+public class StartPageLocationRequester implements LocationRequester {
     private LocationListener mListener;
-    private StartPagePresenter presenter;
     private LocationManager locationManager;
 
-    StartPageLocationManager(StartPagePresenter presenter) {
-        this.presenter = presenter;
-        locationManager = (LocationManager) App.getInstance().getSystemService(Context.LOCATION_SERVICE);
+    public StartPageLocationRequester(App instance) {
+        locationManager = (LocationManager) instance.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    void initLocationListener() {
+    public void initLocationListener(LocationPresenter presenter) {
+        Timber.e("InitLocationListener");
         mListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -56,38 +52,39 @@ class StartPageLocationManager {
     }
 
 
-    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(LocationPresenter presenter, int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Timber.e("onRequestPermissionsResult");
         if (requestCode == LOCATION_PERMISSIONS_REQUEST_CODE) {
             boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-            onPermissionResult(granted);
+            onPermissionResult(presenter, granted);
         }
     }
 
 
     @SuppressLint("MissingPermission")
-    void requestCoordinates(Activity activity) {
+    public void requestCoordinates(LocationReceiver activity) {
         boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
         if (locationPermissionGranted) {
             requestLocation();
         } else if (!locationPermissionGranted) {
             Timber.e("PermissionNotGranted");
             if (activity != null) {
-                ActivityCompat.requestPermissions(activity, new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+                activity.requestPermissions(new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+
             }
         }
     }
 
-    void onPermissionResult(boolean granted) {
-        Timber.e("onPermissionResult %s", granted);
+    public void onPermissionResult(LocationPresenter presenter, boolean granted) {
+        Timber.e("onLocationPermissionResult %s", granted);
         if (granted) {
-            presenter.requestCoordinates();
+            presenter.onLocationPermissionResultGranted();
         }
     }
 
 
     @SuppressLint("MissingPermission")
-    void requestLocation() {
+    public void requestLocation() {
         Timber.e("requestLocation");
         int millisInSecond = 1000;
         int minutes = 1;
@@ -95,12 +92,20 @@ class StartPageLocationManager {
         int meters = 100;
         String networkProvider = LocationManager.NETWORK_PROVIDER;
         String gpsProvider = LocationManager.GPS_PROVIDER;
-        if (locationManager.isProviderEnabled(networkProvider)) {
-            locationManager.requestLocationUpdates(
-                    networkProvider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
-        } else {
-            locationManager.requestLocationUpdates(
-                    gpsProvider, minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        String passiveProvider = LocationManager.PASSIVE_PROVIDER;
+        if (locationManager.isProviderEnabled(passiveProvider)) {
+            Timber.e("Passive provider");
+            locationManager.requestLocationUpdates(passiveProvider,
+                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
         }
+
+        if (locationManager.isProviderEnabled(networkProvider)) {
+            Timber.e("Network provider");
+            locationManager.requestLocationUpdates(networkProvider,
+                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
+        }
+        Timber.e("GPS provider");
+        locationManager.requestLocationUpdates(gpsProvider,
+                minutes * secondsInMinutes * millisInSecond, meters, mListener);
     }
 }

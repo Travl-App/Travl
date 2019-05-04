@@ -14,8 +14,10 @@ public class CoordinatesRequest {
     }
 
     public CoordinatesRequest(double[] coordinates) {
-        setLatitude(coordinates[0]);
-        setLongitude(coordinates[1]);
+        if (coordinates != null) {
+            setLatitude(coordinates[0]);
+            setLongitude(coordinates[1]);
+        }
     }
 
     @NotNull
