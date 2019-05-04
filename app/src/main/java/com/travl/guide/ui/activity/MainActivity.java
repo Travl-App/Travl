@@ -36,6 +36,7 @@ import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
 
@@ -79,7 +80,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.travlzine();
                 presenter.onMoveToPlaceScreen();
-            } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
+            } else if (command instanceof Forward && nextFragment instanceof MapsFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.map();
                 presenter.onMoveToMapScreen();
