@@ -42,7 +42,13 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     @SuppressLint("CheckResult")
     public void loadCitiesList() {
-        disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList -> getViewState().setCityObjectList(citiesList), Timber::e));
+        disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList ->
+                {
+                    getViewState().setCityObjectList(citiesList);
+                    getViewState().transformCityObjectsToCityStrings();
+                    getViewState().addNamesToCitySpinner();
+                },
+                Timber::e));
     }
 
     @Override
@@ -72,12 +78,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     }
 
-    public void setCity(CityContent cityContent) {
-        getViewState().setCity(cityContent);
-    }
-
-    public void requestLocationPermissions() {
-        getViewState().requestLocationPermissions();
+    public void setCurrentCity(CityContent cityContent) {
+        getViewState().setCurrentCity(cityContent);
     }
 
     public void onSpinnerItemClick(String selectedCity) {
@@ -124,13 +126,13 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         locationRequester.onPermissionResult(this, granted);
     }
 
-    public void requestLocation() {
-        locationRequester.requestLocation();
-    }
-
     public void onDispose() {
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
+    }
+
+    public void editPreviousUserCityName(String placeName) {
+        getViewState().editPreviousUserCityName(placeName);
     }
 }

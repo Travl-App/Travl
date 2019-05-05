@@ -14,7 +14,6 @@ import com.travl.guide.ui.App;
 
 import timber.log.Timber;
 
-import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CODE;
 
@@ -61,14 +60,14 @@ public class StartPageLocationRequester implements LocationRequester {
 
 
     @SuppressLint("MissingPermission")
-    public void requestCoordinates(LocationReceiver activity) {
+    public void requestCoordinates(LocationReceiver locationReceiver) {
         boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
         if (locationPermissionGranted) {
             requestLocation();
         } else if (!locationPermissionGranted) {
             Timber.e("PermissionNotGranted");
-            if (activity != null) {
-                activity.requestPermissions(new String[]{COARSE_LOCATION_PERMISSION, FINE_LOCATION_PERMISSION}, LOCATION_PERMISSIONS_REQUEST_CODE);
+            if (locationReceiver != null) {
+                locationReceiver.requestLocationPermissions();
 
             }
         }
@@ -82,7 +81,7 @@ public class StartPageLocationRequester implements LocationRequester {
     }
 
     @SuppressLint("MissingPermission")
-    public void requestLocation() {
+    private void requestLocation() {
         Timber.e("requestLocation");
         int millisInSecond = 1000;
         int minutes = 1;

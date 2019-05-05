@@ -14,6 +14,7 @@ public class User {
     private static User instance;
     // first item = latitude, second item = longitude
     private double[] coordinates;
+    private String cityName;
     private User() {
 
     }
@@ -43,5 +44,13 @@ public class User {
 
     public Observable<CoordinatesRequest> getCoordinatesRequestPublishSubject() {
         return coordinatesRequestPublishSubject.subscribeOn(Schedulers.io());
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

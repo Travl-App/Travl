@@ -54,7 +54,7 @@ public class CitySpinnerListCreator {
         if (city != null && placeName != null) {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-                String name = (String) Objects.requireNonNull(cityArrayAdapter.getItem(i));
+                String name = Objects.requireNonNull(cityArrayAdapter.getItem(i));
                 if (name.equals(resources.getStringArray(R.array.cities)[0])) {
                     startPagePresenter.removeFromCitySpinnerAdapter(name);
                 }
@@ -65,9 +65,20 @@ public class CitySpinnerListCreator {
             if (isPlaceAdded) {
                 startPagePresenter.removeFromCitySpinnerAdapter(placeName);
             }
-            if (isUserCity && placeName != null)
+            if (isUserCity && placeName != null) {
+                editPreviousUserCityName(startPagePresenter, resources, cityArrayAdapter);
                 placeName = resources.getString(R.string.user_location_marker) + " " + placeName;
+            }
             startPagePresenter.placeSelectedCityOnTop(placeName);
+        }
+    }
+
+    private void editPreviousUserCityName(StartPagePresenter startPagePresenter, Resources resources, ArrayAdapter<String> cityArrayAdapter) {
+        for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
+            String name = Objects.requireNonNull(cityArrayAdapter.getItem(i));
+            if (name.startsWith(resources.getString(R.string.user_location_marker))) {
+                startPagePresenter.editPreviousUserCityName(name);
+            }
         }
     }
 
