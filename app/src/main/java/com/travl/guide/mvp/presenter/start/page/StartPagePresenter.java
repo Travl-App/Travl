@@ -51,6 +51,10 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
                 Timber::e));
     }
 
+    public void addNamesToCitySpinner() {
+        getViewState().addNamesToCitySpinner();
+    }
+
     @Override
     public void setUserCoordinates(double[] coordinates) {
         if (coordinates != null) {
@@ -130,9 +134,5 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
-    }
-
-    public void editPreviousUserCityName(String placeName) {
-        getViewState().editPreviousUserCityName(placeName);
     }
 }

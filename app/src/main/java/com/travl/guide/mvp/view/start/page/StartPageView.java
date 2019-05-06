@@ -51,8 +51,6 @@ public interface StartPageView extends MvpView {
 
     void onLocationPermissionRequestGranted();
 
-    void editPreviousUserCityName(String placeName);
-
     void transformCityObjectsToCityStrings();
 
     void addNamesToCitySpinner();
