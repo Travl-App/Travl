@@ -6,8 +6,11 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.articles.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
+import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,10 +45,14 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
     private void loadPlaceCardInfo() {
         placesRepo.loadNewPlace(placeId).observeOn(scheduler).subscribe(root -> {
             Place place = root.getPlace();
-            getViewState().setTitleTextView(place.getTitle());
-            getViewState().setImageSlider(place.getImages());
-            getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUsername());
-            getViewState().setTextView(place.getDescription());
+            if (place != null) {
+                List<Double> coordinates = place.getCoordinates();
+                User.getInstance().setCitySelectedCoordinates(new double[]{coordinates.get(0), coordinates.get(1)});
+                getViewState().setTitleTextView(place.getTitle());
+                getViewState().setImageSlider(place.getImages());
+                getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUsername());
+                getViewState().setTextView(place.getDescription());
+            }
 
         }, Timber::e);
     }

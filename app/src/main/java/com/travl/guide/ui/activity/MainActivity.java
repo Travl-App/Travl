@@ -192,7 +192,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onMoveToPostScreen() {
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setOnClickListener(view -> {
-            Toast.makeText(this, "Show post in map", Toast.LENGTH_SHORT).show();
+            presenter.toMapScreen();
         });
     }
 
