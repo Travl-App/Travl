@@ -315,8 +315,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             int status = cityContent.getStatus();
             if (status == CODE_OK) {
                 currentCity = cityContent.getCity();
+                User.getInstance().setCitySelectedCoordinates(currentCity.getCoordinates());
             } else if (status == CODE_ERROR) {
                 currentCity = cityContent.getContext();
+                User.getInstance().setCitySelectedCoordinates(new double[]{currentCity.getLatitude(), currentCity.getLongitude()});
             }
         }
     }

@@ -46,9 +46,9 @@ import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.ui.App;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,7 +145,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 mapBoxMap.getUiSettings().setLogoEnabled(false);
                 mapBoxMap.getUiSettings().setAttributionEnabled(false);
                 presenter.makeRequestForPlaces();
-                presenter.showLocations();
+                presenter.showUserLocation();
             });
         });
     }
@@ -182,7 +182,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                 LatLng coordinates = convertToLatLng(feature);
                 PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(coordinates);
 
-                Timber.d("Переданы координаты: " + String.valueOf(coordinates.getLatitude()) + " " + String.valueOf(coordinates.getLongitude()));
+                Timber.d("Переданы координаты: " + coordinates.getLatitude() + " " + coordinates.getLongitude());
 
                 presenter.toCardScreen(listPlaces, new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
 
@@ -224,6 +224,16 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     }
 
     @Override
+    public void showUserLocation() {
+        double[] coordinates = User.getInstance().getCitySelectedCoordinates();
+        Timber.e("Camera should go to: " + Arrays.toString(coordinates));
+        if (coordinates != null) {
+            moveCameraToCoordinates(coordinates);
+        } else {
+            findUser();
+        }
+    }
+
     @SuppressLint("MissingPermission")
     public void findUser() {
         if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
@@ -287,11 +297,20 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         Toast.makeText(getContext(), "This app needs location permissions in order to show its functionality.", Toast.LENGTH_SHORT).show();
     }
 
+    private void moveCameraToCoordinates(double[] coordinates) {
+        LatLng latLng = new LatLng();
+        latLng.setLatitude(coordinates[0]);
+        latLng.setLongitude(coordinates[1]);
+        mapBoxMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
     @Override
     public void onPermissionResult(boolean granted) {
-        if(granted) findUser();
-        else
+        if (granted) {
+            presenter.showUserLocation();
+        } else {
             Toast.makeText(getContext(), "You didn\'t grant location permissions.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

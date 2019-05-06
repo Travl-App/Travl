@@ -50,12 +50,12 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().setupMapBox();
     }
 
-    public void showLocations() {
-        getViewState().findUser();
+    public void showUserLocation() {
+        getViewState().showUserLocation();
     }
 
     public void toCardScreen(List<Place> listPlaces, double[] coordinates) {
-        Timber.d("Получены координаты: " + String.valueOf(coordinates[0]) + " " + String.valueOf(coordinates[1]));
+        Timber.d("Получены координаты: " + coordinates[0] + " " + coordinates[1]);
         router.navigateTo(new Screens.PlaceScreen(getId(listPlaces, coordinates)));
     }
 
