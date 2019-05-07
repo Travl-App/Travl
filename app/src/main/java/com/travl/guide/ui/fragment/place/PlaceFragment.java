@@ -22,6 +22,7 @@ import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.CoordinatesProvider;
+import com.travl.guide.ui.activity.SharedDataProvider;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, CoordinatesProvider {
+public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, CoordinatesProvider, SharedDataProvider {
 
     private static final String PLACE_ID_KEY = "place id key";
 
@@ -144,5 +145,10 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     @Override
     public void setCoordinates(double[] coordinates) {
         placeCoordinates = coordinates;
+    }
+
+    @Override
+    public String getSharedData() {
+        return presenter.getPlaceUrl();
     }
 }

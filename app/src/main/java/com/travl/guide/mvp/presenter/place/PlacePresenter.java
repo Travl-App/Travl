@@ -12,6 +12,7 @@ import com.travl.guide.ui.App;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import ru.terrakok.cicerone.Router;
@@ -20,6 +21,10 @@ import timber.log.Timber;
 @InjectViewState
 public class PlacePresenter extends MvpPresenter<PlaceView> {
 
+
+    @Inject
+    @Named("baseUrl")
+    String baseUrl;
     @Inject
     Router router;
     @Inject
@@ -54,5 +59,9 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
             }
 
         }, Timber::e);
+    }
+
+    public String getPlaceUrl() {
+        return baseUrl + "places/" + placeId;
     }
 }

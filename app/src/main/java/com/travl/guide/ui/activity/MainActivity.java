@@ -1,5 +1,6 @@
 package com.travl.guide.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
@@ -56,6 +57,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
     private CoordinatesProvider coordinatesProvider;
+    private SharedDataProvider sharedDataProvider;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -77,7 +79,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if(command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
+            if (command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.travlzine();
                 presenter.onMoveToPlaceScreen();
@@ -85,7 +87,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.map();
                 presenter.onMoveToMapScreen();
-            } else if(command instanceof Replace && nextFragment instanceof StartPageFragment) {
+            } else if (command instanceof Replace && nextFragment instanceof StartPageFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.start();
                 presenter.onMoveToStartPageScreen();
@@ -93,7 +95,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.post();
                 presenter.onMoveToPostScreen();
-            } else if(nextFragment instanceof FavoriteFragment) {
+            } else if (nextFragment instanceof FavoriteFragment) {
                 Timber.d("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.favorite();
                 presenter.onMoveToFavoriteScreen();
@@ -112,7 +114,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onBackPressed() {
         Timber.e("OnBackPressed");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragment instanceof PlaceFragment) {
+        if (fragment instanceof PlaceFragment) {
             Timber.e("to map screen");
             presenter.toMapScreen();
         } else if (!(fragment instanceof StartPageFragment)) {
@@ -135,8 +137,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         presenter.initEvents();
 
         fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(savedInstanceState == null && fragmentContainer == null) {
-            navigator.applyCommands(new Command[] {new Replace(new Screens.StartPageScreen())});
+        if (savedInstanceState == null && fragmentContainer == null) {
+            navigator.applyCommands(new Command[]{new Replace(new Screens.StartPageScreen())});
         }
     }
 
@@ -152,7 +154,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void initEvents() {
         Timber.d("initEvents");
         bar.setNavigationOnClickListener(view -> {
-            if(! getSupportFragmentManager().executePendingTransactions() && ! navigationDrawer.isAdded()) {
+            if (!getSupportFragmentManager().executePendingTransactions() && !navigationDrawer.isAdded()) {
                 navigationDrawer.show(getSupportFragmentManager(),
                         navigationDrawer.getTag());
             }
@@ -203,6 +205,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         if (fragment instanceof CoordinatesProvider) {
             this.coordinatesProvider = (CoordinatesProvider) fragment;
         }
+        if (fragment instanceof SharedDataProvider) {
+            this.sharedDataProvider = (SharedDataProvider) fragment;
+        }
     }
 
     @Override
@@ -245,7 +250,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        switch(screen) {
+        switch (screen) {
             case StartPage:
                 fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
                 menu.findItem(R.id.app_bar_search).setVisible(true);
@@ -287,12 +292,16 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.app_bar_search:
                 Toast.makeText(this, "Search posts", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.app_bar_post_shared:
-                Toast.makeText(this, "Shared this post", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String link = sharedDataProvider == null ? "Oops, something went wrong, try again..." : sharedDataProvider.getSharedData();
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, link);
+                startActivity(Intent.createChooser(intent, "Share link"));
                 break;
             case R.id.app_bar_post_favorite:
                 Toast.makeText(this, "Show favorite posts", Toast.LENGTH_SHORT).show();
