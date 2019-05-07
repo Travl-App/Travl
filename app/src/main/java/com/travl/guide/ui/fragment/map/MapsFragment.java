@@ -66,6 +66,7 @@ import static com.travl.guide.ui.utils.MapUtils.convertToLatLng;
 
 public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
 
+    public static final String COORDS = "coords";
     @BindView(R.id.mapView)
     MapView mapView;
     @BindView(R.id.map_location_fab)
@@ -81,12 +82,20 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     private PermissionsManager permissionsManager;
     private GeoJsonSource geoJsonSource;
 
+    public static MapsFragment getInstance(double[] coordinates) {
+        MapsFragment instance = new MapsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putDoubleArray(COORDS, coordinates);
+        instance.setArguments(bundle);
+        return instance;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = (Activity) context;
         FloatingActionButton fab = activity.findViewById(R.id.app_bar_fab);
-        if(fab != null) {
+        if (fab != null) {
             fab.setOnClickListener(v -> fabClick());
         }
     }
@@ -161,7 +170,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             this.listPlaces.addAll(listPlaces);
         }
 
-        for(int i = 0; i < listPlaces.size(); i++) {
+        for (int i = 0; i < listPlaces.size(); i++) {
             View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);
             bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
             viewMap.put(listPlaces.get(i).getId(), view);
@@ -175,7 +184,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
             PointF screenPoint = mapBoxMap.getProjection().toScreenLocation(point);
             List<Feature> features = mapBoxMap.queryRenderedFeatures(screenPoint, MARKER_LAYER);
-            if(! features.isEmpty()) {
+            if (!features.isEmpty()) {
 
                 Feature feature = features.get(0);
 
@@ -184,7 +193,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
                 Timber.d("Переданы координаты: " + coordinates.getLatitude() + " " + coordinates.getLongitude());
 
-                presenter.toCardScreen(listPlaces, new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
+                presenter.toCardScreen(listPlaces, new double[]{coordinates.getLatitude(), coordinates.getLongitude()});
 
             } /* else {
                 onMarkerClickCallback(point.toString());
@@ -199,12 +208,12 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void onPlacesLoaded(List<Feature> markerCoordinates) {
-        if(mapBoxMap != null) {
+        if (mapBoxMap != null) {
             Style style = mapBoxMap.getStyle();
-            if(style != null) {
+            if (style != null) {
                 SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
                         .withProperties(iconImage(PLACE_IMAGE),
-                                iconOffset(new Float[] {0f, - 9f}));
+                                iconOffset(new Float[]{0f, -9f}));
                 if (this.markerCoordinates == null) {
                     this.markerCoordinates = markerCoordinates;
                 } else {
@@ -225,26 +234,30 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void showUserLocation() {
-        double[] coordinates = User.getInstance().getCitySelectedCoordinates();
-        Timber.e("Camera should go to: " + Arrays.toString(coordinates));
-        if (coordinates != null) {
-            moveCameraToCoordinates(coordinates);
-        } else {
-            findUser();
+        Bundle args = getArguments();
+        if (args != null) {
+            double[] coordinates = args.getDoubleArray(COORDS);
+            if (coordinates != null) {
+                Timber.e("Moving camera to coordinates " + Arrays.toString(coordinates));
+                moveCameraToCoordinates(coordinates);
+                return;
+            }
         }
+        Timber.e("Args = " + args);
+        findUser();
     }
 
     @SuppressLint("MissingPermission")
     public void findUser() {
-        if(PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             locationComponent = mapBoxMap.getLocationComponent();
-            if(mapBoxMap.getStyle() != null) {
+            if (mapBoxMap.getStyle() != null) {
                 locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
                 locationComponent.setLocationComponentEnabled(true);
                 locationComponent.setCameraMode(CameraMode.TRACKING);
                 locationComponent.setRenderMode(RenderMode.NORMAL);
             }
-        } else if(! PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(getActivity());
         }
@@ -255,9 +268,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         double[] coordinates = new double[2];
         coordinates[0] = 0;
         coordinates[1] = 0;
-        if(locationComponent != null) {
+        if (locationComponent != null) {
             Location location = locationComponent.getLastKnownLocation();
-            if(location != null) {
+            if (location != null) {
                 coordinates[0] = location.getLatitude();
                 coordinates[1] = location.getLongitude();
                 Timber.e("User coordinates set to: " + coordinates[0] + ", " + coordinates[1]);
@@ -270,16 +283,16 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Timber.d("Result query with find place");
-        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
             CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
-            if(mapBoxMap != null) {
+            if (mapBoxMap != null) {
                 Style style = mapBoxMap.getStyle();
-                if(style != null) {
+                if (style != null) {
                     String geoJsonSourceLayerId = "geoJsonSourceLayerId";
                     GeoJsonSource source = style.getSourceAs(geoJsonSourceLayerId);
-                    if(source != null) {
+                    if (source != null) {
                         source.setGeoJson(FeatureCollection.fromFeatures(
-                                new Feature[] {Feature.fromJson(selectedCarmenFeature.toJson())}));
+                                new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())}));
                     }
                     mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()

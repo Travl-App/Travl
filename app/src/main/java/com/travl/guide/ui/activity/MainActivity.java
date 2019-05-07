@@ -55,6 +55,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
+    private CoordinatesProvider coordinatesProvider;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -197,8 +198,16 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     }
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof CoordinatesProvider) {
+            this.coordinatesProvider = (CoordinatesProvider) fragment;
+        }
+    }
+
+    @Override
     public void toMapScreen() {
-        router.navigateTo(new Screens.MapScreen());
+        router.navigateTo(new Screens.MapScreen(coordinatesProvider.getCoordinates()));
     }
 
     @Override

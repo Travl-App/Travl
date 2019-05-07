@@ -6,7 +6,6 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.travl.guide.mvp.model.api.places.articles.Place;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
 
@@ -47,7 +46,7 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
             Place place = root.getPlace();
             if (place != null) {
                 List<Double> coordinates = place.getCoordinates();
-                User.getInstance().setCitySelectedCoordinates(new double[]{coordinates.get(0), coordinates.get(1)});
+                getViewState().setCoordinates(new double[]{coordinates.get(0), coordinates.get(1)});
                 getViewState().setTitleTextView(place.getTitle());
                 getViewState().setImageSlider(place.getImages());
                 getViewState().setPlaceAuthorNameTextView(place.getAuthor().getUsername());

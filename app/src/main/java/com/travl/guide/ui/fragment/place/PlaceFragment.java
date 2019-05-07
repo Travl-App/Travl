@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.CoordinatesProvider;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
+public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, CoordinatesProvider {
 
     private static final String PLACE_ID_KEY = "place id key";
 
@@ -57,6 +57,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Inject
     @Named("baseUrl")
     String baseUrl;
+
+    private double[] placeCoordinates;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -131,5 +133,16 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     public void onBackPressed() {
         if (getActivity() != null) getActivity().onBackPressed();
         else throw new RuntimeException("Activity is null");
+    }
+
+    @Nullable
+    @Override
+    public double[] getCoordinates() {
+        return placeCoordinates;
+    }
+
+    @Override
+    public void setCoordinates(double[] coordinates) {
+        placeCoordinates = coordinates;
     }
 }

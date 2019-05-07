@@ -19,4 +19,6 @@ public interface PlaceView extends MvpView {
     void setPlaceAuthorNameTextView(String authorName);
 
     void setTextView(String text);
+
+    void setCoordinates(double[] coordinates);
 }

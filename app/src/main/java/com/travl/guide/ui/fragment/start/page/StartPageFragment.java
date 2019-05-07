@@ -33,10 +33,12 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.CoordinatesProvider;
 import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,7 +50,7 @@ import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CODE;
 
-public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, LocationReceiver {
+public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, LocationReceiver, CoordinatesProvider {
 
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
     public static final int CODE_OK = 200;
@@ -70,6 +72,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     //Array of city names shown in spinner
     private ArrayAdapter<String> cityArrayAdapter;
     private ArticlesReceiver articlesReceiver;
+    private double[] citySelectedCoordinates;
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -315,12 +318,19 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             int status = cityContent.getStatus();
             if (status == CODE_OK) {
                 currentCity = cityContent.getCity();
-                User.getInstance().setCitySelectedCoordinates(currentCity.getCoordinates());
+                citySelectedCoordinates = currentCity.getCoordinates();
+                Timber.e("coords = " + Arrays.toString(citySelectedCoordinates));
             } else if (status == CODE_ERROR) {
                 currentCity = cityContent.getContext();
-                User.getInstance().setCitySelectedCoordinates(new double[]{currentCity.getLatitude(), currentCity.getLongitude()});
+                citySelectedCoordinates = new double[]{currentCity.getLatitude(), currentCity.getLongitude()};
+                Timber.e("coords = " + Arrays.toString(citySelectedCoordinates));
             }
         }
+    }
+
+    @Override
+    public double[] getCoordinates() {
+        return citySelectedCoordinates;
     }
 
     @Override
