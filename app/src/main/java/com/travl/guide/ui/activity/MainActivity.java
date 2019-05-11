@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,21 +58,27 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     private CurrentScreen.Screen screen;
     private CoordinatesProvider coordinatesProvider;
     private SharedDataProvider sharedDataProvider;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (fragment != null) {
-            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
     private BottomNavigationDrawerBehavior navigationDrawer;
-
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
         public void applyCommands(Command[] commands) {
             super.applyCommands(commands);
+        }
+
+        @Override
+        protected void fragmentBack() {
+            super.fragmentBack();
+            Timber.e("Back");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            String fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
+            Timber.e(fragmentName + " should equal to " + Screens.PlaceScreen.class.getCanonicalName());
+            if (fragmentName != null && fragmentName.equals(Screens.PlaceScreen.class.getCanonicalName())) {
+                screen = CurrentScreen.INSTANCE.post();
+                presenter.onMoveToPlaceScreen();
+            } else if (fragmentName != null && fragmentName.equals(Screens.StartPageScreen.class.getCanonicalName())) {
+                screen = CurrentScreen.INSTANCE.start();
+                presenter.onMoveToStartPageScreen();
+            }
         }
 
         @Override
@@ -82,7 +89,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             if (nextFragment instanceof TravlZineArticlesFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.travlzine();
-                presenter.onMoveToPlaceScreen();
+                presenter.onMoveToTravlZineScreen();
             } else if (nextFragment instanceof MapsFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.map();
@@ -94,7 +101,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             } else if (nextFragment instanceof PlaceFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.post();
-                presenter.onMoveToPostScreen();
+                presenter.onMoveToPlaceScreen();
             } else if (nextFragment instanceof FavoriteFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.favorite();
@@ -102,6 +109,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             }
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment != null) {
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -165,7 +180,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     }
 
-    public void onMoveToPlaceScreen() {
+    public void onMoveToTravlZineScreen() {
         Timber.d("onMoveToPlaceScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setOnClickListener(view -> {
@@ -195,7 +210,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     }
 
     @Override
-    public void onMoveToPostScreen() {
+    public void onMoveToPlaceScreen() {
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setOnClickListener(view -> {
             presenter.toMapScreen();

@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +113,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         for (String imageUrl : imageUrls) {
             SliderView sliderView = new DefaultSliderView(getActivity());
             sliderView.setImageUrl(baseUrl + imageUrl);
+            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+//            sliderView.setDescription("setDescription");
             sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
             placeSliderLayout.addSliderView(sliderView);
         }

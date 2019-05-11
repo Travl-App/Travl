@@ -35,8 +35,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().onMoveToMapScreen();
     }
 
-    public void onMoveToPlaceScreen() {
-        getViewState().onMoveToPlaceScreen();
+    public void onMoveToTravlZineScreen() {
+        getViewState().onMoveToTravlZineScreen();
     }
 
     public void onMoveToFavoriteScreen() {
@@ -47,7 +47,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().onMoveToStartPageScreen();
     }
 
-    public void onMoveToPostScreen() {
-        getViewState().onMoveToPostScreen();
+    public void onMoveToPlaceScreen() {
+        getViewState().onMoveToPlaceScreen();
     }
 }

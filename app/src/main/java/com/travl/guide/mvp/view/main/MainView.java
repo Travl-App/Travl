@@ -29,7 +29,7 @@ public interface MainView extends MvpView {
 
     void onMoveToStartPageScreen();
 
-    void onMoveToPostScreen();
-
     void onMoveToFavoriteScreen();
+
+    void onMoveToTravlZineScreen();
 }
