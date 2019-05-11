@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/travlzine_article_preview_category_margin_top"
+            android:layout_marginStart="@dimen/travlzine_article_preview_category_margin_start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_image_view">
 
@@ -37,7 +38,7 @@
                 android:layout_alignEnd="@id/travlzine_article_preview_category_text_view"
                 android:layout_alignBottom="@id/travlzine_article_preview_category_text_view"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_category_rectangle" />
+                android:src="@drawable/ic_category_3" />
 
             <TextView
                 android:id="@+id/travlzine_article_preview_category_text_view"

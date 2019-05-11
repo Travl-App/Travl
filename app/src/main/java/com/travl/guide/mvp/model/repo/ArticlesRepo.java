@@ -30,4 +30,19 @@ public class ArticlesRepo {
             };
         }
     }
+
+    public Single<ArticleLinksContainer> getMoreTravlZineArticles() {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadMoreArticles(true).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
+        } else {
+            return new Single<ArticleLinksContainer>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super ArticleLinksContainer> observer) {
+                }
+            };
+        }
+    }
 }

@@ -32,6 +32,7 @@
     <string name="getting_articles">Получение статей</string>
     <string name="city_definition">Определение города</string>
     <string name="no_category_text">Нет категории</string>
+    <string name="show_more">Показать еще</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>

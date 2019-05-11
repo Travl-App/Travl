@@ -34,11 +34,12 @@
     <dimen name="travlzine_preview_chip_icon_size">30dp</dimen>
     <dimen name="travlzine_preview_chip_margin_bottom">10dp</dimen>
     <dimen name="travlzine_preview_chip_margin_start">10dp</dimen>
-    <dimen name="travlzine_article_preview_category_text_view_padding_start">12dp</dimen>
-    <dimen name="travlzine_article_preview_category_text_view_padding_end">12dp</dimen>
+    <dimen name="travlzine_article_preview_category_text_view_padding_start">4dp</dimen>
+    <dimen name="travlzine_article_preview_category_text_view_padding_end">4dp</dimen>
     <dimen name="travlzine_article_preview_category_text_view_padding_bottom">4dp</dimen>
     <dimen name="travlzine_article_preview_category_text_view_padding_top">4dp</dimen>
-    <dimen name="travlzine_article_preview_category_margin_top">10dp</dimen>
+    <dimen name="travlzine_article_preview_category_margin_top">8dp</dimen>
+    <dimen name="travlzine_article_preview_category_margin_start">4dp</dimen>
     <dimen name="travlzine_card_margin_horizontal">0dp</dimen>
 
     <!--BottomSheet dimens-->

@@ -72,4 +72,10 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
             travzineArticlesPreviewRecycler.getAdapter().notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDispose();
+    }
 }
