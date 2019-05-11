@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,7 +40,6 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.places.map.Place;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.ui.App;
@@ -107,7 +105,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
+        Timber.e("mapView.onCreate");
         mapView.onCreate(savedInstanceState);
+        Timber.e("SetupViews");
         setupViews();
         return view;
     }
@@ -145,18 +145,24 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
     @Override
     public void setupMapBox() {
-        mapView.getMapAsync(mapBoxMap -> {
-            this.mapBoxMap = mapBoxMap;
-            mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
-                LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
-                localizationPlugin.matchMapLanguageWithDeviceDefault();
-                mapBoxMap.getUiSettings().setCompassEnabled(false);
-                mapBoxMap.getUiSettings().setLogoEnabled(false);
-                mapBoxMap.getUiSettings().setAttributionEnabled(false);
-                presenter.makeRequestForPlaces();
-                presenter.showUserLocation();
+        Timber.e("Setup MapBox");
+        if (mapView != null) {
+            mapView.getMapAsync(mapBoxMap -> {
+                Timber.e("getMapAsync");
+                this.mapBoxMap = mapBoxMap;
+                mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
+                    Timber.e("Set Map style");
+                    LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
+                    localizationPlugin.matchMapLanguageWithDeviceDefault();
+                    mapBoxMap.getUiSettings().setCompassEnabled(false);
+                    mapBoxMap.getUiSettings().setLogoEnabled(false);
+                    mapBoxMap.getUiSettings().setAttributionEnabled(false);
+                    Timber.e("RequestForPlaces");
+                    presenter.makeRequestForPlaces();
+                    presenter.showUserLocation();
+                });
             });
-        });
+        }
     }
 
     @SuppressLint("UseSparseArrays")
@@ -193,7 +199,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
 
                 Timber.d("Переданы координаты: " + coordinates.getLatitude() + " " + coordinates.getLongitude());
 
-                presenter.toCardScreen(listPlaces, new double[]{coordinates.getLatitude(), coordinates.getLongitude()});
+                presenter.toPlaceScreen(listPlaces, new double[]{coordinates.getLatitude(), coordinates.getLongitude()});
 
             } /* else {
                 onMarkerClickCallback(point.toString());
@@ -263,22 +269,6 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private void setUserCoordinates() {
-        double[] coordinates = new double[2];
-        coordinates[0] = 0;
-        coordinates[1] = 0;
-        if (locationComponent != null) {
-            Location location = locationComponent.getLastKnownLocation();
-            if (location != null) {
-                coordinates[0] = location.getLatitude();
-                coordinates[1] = location.getLongitude();
-                Timber.e("User coordinates set to: " + coordinates[0] + ", " + coordinates[1]);
-            }
-        }
-        User.getInstance().setCoordinates(coordinates);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -314,7 +304,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         LatLng latLng = new LatLng();
         latLng.setLatitude(coordinates[0]);
         latLng.setLongitude(coordinates[1]);
-        mapBoxMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(9)
+                .build()));
     }
 
     @Override
@@ -348,6 +341,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onStart() {
         super.onStart();
         mapView.onStart();
+
+        if (locationComponent != null) {
+            locationComponent.onStart();
+        }
     }
 
     @Override
@@ -360,12 +357,18 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     public void onStop() {
         super.onStop();
         mapView.onStop();
+        if (locationComponent != null) {
+            locationComponent.onStop();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mapView.onDestroy();
+        if (locationComponent != null) {
+            locationComponent.onDestroy();
+        }
     }
 
     @Override

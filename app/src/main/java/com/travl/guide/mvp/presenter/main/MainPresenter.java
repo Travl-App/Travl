@@ -19,12 +19,12 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().toMapScreen();
     }
 
-    public void toPlaceScreen() {
-        getViewState().toPlaceScreen();
+    public void toTravlZineScreen() {
+        getViewState().toTravlZineScreen();
     }
 
     public void toFavoriteScreen() {
-        getViewState().toFavoriteScreen();
+        getViewState().toFavoriteScreens();
     }
 
     public void toStartPageScreen() {

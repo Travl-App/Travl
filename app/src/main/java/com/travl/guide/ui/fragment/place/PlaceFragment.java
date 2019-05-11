@@ -60,6 +60,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     String baseUrl;
 
     private double[] placeCoordinates;
+    private int placeId;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -71,7 +72,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        int placeId = getArguments().getInt(PLACE_ID_KEY);
+        placeId = getArguments().getInt(PLACE_ID_KEY);
         return new PlacePresenter(AndroidSchedulers.mainThread(), placeId);
     }
 

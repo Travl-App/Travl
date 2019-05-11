@@ -37,7 +37,6 @@ import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
 
@@ -79,24 +78,25 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
-            if (command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+            Timber.e("Транзакция фрагментов. Команда = " + command.toString() + " фрагмент = " + nextFragment.getClass());
+            if (nextFragment instanceof TravlZineArticlesFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.travlzine();
                 presenter.onMoveToPlaceScreen();
-            } else if (command instanceof Forward && nextFragment instanceof MapsFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+            } else if (nextFragment instanceof MapsFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.map();
                 presenter.onMoveToMapScreen();
-            } else if (command instanceof Replace && nextFragment instanceof StartPageFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+            } else if (nextFragment instanceof StartPageFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.start();
                 presenter.onMoveToStartPageScreen();
-            } else if (command instanceof Forward && nextFragment instanceof PlaceFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+            } else if (nextFragment instanceof PlaceFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.post();
                 presenter.onMoveToPostScreen();
             } else if (nextFragment instanceof FavoriteFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
                 screen = CurrentScreen.INSTANCE.favorite();
                 presenter.onMoveToFavoriteScreen();
             }
@@ -114,7 +114,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onBackPressed() {
         Timber.e("OnBackPressed");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (fragment instanceof PlaceFragment) {
+        if (fragment instanceof FavoriteFragment) {
+            Timber.e("to place screen");
+            router.exit();
+        } else if (fragment instanceof PlaceFragment) {
             Timber.e("to map screen");
             presenter.toMapScreen();
         } else if (!(fragment instanceof StartPageFragment)) {
@@ -212,22 +215,25 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void toMapScreen() {
-        router.navigateTo(new Screens.MapScreen(coordinatesProvider.getCoordinates()));
+        double[] coordinates = null;
+        if (coordinatesProvider != null)
+            coordinates = coordinatesProvider.getCoordinates();
+        router.navigateTo(new Screens.MapScreen(coordinates));
     }
 
     @Override
-    public void toFavoriteScreen() {
+    public void toFavoriteScreens() {
         router.navigateTo(new Screens.FavoriteScreens());
     }
 
     @Override
-    public void toPlaceScreen() {
+    public void toTravlZineScreen() {
         router.navigateTo(new Screens.PlacesScreen());
     }
 
     @Override
     public void toStartPageScreen() {
-        router.replaceScreen(new Screens.StartPageScreen());
+        router.navigateTo(new Screens.StartPageScreen());
     }
 
     @Override
@@ -318,8 +324,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     }
 
     @Override
-    public void navToPlaceScreen() {
-        presenter.toPlaceScreen();
+    public void navToTravlZineScreen() {
+        presenter.toTravlZineScreen();
     }
 
     @Override
