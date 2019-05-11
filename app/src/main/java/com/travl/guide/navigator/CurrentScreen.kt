@@ -32,7 +32,7 @@ object CurrentScreen {
         return selectedScreen
     }
 
-    fun post(): Screen {
+    fun place(): Screen {
         selectedScreen = Screen.PostPage
         return selectedScreen
     }

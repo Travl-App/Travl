@@ -67,17 +67,24 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
         @Override
         protected void fragmentBack() {
-            super.fragmentBack();
             Timber.e("Back");
             FragmentManager fragmentManager = getSupportFragmentManager();
             String fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
             Timber.e(fragmentName + " should equal to " + Screens.PlaceScreen.class.getCanonicalName());
             if (fragmentName != null && fragmentName.equals(Screens.PlaceScreen.class.getCanonicalName())) {
-                screen = CurrentScreen.INSTANCE.post();
+                super.fragmentBack();
+                screen = CurrentScreen.INSTANCE.place();
                 presenter.onMoveToPlaceScreen();
             } else if (fragmentName != null && fragmentName.equals(Screens.StartPageScreen.class.getCanonicalName())) {
+                super.fragmentBack();
                 screen = CurrentScreen.INSTANCE.start();
                 presenter.onMoveToStartPageScreen();
+            } else if (fragmentName != null && fragmentName.equals(Screens.MapScreen.class.getCanonicalName())) {
+                presenter.toMapScreen();
+                screen = CurrentScreen.INSTANCE.map();
+                presenter.onMoveToMapScreen();
+            } else {
+                super.fragmentBack();
             }
         }
 
@@ -100,7 +107,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
                 presenter.onMoveToStartPageScreen();
             } else if (nextFragment instanceof PlaceFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.post();
+                screen = CurrentScreen.INSTANCE.place();
                 presenter.onMoveToPlaceScreen();
             } else if (nextFragment instanceof FavoriteFragment) {
                 Timber.e("Смена фрагмента на %s", nextFragment.getClass());
