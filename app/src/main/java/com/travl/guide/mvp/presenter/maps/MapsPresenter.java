@@ -72,9 +72,24 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     private boolean coarseEqualsCheck(double first, double second) {
-        DecimalFormat roundTo = new DecimalFormat("#.##");
+        DecimalFormat coarseRoundTo = new DecimalFormat("#.##");
         int gap = 3;
         double precision = 0.01;
+        for (int i = -gap; i < gap; i++) {
+            String firstNumber = coarseRoundTo.format(first + i * precision);
+            String secondNumber = coarseRoundTo.format(second);
+            Timber.e("First coordinate =" + firstNumber + "Second coordinate =" + secondNumber);
+            if (firstNumber.equals(secondNumber)) {
+                return fineEqualsCheck(first, second);
+            }
+        }
+        return false;
+    }
+
+    private boolean fineEqualsCheck(double first, double second) {
+        DecimalFormat roundTo = new DecimalFormat("#.#####");
+        int gap = 30;
+        double precision = 0.00001;
         for (int i = -gap; i < gap; i++) {
             String firstNumber = roundTo.format(first + i * precision);
             String secondNumber = roundTo.format(second);
