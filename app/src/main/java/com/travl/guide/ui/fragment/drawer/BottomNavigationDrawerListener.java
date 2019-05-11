@@ -3,7 +3,7 @@ package com.travl.guide.ui.fragment.drawer;
 public interface BottomNavigationDrawerListener {
     void navToMapScreen();
 
-    void navToPlaceScreen();
+    void navToTravlZineScreen();
 
     void navToFavoriteScreen();
 

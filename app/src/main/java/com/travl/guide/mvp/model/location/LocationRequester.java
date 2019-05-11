@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 public interface LocationRequester {
     void initLocationListener(LocationPresenter presenter);
 
-    void requestLocation();
-
     void onPermissionResult(LocationPresenter presenter, boolean granted);
 
     void onRequestPermissionsResult(LocationPresenter presenter, int requestCode,

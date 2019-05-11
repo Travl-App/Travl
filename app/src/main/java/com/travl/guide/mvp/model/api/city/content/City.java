@@ -22,11 +22,16 @@ public class City {
     @Expose
     private CityArticleLinksContainer articleLinksContainer;
 
-    public City(String placeName, String region, String country) {
-        this.placeName = placeName;
-        this.region = region;
-        this.country = country;
-    }
+    @SerializedName("longitude")
+    @Expose
+    private double longitude;
+    @SerializedName("latitude")
+    @Expose
+    private double latitude;
+
+    @SerializedName("coordinates")
+    @Expose
+    private double[] coordinates;
 
     public String getPlaceName() {
         return placeName;
@@ -66,5 +71,29 @@ public class City {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double[] getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(double[] coordinates) {
+        this.coordinates = coordinates;
     }
 }

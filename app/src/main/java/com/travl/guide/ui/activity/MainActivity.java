@@ -1,10 +1,12 @@
 package com.travl.guide.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +56,59 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
+    private CoordinatesProvider coordinatesProvider;
+    private SharedDataProvider sharedDataProvider;
+    private BottomNavigationDrawerBehavior navigationDrawer;
+    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
+        @Override
+        public void applyCommands(Command[] commands) {
+            super.applyCommands(commands);
+        }
+
+        @Override
+        protected void fragmentBack() {
+            super.fragmentBack();
+            Timber.e("Back");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            String fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
+            Timber.e(fragmentName + " should equal to " + Screens.PlaceScreen.class.getCanonicalName());
+            if (fragmentName != null && fragmentName.equals(Screens.PlaceScreen.class.getCanonicalName())) {
+                screen = CurrentScreen.INSTANCE.post();
+                presenter.onMoveToPlaceScreen();
+            } else if (fragmentName != null && fragmentName.equals(Screens.StartPageScreen.class.getCanonicalName())) {
+                screen = CurrentScreen.INSTANCE.start();
+                presenter.onMoveToStartPageScreen();
+            }
+        }
+
+        @Override
+        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+            super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
+            fragmentTransaction.addToBackStack(null);
+            Timber.e("Транзакция фрагментов. Команда = " + command.toString() + " фрагмент = " + nextFragment.getClass());
+            if (nextFragment instanceof TravlZineArticlesFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
+                screen = CurrentScreen.INSTANCE.travlzine();
+                presenter.onMoveToTravlZineScreen();
+            } else if (nextFragment instanceof MapsFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
+                screen = CurrentScreen.INSTANCE.map();
+                presenter.onMoveToMapScreen();
+            } else if (nextFragment instanceof StartPageFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
+                screen = CurrentScreen.INSTANCE.start();
+                presenter.onMoveToStartPageScreen();
+            } else if (nextFragment instanceof PlaceFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
+                screen = CurrentScreen.INSTANCE.post();
+                presenter.onMoveToPlaceScreen();
+            } else if (nextFragment instanceof FavoriteFragment) {
+                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
+                screen = CurrentScreen.INSTANCE.favorite();
+                presenter.onMoveToFavoriteScreen();
+            }
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -62,42 +117,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-    private BottomNavigationDrawerBehavior navigationDrawer;
-
-    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
-        @Override
-        public void applyCommands(Command[] commands) {
-            super.applyCommands(commands);
-        }
-
-        @Override
-        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
-            super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
-            fragmentTransaction.addToBackStack(null);
-            if(command instanceof Replace && nextFragment instanceof TravlZineArticlesFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.travlzine();
-                presenter.onMoveToPlaceScreen();
-            } else if(command instanceof Replace && nextFragment instanceof MapsFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.map();
-                presenter.onMoveToMapScreen();
-            } else if(command instanceof Replace && nextFragment instanceof StartPageFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.start();
-                presenter.onMoveToStartPageScreen();
-            } else if(nextFragment instanceof PlaceFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.post();
-                presenter.onMoveToPostScreen();
-            } else if(nextFragment instanceof FavoriteFragment) {
-                Timber.d("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.favorite();
-                presenter.onMoveToFavoriteScreen();
-            }
-        }
-    };
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -108,12 +127,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public void onBackPressed() {
+        Timber.e("OnBackPressed");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragment instanceof PlaceFragment) {
+        if (fragment instanceof FavoriteFragment) {
+            Timber.e("to place screen");
+            router.exit();
+        } else if (fragment instanceof PlaceFragment) {
+            Timber.e("to map screen");
             presenter.toMapScreen();
-        } else if(! (fragment instanceof StartPageFragment)) {
+        } else if (!(fragment instanceof StartPageFragment)) {
+            Timber.e("To start page");
             presenter.toStartPageScreen();
         } else {
+            Timber.e("Finish");
             finish();
         }
     }
@@ -129,8 +155,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         presenter.initEvents();
 
         fragmentContainer = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(savedInstanceState == null && fragmentContainer == null) {
-            navigator.applyCommands(new Command[] {new Replace(new Screens.StartPageScreen())});
+        if (savedInstanceState == null && fragmentContainer == null) {
+            navigator.applyCommands(new Command[]{new Replace(new Screens.StartPageScreen())});
         }
     }
 
@@ -146,7 +172,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void initEvents() {
         Timber.d("initEvents");
         bar.setNavigationOnClickListener(view -> {
-            if(! getSupportFragmentManager().executePendingTransactions() && ! navigationDrawer.isAdded()) {
+            if (!getSupportFragmentManager().executePendingTransactions() && !navigationDrawer.isAdded()) {
                 navigationDrawer.show(getSupportFragmentManager(),
                         navigationDrawer.getTag());
             }
@@ -154,7 +180,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     }
 
-    public void onMoveToPlaceScreen() {
+    public void onMoveToTravlZineScreen() {
         Timber.d("onMoveToPlaceScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setOnClickListener(view -> {
@@ -184,31 +210,45 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     }
 
     @Override
-    public void onMoveToPostScreen() {
+    public void onMoveToPlaceScreen() {
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         fab.setOnClickListener(view -> {
-            Toast.makeText(this, "Show post in map", Toast.LENGTH_SHORT).show();
+            presenter.toMapScreen();
         });
     }
 
     @Override
-    public void toMapScreen() {
-        router.replaceScreen(new Screens.MapScreen());
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof CoordinatesProvider) {
+            this.coordinatesProvider = (CoordinatesProvider) fragment;
+        }
+        if (fragment instanceof SharedDataProvider) {
+            this.sharedDataProvider = (SharedDataProvider) fragment;
+        }
     }
 
     @Override
-    public void toFavoriteScreen() {
+    public void toMapScreen() {
+        double[] coordinates = null;
+        if (coordinatesProvider != null)
+            coordinates = coordinatesProvider.getCoordinates();
+        router.navigateTo(new Screens.MapScreen(coordinates));
+    }
+
+    @Override
+    public void toFavoriteScreens() {
         router.navigateTo(new Screens.FavoriteScreens());
     }
 
     @Override
-    public void toPlaceScreen() {
-        router.replaceScreen(new Screens.PlacesScreen());
+    public void toTravlZineScreen() {
+        router.navigateTo(new Screens.PlacesScreen());
     }
 
     @Override
     public void toStartPageScreen() {
-        router.replaceScreen(new Screens.StartPageScreen());
+        router.navigateTo(new Screens.StartPageScreen());
     }
 
     @Override
@@ -231,7 +271,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        switch(screen) {
+        switch (screen) {
             case StartPage:
                 fab.setImageDrawable(getDrawable(R.drawable.ic_geo_map));
                 menu.findItem(R.id.app_bar_search).setVisible(true);
@@ -273,12 +313,16 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.app_bar_search:
                 Toast.makeText(this, "Search posts", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.app_bar_post_shared:
-                Toast.makeText(this, "Shared this post", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String link = sharedDataProvider == null ? "Oops, something went wrong, try again..." : sharedDataProvider.getSharedData();
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, link);
+                startActivity(Intent.createChooser(intent, "Share link"));
                 break;
             case R.id.app_bar_post_favorite:
                 Toast.makeText(this, "Show favorite posts", Toast.LENGTH_SHORT).show();
@@ -295,8 +339,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     }
 
     @Override
-    public void navToPlaceScreen() {
-        presenter.toPlaceScreen();
+    public void navToTravlZineScreen() {
+        presenter.toTravlZineScreen();
     }
 
     @Override

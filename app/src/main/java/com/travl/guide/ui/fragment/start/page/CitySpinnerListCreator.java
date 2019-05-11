@@ -12,7 +12,8 @@ import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import timber.log.Timber;
 
 public class CitySpinnerListCreator {
     private static final String COMMA = ", ";
@@ -46,27 +47,41 @@ public class CitySpinnerListCreator {
         return title;
     }
 
+    @Nullable
     public void addToCityList(City city, ArrayAdapter<String> cityArrayAdapter, StartPagePresenter startPagePresenter, boolean isUserCity) {
+        startPagePresenter.addNamesToCitySpinner();
         Resources resources = App.getInstance().getResources();
         String placeName = cityToString(city);
         placeName = formatPlaceName(placeName);
-
-        if (city != null && placeName != null) {
+        String userLocationMarker = resources.getString(R.string.user_location_marker);
+        //Check for duplicates and blank
+        if (cityArrayAdapter != null && city != null && placeName != null) {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-                String name = (String) Objects.requireNonNull(cityArrayAdapter.getItem(i));
-                if (name.equals(resources.getStringArray(R.array.cities)[0])) {
-                    startPagePresenter.removeFromCitySpinnerAdapter(name);
-                }
-                if (name.contains(placeName) || name.contains(resources.getString(R.string.user_location_marker) + " " + placeName)) {
-                    isPlaceAdded = true;
+                String name = cityArrayAdapter.getItem(i);
+                Timber.e("Name = " + name + "PlaceName =" + placeName);
+                if (name != null) {
+                    //Remove blank "Choose city:"
+                    if (name.equals(resources.getStringArray(R.array.cities)[0])) {
+                        startPagePresenter.removeFromCitySpinnerAdapter(name);
+                    }
+                    if (name.startsWith(userLocationMarker)) {
+                        startPagePresenter.removeFromCitySpinnerAdapter(name);
+                    }
+                    if (name.contains(placeName) || name.contains(userLocationMarker + " " + placeName)) {
+                        Timber.e("Place =" + name + " is added");
+                        isPlaceAdded = true;
+                    }
                 }
             }
+            //Remove duplicates
             if (isPlaceAdded) {
                 startPagePresenter.removeFromCitySpinnerAdapter(placeName);
             }
-            if (isUserCity && placeName != null)
+            //Add "You are here:" if it is User's city
+            if (isUserCity && placeName != null) {
                 placeName = resources.getString(R.string.user_location_marker) + " " + placeName;
+            }
             startPagePresenter.placeSelectedCityOnTop(placeName);
         }
     }

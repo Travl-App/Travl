@@ -36,7 +36,7 @@ class BottomNavigationDrawerBehavior: BottomSheetDialogFragment() {
                     bottomNavigationDrawerListener!!.navToStartPageScreen()
                 }
                 R.id.app_bar_travlzine -> {
-                    bottomNavigationDrawerListener!!.navToPlaceScreen()
+                    bottomNavigationDrawerListener!!.navToTravlZineScreen()
                 }
                 R.id.app_bar_favorite -> {
                     bottomNavigationDrawerListener!!.navToFavoriteScreen()

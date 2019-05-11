@@ -15,13 +15,13 @@ public interface MainView extends MvpView {
     void toMapScreen();
 
     @StateStrategyType(value = SkipStrategy.class)
-    void toPlaceScreen();
+    void toTravlZineScreen();
 
     @StateStrategyType(value = SkipStrategy.class)
     void toStartPageScreen();
 
     @StateStrategyType(value = SkipStrategy.class)
-    void toFavoriteScreen();
+    void toFavoriteScreens();
 
     void onMoveToPlaceScreen();
 
@@ -29,7 +29,7 @@ public interface MainView extends MvpView {
 
     void onMoveToStartPageScreen();
 
-    void onMoveToPostScreen();
-
     void onMoveToFavoriteScreen();
+
+    void onMoveToTravlZineScreen();
 }

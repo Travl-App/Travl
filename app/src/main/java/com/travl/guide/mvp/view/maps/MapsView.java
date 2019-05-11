@@ -18,7 +18,7 @@ public interface MapsView extends MvpView {
     void onRequestCompleted(List<Place> viewMap);
 
     @StateStrategyType(value = SkipStrategy.class)
-    void findUser();
+    void showUserLocation();
 
     void setupFab();
 

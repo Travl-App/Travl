@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface LocationReceiver {
 
-    void requestPermissions(String[] strings, int locationPermissionsRequestCode);
+    void requestLocationPermissions();
 
     void onExplanationNeeded(List<String> permissionsToExplain);
 

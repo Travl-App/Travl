@@ -22,6 +22,8 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.CoordinatesProvider;
+import com.travl.guide.ui.activity.SharedDataProvider;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
+public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, CoordinatesProvider, SharedDataProvider {
 
     private static final String PLACE_ID_KEY = "place id key";
 
@@ -58,6 +60,9 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Named("baseUrl")
     String baseUrl;
 
+    private double[] placeCoordinates;
+    private int placeId;
+
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
         Bundle args = new Bundle();
@@ -68,7 +73,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        int placeId = getArguments().getInt(PLACE_ID_KEY);
+        placeId = getArguments().getInt(PLACE_ID_KEY);
         return new PlacePresenter(AndroidSchedulers.mainThread(), placeId);
     }
 
@@ -85,9 +90,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
 
     private void setupToolbar() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setupSliderLayout() {
@@ -108,20 +111,11 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     @Override
     public void setImageSlider(List<String> imageUrls) {
         for (String imageUrl : imageUrls) {
-
             SliderView sliderView = new DefaultSliderView(getActivity());
-
             sliderView.setImageUrl(baseUrl + imageUrl);
-
             sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
 //            sliderView.setDescription("setDescription");
-            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+            sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
             placeSliderLayout.addSliderView(sliderView);
         }
     }
@@ -144,5 +138,21 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView {
     public void onBackPressed() {
         if (getActivity() != null) getActivity().onBackPressed();
         else throw new RuntimeException("Activity is null");
+    }
+
+    @Nullable
+    @Override
+    public double[] getCoordinates() {
+        return placeCoordinates;
+    }
+
+    @Override
+    public void setCoordinates(double[] coordinates) {
+        placeCoordinates = coordinates;
+    }
+
+    @Override
+    public String getSharedData() {
+        return presenter.getPlaceUrl();
     }
 }

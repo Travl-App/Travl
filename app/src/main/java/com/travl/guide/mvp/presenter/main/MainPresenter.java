@@ -19,12 +19,12 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().toMapScreen();
     }
 
-    public void toPlaceScreen() {
-        getViewState().toPlaceScreen();
+    public void toTravlZineScreen() {
+        getViewState().toTravlZineScreen();
     }
 
     public void toFavoriteScreen() {
-        getViewState().toFavoriteScreen();
+        getViewState().toFavoriteScreens();
     }
 
     public void toStartPageScreen() {
@@ -35,8 +35,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().onMoveToMapScreen();
     }
 
-    public void onMoveToPlaceScreen() {
-        getViewState().onMoveToPlaceScreen();
+    public void onMoveToTravlZineScreen() {
+        getViewState().onMoveToTravlZineScreen();
     }
 
     public void onMoveToFavoriteScreen() {
@@ -47,7 +47,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().onMoveToStartPageScreen();
     }
 
-    public void onMoveToPostScreen() {
-        getViewState().onMoveToPostScreen();
+    public void onMoveToPlaceScreen() {
+        getViewState().onMoveToPlaceScreen();
     }
 }

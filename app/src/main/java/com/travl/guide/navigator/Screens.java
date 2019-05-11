@@ -24,9 +24,15 @@ public class Screens extends Screen {
 
     public static class MapScreen extends SupportAppScreen {
 
+        private double[] coordinates;
+
+        public MapScreen(double[] coordinates) {
+            this.coordinates = coordinates;
+        }
+
         @Override
         public Fragment getFragment() {
-            return new MapsFragment();
+            return MapsFragment.getInstance(coordinates);
         }
     }
 

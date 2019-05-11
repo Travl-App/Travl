@@ -24,11 +24,9 @@ public interface StartPageView extends MvpView {
     void setCityContentByLinkId(CityContent cityContent);
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setCity(CityContent cityContent);
+    void setCurrentCity(CityContent cityContent);
 
     void requestLocationPermissions();
-
-    void requestLocation();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityStringNames(ArrayList<String> citiesListToCitiesNameList);
@@ -52,4 +50,8 @@ public interface StartPageView extends MvpView {
     void setCityArticles();
 
     void onLocationPermissionRequestGranted();
+
+    void transformCityObjectsToCityStrings();
+
+    void addNamesToCitySpinner();
 }
