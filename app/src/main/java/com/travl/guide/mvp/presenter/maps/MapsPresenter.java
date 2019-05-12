@@ -16,7 +16,6 @@ import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,51 +53,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().showUserLocation();
     }
 
-    public void toPlaceScreen(List<Place> listPlaces, double[] coordinates) {
-        Timber.d("Получены координаты: " + coordinates[0] + " " + coordinates[1]);
-        router.navigateTo(new Screens.PlaceScreen(getId(listPlaces, coordinates)));
-    }
-
-    private int getId(List<Place> listPlaces, double[] coordinates) {
-        for (int i = 0; i < listPlaces.size(); i++) {
-            double[] local = listPlaces.get(i).getCoordinates();
-            if (coarseEqualsCheck(coordinates[0], local[0]) && coarseEqualsCheck(coordinates[1], local[1])) {
-                Timber.d("Id маркера: %s", String.valueOf(listPlaces.get(i).getId()));
-                return listPlaces.get(i).getId();
-            }
-        }
-        Timber.d("Всё плохо, мы ничего не нашли и выводим рандомную статью");
-        return 1;
-    }
-
-    private boolean coarseEqualsCheck(double first, double second) {
-        DecimalFormat coarseRoundTo = new DecimalFormat("#.##");
-        int gap = 3;
-        double precision = 0.01;
-        for (int i = -gap; i < gap; i++) {
-            String firstNumber = coarseRoundTo.format(first + i * precision);
-            String secondNumber = coarseRoundTo.format(second);
-            Timber.e("First coordinate =" + firstNumber + "Second coordinate =" + secondNumber);
-            if (firstNumber.equals(secondNumber)) {
-                return fineEqualsCheck(first, second);
-            }
-        }
-        return false;
-    }
-
-    private boolean fineEqualsCheck(double first, double second) {
-        DecimalFormat roundTo = new DecimalFormat("#.#####");
-        int gap = 30;
-        double precision = 0.00001;
-        for (int i = -gap; i < gap; i++) {
-            String firstNumber = roundTo.format(first + i * precision);
-            String secondNumber = roundTo.format(second);
-            Timber.e("First coordinate =" + firstNumber + "Second coordinate =" + secondNumber);
-            if (firstNumber.equals(secondNumber)) {
-                return true;
-            }
-        }
-        return false;
+    public void toPlaceScreen(int id) {
+        router.navigateTo(new Screens.PlaceScreen(id));
     }
 
     @SuppressLint("CheckResult")
@@ -157,7 +113,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             double[] coordinates = places.get(i).getCoordinates();
             double latitude = coordinates[0];
             double longitude = coordinates[1];
-            features.add(Feature.fromGeometry(Point.fromLngLat(longitude, latitude)));
+            Feature feature = Feature.fromGeometry(Point.fromLngLat(longitude, latitude));
+            feature.addNumberProperty("id", places.get(i).getId());
+            features.add(feature);
         }
 
         return features;

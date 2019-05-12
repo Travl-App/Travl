@@ -193,13 +193,9 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
             if (!features.isEmpty()) {
 
                 Feature feature = features.get(0);
-
                 LatLng coordinates = convertToLatLng(feature);
                 PointF symbolScreenPoint = mapBoxMap.getProjection().toScreenLocation(coordinates);
-
-                Timber.d("Переданы координаты: " + coordinates.getLatitude() + " " + coordinates.getLongitude());
-
-                presenter.toPlaceScreen(listPlaces, new double[]{coordinates.getLatitude(), coordinates.getLongitude()});
+                presenter.toPlaceScreen(feature.getNumberProperty("id").intValue());
 
             } /* else {
                 onMarkerClickCallback(point.toString());
