@@ -1,6 +1,6 @@
 package com.travl.guide.ui.adapter.articles.travlzine;
 
-import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.design.chip.Chip;
@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devs.vectorchildfinder.VectorChildFinder;
+import com.devs.vectorchildfinder.VectorDrawableCompat;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
@@ -98,16 +100,44 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void setCategory(String category) {
-            ImageView categoryView = cardView.findViewById(R.id.travlzine_article_preview_category_image_view);
-            Resources resources = App.getInstance().getResources();
+            int categoryDrawable = R.drawable.ic_category_11;
             if (category.length() < 4) {
-                imageLoader.loadInto(categoryView, resources.getDrawable(R.drawable.ic_category_3));
+                categoryDrawable = R.drawable.ic_category_3;
             } else if (category.length() < 8) {
-                imageLoader.loadInto(categoryView, resources.getDrawable(R.drawable.ic_category_7));
-            } else {
-                imageLoader.loadInto(categoryView, resources.getDrawable(R.drawable.ic_category_11));
+                categoryDrawable = R.drawable.ic_category_7;
             }
-            ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view)).setText(category);
+            ImageView categoryView = cardView.findViewById(R.id.travlzine_article_preview_category_image_view);
+            VectorChildFinder vector = new VectorChildFinder(App.getInstance(), categoryDrawable, categoryView);
+            VectorDrawableCompat.VFullPath path1 = vector.findPathByName("path1");
+            TextView categoryText = ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view));
+            categoryText.setText(category);
+            Timber.e("Категория = " + category);
+            int color = 0;
+            category = category.toUpperCase();
+            if (category.equals("АРХИТЕКТУРА")) {
+                color = Color.parseColor("#A5A5A5");
+            } else if (category.equals("ПОКУПКИ")) {
+                color = Color.parseColor("#C14040");
+            } else if (category.equals("ЕДА")) {
+                color = Color.parseColor("#EEAE75");
+            } else if (category.equals("ЖИЛЬЕ") || category.equals("ОТЕЛЬ")) {
+                color = Color.parseColor("#82BCEE");
+            } else if (category.equals("ПРИРОДА")) {
+                color = Color.parseColor("#97C89A");
+            } else if (category.equals("STREETART")) {
+                color = Color.parseColor("#E5CC4F");
+            } else if (category.equals("НАХОДКА")) {
+                color = Color.parseColor("#A496D4");
+            } else if (category.equals("URBEX")) {
+                color = Color.parseColor("#444444");
+            } else if (category.equals("ВИД")) {
+                color = Color.parseColor("#D780C0");
+            } else {
+                color = Color.parseColor("#A5A5A5");
+            }
+            path1.setStrokeColor(color);
+            categoryText.setTextColor(color);
+            categoryView.invalidate();
         }
 
         @Override

@@ -37,14 +37,13 @@
                 android:layout_alignTop="@id/travlzine_article_preview_category_text_view"
                 android:layout_alignEnd="@id/travlzine_article_preview_category_text_view"
                 android:layout_alignBottom="@id/travlzine_article_preview_category_text_view"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_category_3" />
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/travlzine_article_preview_category_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_slab_bold"
+                android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
                 android:paddingStart="@dimen/travlzine_article_preview_category_text_view_padding_start"
                 android:paddingTop="@dimen/travlzine_article_preview_category_text_view_padding_top"
