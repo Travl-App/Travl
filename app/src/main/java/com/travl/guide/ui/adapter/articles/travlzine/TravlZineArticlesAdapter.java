@@ -1,5 +1,6 @@
 package com.travl.guide.ui.adapter.articles.travlzine;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
@@ -100,6 +101,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void setCategory(String category) {
+            Resources resources = App.getInstance().getResources();
             int categoryDrawable = R.drawable.ic_category_11;
             if (category.length() < 4) {
                 categoryDrawable = R.drawable.ic_category_3;
@@ -115,25 +117,25 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
             int color = 0;
             category = category.toUpperCase();
             if (category.equals("АРХИТЕКТУРА")) {
-                color = Color.parseColor("#A5A5A5");
+                color = Color.parseColor(resources.getString(R.string.category_color_architecture));
             } else if (category.equals("ПОКУПКИ")) {
-                color = Color.parseColor("#C14040");
+                color = Color.parseColor(resources.getString(R.string.category_color_goods));
             } else if (category.equals("ЕДА")) {
-                color = Color.parseColor("#EEAE75");
+                color = Color.parseColor(resources.getString(R.string.category_color_food));
             } else if (category.equals("ЖИЛЬЕ") || category.equals("ОТЕЛЬ")) {
-                color = Color.parseColor("#82BCEE");
+                color = Color.parseColor(resources.getString(R.string.category_color_habitation));
             } else if (category.equals("ПРИРОДА")) {
-                color = Color.parseColor("#97C89A");
+                color = Color.parseColor(resources.getString(R.string.category_color_nature));
             } else if (category.equals("STREETART")) {
-                color = Color.parseColor("#E5CC4F");
+                color = Color.parseColor(resources.getString(R.string.category_color_streetart));
             } else if (category.equals("НАХОДКА")) {
-                color = Color.parseColor("#A496D4");
+                color = Color.parseColor(resources.getString(R.string.category_color_trove));
             } else if (category.equals("URBEX")) {
-                color = Color.parseColor("#444444");
+                color = Color.parseColor(resources.getString(R.string.category_color_urbex));
             } else if (category.equals("ВИД")) {
-                color = Color.parseColor("#D780C0");
+                color = Color.parseColor(resources.getString(R.string.category_color_view));
             } else {
-                color = Color.parseColor("#A5A5A5");
+                color = Color.parseColor(resources.getString(R.string.category_color_default));
             }
             path1.setStrokeColor(color);
             categoryText.setTextColor(color);
@@ -157,9 +159,9 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     private class FooterViewHolder extends RecyclerView.ViewHolder implements TravlZineFooterItemView {
-        public Button loadMoreButton;
+        Button loadMoreButton;
 
-        public FooterViewHolder(@NonNull View itemView) {
+        FooterViewHolder(@NonNull View itemView) {
             super(itemView);
             Timber.e("FooterViewHolder");
             loadMoreButton = itemView.findViewById(R.id.travlzine_articles_list_footer_button);

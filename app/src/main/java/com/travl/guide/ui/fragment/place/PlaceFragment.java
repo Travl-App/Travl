@@ -61,7 +61,6 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     String baseUrl;
 
     private double[] placeCoordinates;
-    private int placeId;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -71,9 +70,19 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         return placeFragment;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDispose();
+    }
+
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        placeId = getArguments().getInt(PLACE_ID_KEY);
+        Bundle args = getArguments();
+        int placeId = 0;
+        if (args != null) {
+            placeId = args.getInt(PLACE_ID_KEY);
+        }
         return new PlacePresenter(AndroidSchedulers.mainThread(), placeId);
     }
 
@@ -99,17 +108,17 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     }
 
     @Override
-    public void setTitleTextView(String title) {
+    public void setPlaceTitle(String title) {
         placeTitleTextView.setText(title);
     }
 
     @Override
-    public void setSubtitleTextView(String subtitle) {
+    public void setPlaceSubtitle(String subtitle) {
         placeSubtitleTextView.setText(subtitle);
     }
 
     @Override
-    public void setImageSlider(List<String> imageUrls) {
+    public void setPlaceImages(List<String> imageUrls) {
         for (String imageUrl : imageUrls) {
             SliderView sliderView = new DefaultSliderView(getActivity());
             sliderView.setImageUrl(baseUrl + imageUrl);
@@ -121,17 +130,17 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     }
 
     @Override
-    public void setPlaceAddressTextView(String placeAddress) {
+    public void setPlaceAddress(String placeAddress) {
         placeAddressTextView.setText(placeAddress);
     }
 
     @Override
-    public void setPlaceAuthorNameTextView(String userName) {
+    public void setPlaceAuthorName(String userName) {
         placeAuthorNameTextView.setText(userName);
     }
 
     @Override
-    public void setTextView(String text) {
+    public void setPlaceDescription(String text) {
         placeTextView.setText(text);
     }
 
@@ -147,7 +156,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     }
 
     @Override
-    public void setCoordinates(double[] coordinates) {
+    public void setPlaceCoordinates(double[] coordinates) {
         placeCoordinates = coordinates;
     }
 

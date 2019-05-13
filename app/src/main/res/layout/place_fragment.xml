@@ -105,7 +105,7 @@
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_slab_bold"
                     android:scrollbarSize="16sp"
-                    android:text="Как добраться: "
+                    android:text="@string/route_to_place"
                     android:textSize="14sp" />
 
                 <TextView
@@ -114,7 +114,7 @@
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_slab_regular"
                     android:scrollbarSize="16sp"
-                    android:text="От г. Дзержинска на электричке до станции Сады, далее пешком (дорога хорошая). Можно взять такси, стоит это -500 руб."
+                    android:text="@string/route_to_place_description"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -132,7 +132,7 @@
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_slab_bold"
                     android:scrollbarSize="16sp"
-                    android:text="Популярность: "
+                    android:text="@string/place_popularity"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -155,7 +155,7 @@
                 android:fontFamily="@font/roboto_slab_regular"
                 android:padding="4dp"
                 android:scrollbarSize="16sp"
-                android:text="текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст"
+                android:text="@string/place_description"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -171,7 +171,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/roboto_slab_bold"
                     android:scrollbarSize="16sp"
-                    android:text="Автор: "
+                    android:text="@string/place_author"
                     android:textSize="11sp" />
 
                 <TextView

@@ -129,10 +129,12 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void onSpinnerItemClick(String selectedCity) {
+        Timber.e("OnSpinnerClick");
         if (cityStringNames != null && cityObjectList != null) {
             if (cityStringNames.contains(selectedCity)) {
                 for (CitiesList.CityLink link : cityObjectList.getCities()) {
-                    if (selectedCity.equals(listCreator.formatCityLink(link))) {
+                    String formattedLink = listCreator.formatCityLink(link);
+                    if (selectedCity.equals(formattedLink) || (getString(R.string.user_location_marker) + " " + selectedCity).equals(formattedLink)) {
                         presenter.loadCityContentByLinkId(link.getId());
                         return;
                     }
@@ -161,9 +163,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String spinnerCityName = (String) adapterView.getItemAtPosition(position);
-                if (selectedCity != null && selectedCity.equals(spinnerCityName))
-                    return;
-                setCitySelectedName(spinnerCityName);
+                Timber.e("onItemSelected = " + spinnerCityName);
+                if (selectedCity == null || !selectedCity.equals(spinnerCityName)) {
+                    setCitySelectedName(spinnerCityName);
+                }
                 presenter.onSpinnerItemClick(selectedCity);
             }
 
@@ -171,6 +174,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+
         });
     }
 
@@ -188,8 +192,10 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void placeSelectedCityOnTop(String placeName) {
+        Timber.e("Placing on top = " + placeName);
         if (userCitySpinner != null && cityArrayAdapter != null && userCitySpinner.getCount() > 0) {
             if (!userCitySpinner.getItemAtPosition(0).equals(placeName)) {
+                Timber.e("Item at position 0 does not equal to " + placeName + ". Replacing...");
                 cityArrayAdapter.insert(placeName, 0);
                 presenter.setSpinnerPositionSelected(0);
                 cityArrayAdapter.notifyDataSetChanged();
@@ -271,11 +277,12 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void setCityContentByLinkId(CityContent cityContent) {
         Timber.e("SetById");
-        this.cityContent = cityContent;
-        hideCityArticlesFragment();
         String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
         //If no city is selected or loaded and if the info is related to the city selected
-        if (selectedCity == null || cityName != null && cityName.equals(selectedCity)) {
+        if (selectedCity == null || cityName != null && (cityName.equals(selectedCity)
+                || cityName.equals(getString(R.string.user_location_marker) + " " + selectedCity))) {
+            this.cityContent = cityContent;
+            hideCityArticlesFragment();
             presenter.setCurrentCity(cityContent);
             removePlaceIfIsAdded(cityName);
             placeSelectedCityOnTop(cityName);
@@ -393,15 +400,15 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
-    public interface ArticlesReceiver {
-        void setArticles(List<ArticleLink> articleLinks);
-
-        int getArticlesNumber();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDispose();
+    }
+
+    public interface ArticlesReceiver {
+        void setArticles(List<ArticleLink> articleLinks);
+
+        int getArticlesNumber();
     }
 }

@@ -59,7 +59,7 @@ public class CitySpinnerListCreator {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
                 String name = cityArrayAdapter.getItem(i);
-                Timber.e("Name = " + name + "PlaceName =" + placeName);
+                Timber.e("Name = " + name + " PlaceName = " + placeName);
                 if (name != null) {
                     //Remove blank "Choose city:"
                     if (name.equals(resources.getStringArray(R.array.cities)[0])) {
