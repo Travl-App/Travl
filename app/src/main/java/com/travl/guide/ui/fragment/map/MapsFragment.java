@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -158,11 +159,22 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                     mapBoxMap.getUiSettings().setLogoEnabled(false);
                     mapBoxMap.getUiSettings().setAttributionEnabled(false);
                     Timber.e("RequestForPlaces");
+                    presenter.showUserLocation();
                     Bundle args = getArguments();
                     double[] coordinates = null;
-                    if (args != null) coordinates = args.getDoubleArray(COORDS);
+                    if (args != null) {
+                        coordinates = args.getDoubleArray(COORDS);
+                    } else {
+                        if (locationComponent != null) {
+                            @SuppressLint("MissingPermission") Location location = locationComponent.getLastKnownLocation();
+                            if (location != null) {
+                                coordinates = new double[2];
+                                coordinates[0] = location.getLatitude();
+                                coordinates[1] = location.getLongitude();
+                            }
+                        }
+                    }
                     presenter.makeRequestForPlaces(coordinates);
-                    presenter.showUserLocation();
                 });
             });
         }
