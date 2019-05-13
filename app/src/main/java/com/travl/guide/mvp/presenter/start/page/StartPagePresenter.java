@@ -11,7 +11,6 @@ import com.travl.guide.mvp.model.location.LocationReceiver;
 import com.travl.guide.mvp.model.location.LocationRequester;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
 
@@ -58,22 +57,25 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     @Override
     public void setUserCoordinates(double[] coordinates) {
         if (coordinates != null) {
-            User.getInstance().setCoordinates(coordinates);
+            locationRequester.setCoordinates(coordinates);
         }
     }
 
     @SuppressLint("CheckResult")
-    public void loadCityContentByCoordinates(CoordinatesRequest coordinatesRequest) {
+    public void loadCityContentByCoordinates() {
         Timber.e("loadCityContentByCoordinates");
-        disposables.add(cityRepo.getCityContent(coordinatesRequest).observeOn(scheduler).subscribe(cityContent -> {
+        disposables.add(cityRepo.getCityContent(new CoordinatesRequest(locationRequester.getLastKnownCoordinates())).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
         }, Timber::e));
     }
 
     @Override
     public void observeUserCoordinates() {
-        disposables.add(User.getInstance().getCoordinatesRequestPublishSubject()
-                .subscribe(this::loadCityContentByCoordinates, Timber::e));
+        disposables.add(locationRequester.getCoordinatesRequestPublishSubject()
+                .subscribe(coordinatesRequest -> {
+                    Timber.e("Coordinates received. Loading city content...");
+                    loadCityContentByCoordinates();
+                }, Timber::e));
     }
 
     @SuppressLint("CheckResult")
@@ -134,5 +136,13 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
+    }
+
+    public String getCityName() {
+        return cityRepo.getCityName();
+    }
+
+    public void setCityName(String cityName) {
+        cityRepo.saveCityName(cityName);
     }
 }

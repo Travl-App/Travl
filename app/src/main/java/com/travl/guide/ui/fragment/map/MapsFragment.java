@@ -158,7 +158,10 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                     mapBoxMap.getUiSettings().setLogoEnabled(false);
                     mapBoxMap.getUiSettings().setAttributionEnabled(false);
                     Timber.e("RequestForPlaces");
-                    presenter.makeRequestForPlaces();
+                    Bundle args = getArguments();
+                    double[] coordinates = null;
+                    if (args != null) coordinates = args.getDoubleArray(COORDS);
+                    presenter.makeRequestForPlaces(coordinates);
                     presenter.showUserLocation();
                 });
             });
@@ -365,6 +368,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         if (locationComponent != null) {
             locationComponent.onDestroy();
         }
+        presenter.onDispose();
     }
 
     @Override

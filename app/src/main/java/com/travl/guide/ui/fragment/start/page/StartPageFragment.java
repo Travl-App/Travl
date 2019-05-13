@@ -28,8 +28,6 @@ import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.location.LocationReceiver;
-import com.travl.guide.mvp.model.network.CoordinatesRequest;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.ui.App;
@@ -141,12 +139,11 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 }
             } else {
                 Timber.e("City is not in the object list");
-                User user = User.getInstance();
-                String userCityName = user.getCityName();
+                String userCityName = presenter.getCityName();
                 if (userCityName != null) {
                     if (selectedCity.contains(userCityName)) {
                         Timber.e("City is User's");
-                        presenter.loadCityContentByCoordinates(new CoordinatesRequest(user.getCoordinates()));
+                        presenter.loadCityContentByCoordinates();
                     }
                 }
             }
@@ -250,7 +247,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         presenter.addToCityList(currentCity, true);
         String cityName = listCreator.formatPlaceName(listCreator.cityToString(currentCity));
         setCitySelectedName(cityName);
-        User.getInstance().setCityName(cityName);
+        presenter.setCityName(cityName);
         presenter.setCityArcticles();
     }
 

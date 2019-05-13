@@ -12,16 +12,17 @@ import com.travl.guide.mvp.model.api.places.map.PlaceContainer;
 import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
@@ -34,10 +35,12 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     PlacesRepo placesRepo;
     private MapsModel model;
     private Scheduler scheduler;
+    private List<Disposable> disposables;
 
     public MapsPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
         if (model == null) this.model = new MapsModel();
+        disposables = new ArrayList<>();
     }
 
     @Override
@@ -58,15 +61,14 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     @SuppressLint("CheckResult")
-    public void makeRequestForPlaces() {
+    public void makeRequestForPlaces(double[] coordinates) {
         Timber.e("Make request");
         getViewState().showLoadInfo();
-        User user = User.getInstance();
-        double[] coordinates = user.getCoordinates();
+        Timber.e("Maps received coordinates = " + Arrays.toString(coordinates) + " from locationRequester");
         if (coordinates == null) return;
         double latitude = coordinates[0];
         double longitude = coordinates[1];
-        placesRepo.loadPlacesForMap(
+        disposables.add(placesRepo.loadPlacesForMap(
                 new CoordinatesRequest(latitude, longitude), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
@@ -79,12 +81,12 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                         }
                         addPlacesToMap(placeContainer);
                     }
-                }, Timber::e);
+                }, Timber::e));
     }
 
     @SuppressLint("CheckResult")
     private void loadNextPlaces(String nextUrl) {
-        placesRepo.loadNextPlaces(nextUrl)
+        disposables.add(placesRepo.loadNextPlaces(nextUrl)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     PlaceContainer placeContainer = placesMap.getPlaces();
@@ -95,7 +97,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                         }
                         addPlacesToMap(placeContainer);
                     }
-                }, Timber::e);
+                }, Timber::e));
     }
 
     private void addPlacesToMap(PlaceContainer placeContainer) {
@@ -138,5 +140,11 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     public void setupLocationFab() {
         getViewState().setupFab();
+    }
+
+    public void onDispose() {
+        for (Disposable disposable : disposables) {
+            disposable.dispose();
+        }
     }
 }

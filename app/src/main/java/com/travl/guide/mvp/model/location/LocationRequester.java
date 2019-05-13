@@ -2,6 +2,10 @@ package com.travl.guide.mvp.model.location;
 
 import android.support.annotation.NonNull;
 
+import com.travl.guide.mvp.model.network.CoordinatesRequest;
+
+import io.reactivex.Observable;
+
 public interface LocationRequester {
     void initLocationListener(LocationPresenter presenter);
 
@@ -11,4 +15,11 @@ public interface LocationRequester {
                                     @NonNull String[] permissions, @NonNull int[] grantResults);
 
     void requestCoordinates(LocationReceiver locationReceiver);
+
+    double[] getLastKnownCoordinates();
+
+    void setCoordinates(double[] coordinates);
+
+    Observable<CoordinatesRequest> getCoordinatesRequestPublishSubject();
+
 }
