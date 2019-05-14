@@ -11,7 +11,7 @@ public class ArticlePlace {
     @Expose
     private String placeImageUrl;
 
-    @SerializedName("description")
+    @SerializedName("article_text")
     @Expose
     private String articleText;
 

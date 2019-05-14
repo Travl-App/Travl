@@ -127,12 +127,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         placeCoverImageView.setLayoutParams(layoutParams);
-        placeCoverImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.showPlace(placeId);
-            }
-        });
+        placeCoverImageView.setOnClickListener(v -> presenter.showPlace(placeId));
         linearLayout.addView(placeCoverImageView);
         linearLayout.invalidate();
     }
