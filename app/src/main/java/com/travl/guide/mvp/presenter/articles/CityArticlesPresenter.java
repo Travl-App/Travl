@@ -79,7 +79,7 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             Timber.d("BindView and set Description");
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
-            publishSubjectList.get(position).subscribe(cityArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
+            publishSubjectList.get(position).subscribe(cityArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getId())), Timber::e);
             if (articleLink != null) {
                 view.setDescription(articleLink.getTitle());
                 String imageUrl = articleLink.getImageCoverUrl();

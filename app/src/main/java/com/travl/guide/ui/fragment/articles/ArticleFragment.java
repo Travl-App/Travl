@@ -1,34 +1,31 @@
 package com.travl.guide.ui.fragment.articles;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.travl.guide.R;
+import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.ArticlePresenter;
 import com.travl.guide.mvp.view.articles.ArticleView;
-import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ru.terrakok.cicerone.Router;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
@@ -37,26 +34,26 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @BindView(R.id.article_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.article_web_view)
-    WebView articleWebVew;
+    @BindView(R.id.article_content_layout)
+    LinearLayout linearLayout;
 
     @Inject
-    Router router;
+    IImageLoader iImageLoader;
 
     @InjectPresenter
     ArticlePresenter presenter;
 
-    public static ArticleFragment getInstance(String articleUrl) {
+    public static ArticleFragment getInstance(int articleId) {
         ArticleFragment articleFragment = new ArticleFragment();
         Bundle args = new Bundle();
-        args.putString(ARTICLE_ID_KEY, articleUrl);
+        args.putInt(ARTICLE_ID_KEY, articleId);
         articleFragment.setArguments(args);
         return articleFragment;
     }
 
     @ProvidePresenter
     public ArticlePresenter providePresenter() {
-        return new ArticlePresenter();
+        return new ArticlePresenter(AndroidSchedulers.mainThread());
     }
 
     @Nullable
@@ -65,19 +62,90 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         View view = inflater.inflate(R.layout.article_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
-        setupWebView();
         setupToolbar();
-        String articleUrl = getArguments().getString(ARTICLE_ID_KEY);
-        presenter.setArticleUrl(articleUrl);
-        presenter.loadUrl();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int articleId = getArguments().getInt(ARTICLE_ID_KEY);
+            presenter.loadArticle(articleId);
+        }
         return view;
     }
 
-    @SuppressLint({"SetJavaScriptEnabled"})
-    private void setupWebView() {
-        articleWebVew.getSettings().setJavaScriptEnabled(true);
-        articleWebVew.getSettings().setDomStorageEnabled(true);
-        articleWebVew.setWebViewClient(new MyWebViewClient());
+    @Override
+    public void setTitle(String title) {
+        Timber.e("Set title to = " + title);
+        TextView titleTextView = new TextView(getContext());
+        titleTextView.setText(title);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        titleTextView.setPadding(0, 10, 0, 0);
+        titleTextView.setLayoutParams(layoutParams);
+        linearLayout.addView(titleTextView);
+        linearLayout.invalidate();
+    }
+
+    @Override
+    public void setSubTitle(String subtitle) {
+        Timber.e("Set subtitle to = " + subtitle);
+        TextView subtitleTextView = new TextView(getContext());
+        subtitleTextView.setText(subtitle);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        subtitleTextView.setLayoutParams(layoutParams);
+        linearLayout.addView(subtitleTextView);
+        linearLayout.invalidate();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        Timber.e("Set description to = " + description);
+        TextView descriptionTextView = new TextView(getContext());
+        descriptionTextView.setText(description);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        descriptionTextView.setLayoutParams(layoutParams);
+        linearLayout.addView(descriptionTextView);
+        linearLayout.invalidate();
+    }
+
+    @Override
+    public void setImageCover(String coverUrl) {
+        Timber.e("Set coverUrl to = " + coverUrl);
+        ImageView coverImageView = new ImageView(getContext());
+        iImageLoader.loadInto(coverImageView, coverUrl);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        coverImageView.setLayoutParams(layoutParams);
+        linearLayout.addView(coverImageView);
+        linearLayout.invalidate();
+    }
+
+    @Override
+    public void setArticlePlaceCover(String placeImageUrl, int placeId) {
+        ImageView placeCoverImageView = new ImageView(getContext());
+        iImageLoader.loadInto(placeCoverImageView, placeImageUrl);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        placeCoverImageView.setLayoutParams(layoutParams);
+        placeCoverImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.showPlace(placeId);
+            }
+        });
+        linearLayout.addView(placeCoverImageView);
+        linearLayout.invalidate();
+    }
+
+    @Override
+    public void setArticlePlaceDescription(String articleText) {
+        TextView descriptionTextView = new TextView(getContext());
+        descriptionTextView.setText(articleText);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        descriptionTextView.setLayoutParams(layoutParams);
+        linearLayout.addView(descriptionTextView);
+        linearLayout.invalidate();
     }
 
     private void setupToolbar() {
@@ -87,44 +155,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         });
     }
 
-    @Override
-    public void loadWebView(String url) {
-        articleWebVew.loadUrl(url);
-    }
-
     public void onBackPressed() {
-        if (articleWebVew.canGoBack()) {
-            articleWebVew.goBack();
-        } else if (getActivity() != null) getActivity().onBackPressed();
+        if (getActivity() != null) getActivity().onBackPressed();
         else throw new RuntimeException("Activity is null");
-    }
-
-    private class MyWebViewClient extends WebViewClient {
-        @TargetApi(Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            String url = request.getUrl().toString();
-            if (url.contains("https://travl.dev/api/places")) {
-                router.navigateTo(new Screens.PlaceScreen(Integer.parseInt(url.substring(0, url.length() - 1).substring(29))));
-            } else {
-                view.loadUrl(url);
-            }
-            return true;
-        }
-
-        // Для старых устройств
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            Timber.e("Webview " + error.toString());
-            super.onReceivedError(view, request, error);
-        }
-
     }
 
 }

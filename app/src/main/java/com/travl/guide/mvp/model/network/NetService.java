@@ -1,5 +1,6 @@
 package com.travl.guide.mvp.model.network;
 
+import com.travl.guide.mvp.model.api.articles.ArticleContainer;
 import com.travl.guide.mvp.model.api.articles.ArticleLinksContainer;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
@@ -28,6 +29,9 @@ public interface NetService {
     @GET("api/articles/")
     Single<ArticleLinksContainer> loadMoreArticles(@Query("travlzine") boolean isTravlZine);
 
+    @GET("api/articles/{id}")
+    Single<ArticleContainer> loadArticle(@Path("id") int id);
+
     @GET("api/cities/")
     Single<CitiesList> loadCitiesList();
 
@@ -39,4 +43,5 @@ public interface NetService {
 
     @GET
     Single<ManyPlacesContainer> loadNextPlaces(@Url String url);
+
 }

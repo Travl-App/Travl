@@ -1,5 +1,6 @@
 package com.travl.guide.mvp.model.repo;
 
+import com.travl.guide.mvp.model.api.articles.ArticleContainer;
 import com.travl.guide.mvp.model.api.articles.ArticleLinksContainer;
 import com.travl.guide.mvp.model.network.NetService;
 import com.travl.guide.ui.utils.NetworkStatus;
@@ -41,6 +42,21 @@ public class ArticlesRepo {
             return new Single<ArticleLinksContainer>() {
                 @Override
                 protected void subscribeActual(SingleObserver<? super ArticleLinksContainer> observer) {
+                }
+            };
+        }
+    }
+
+    public Single<ArticleContainer> getArticle(int id) {
+        if (NetworkStatus.isOnline()) {
+            return netService.loadArticle(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                Timber.e(throwable);
+                return null;
+            });
+        } else {
+            return new Single<ArticleContainer>() {
+                @Override
+                protected void subscribeActual(SingleObserver<? super ArticleContainer> observer) {
                 }
             };
         }

@@ -103,7 +103,7 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             Timber.e("BindView and set Description");
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
-            disposables.add(publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e));
+            disposables.add(publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getId())), Timber::e));
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             List<Category> categories = articleLink.getCategories();
