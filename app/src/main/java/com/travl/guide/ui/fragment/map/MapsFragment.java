@@ -158,6 +158,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
                     mapBoxMap.getUiSettings().setCompassEnabled(false);
                     mapBoxMap.getUiSettings().setLogoEnabled(false);
                     mapBoxMap.getUiSettings().setAttributionEnabled(false);
+                    activateLocationComponent();
                     Timber.e("RequestForPlaces");
                     presenter.showUserLocation();
                     Bundle args = getArguments();
@@ -267,12 +268,26 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @SuppressLint("MissingPermission")
     public void findUser() {
         if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
-            locationComponent = mapBoxMap.getLocationComponent();
             if (mapBoxMap.getStyle() != null) {
+                locationComponent = mapBoxMap.getLocationComponent();
                 locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
                 locationComponent.setLocationComponentEnabled(true);
                 locationComponent.setCameraMode(CameraMode.TRACKING);
                 locationComponent.setRenderMode(RenderMode.NORMAL);
+            }
+        } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(getActivity());
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void activateLocationComponent() {
+        if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
+            if (mapBoxMap.getStyle() != null) {
+                locationComponent = mapBoxMap.getLocationComponent();
+                locationComponent.setLocationComponentEnabled(true);
+                locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
             }
         } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             permissionsManager = new PermissionsManager(this);

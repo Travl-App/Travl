@@ -119,13 +119,15 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @Override
     public void setPlaceImages(List<String> imageUrls) {
-        for (String imageUrl : imageUrls) {
-            SliderView sliderView = new DefaultSliderView(getActivity());
-            sliderView.setImageUrl(baseUrl + imageUrl);
-            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (imageUrls != null) {
+            for (String imageUrl : imageUrls) {
+                SliderView sliderView = new DefaultSliderView(getActivity());
+                sliderView.setImageUrl(baseUrl + imageUrl);
+                sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
 //            sliderView.setDescription("setDescription");
-            sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
-            placeSliderLayout.addSliderView(sliderView);
+                sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
+                placeSliderLayout.addSliderView(sliderView);
+            }
         }
     }
 

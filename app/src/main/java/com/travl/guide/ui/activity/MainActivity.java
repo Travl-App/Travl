@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
+import android.support.design.bottomappbar.HideableBottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +53,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @BindView(R.id.app_bar_fab)
     FloatingActionButton fab;
     @BindView(R.id.bottom_app_bar)
-    BottomAppBar bar;
+    HideableBottomAppBar bar;
 
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
@@ -225,6 +226,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onMoveToMapScreen() {
         Timber.d("onMoveToMapScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        bar.show();
         bar.getMenu().clear();
     }
 
