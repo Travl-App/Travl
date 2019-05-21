@@ -28,17 +28,32 @@
             android:id="@+id/place_root_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:dividerPadding="4dp"
             android:orientation="vertical"
             android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/text_view_place_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/tag_background"
+                android:fontFamily="@font/montserrat_bold"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:text="TAG"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/text_view_place_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
                 android:fontFamily="@font/roboto_slab_bold"
-                android:padding="1dp"
                 android:text="@string/title"
                 android:textSize="30sp" />
 
@@ -46,38 +61,42 @@
                 android:id="@+id/text_view_place_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_slab_regular"
-                android:padding="2dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="17dp"
+                android:fontFamily="@font/montserrat_regular"
                 android:text="@string/subtitle"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <com.smarteist.autoimageslider.SliderLayout
                 android:id="@+id/imageSlider"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="5dp"
+                android:layout_height="224dp"
+                android:layout_marginTop="12dp"
                 android:scaleType="centerCrop" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="4dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="15dp"
                 android:background="@color/colorTextDelimitersInsideText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
                 android:gravity="start"
-                android:orientation="vertical"
-                android:padding="4dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/roboto_slab_bold"
-                    android:scrollbarSize="16sp"
-                    android:text="@string/address"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="АДРЕС:"
                     android:textSize="14sp" />
 
                 <TextView
@@ -85,9 +104,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/roboto_slab_regular"
-                    android:scrollbarSize="16sp"
-                    android:text="@string/place_address"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="адрес"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -95,25 +114,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
                 android:gravity="start"
-                android:orientation="vertical"
-                android:padding="4dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/roboto_slab_bold"
-                    android:scrollbarSize="16sp"
-                    android:text="@string/route_to_place"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="КАК ДОБРАТЬСЯ:"
                     android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/roboto_slab_regular"
-                    android:scrollbarSize="16sp"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:text="@string/route_to_place_description"
                     android:textSize="14sp" />
 
@@ -122,56 +142,59 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
                 android:gravity="start"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/roboto_slab_bold"
-                    android:scrollbarSize="16sp"
-                    android:text="@string/place_popularity"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="ПОПУЛЯРНОСТЬ:"
                     android:textSize="14sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="4dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="15dp"
                 android:background="@color/colorTextDelimitersInsideText" />
 
             <TextView
                 android:id="@+id/text_view_place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/roboto_slab_regular"
-                android:padding="4dp"
-                android:scrollbarSize="16sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="36dp"
+                android:fontFamily="@font/alice_regular"
                 android:text="@string/place_description"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_slab_bold"
+                    android:fontFamily=""
                     android:scrollbarSize="16sp"
-                    android:text="@string/place_author"
+                    android:text="Фото/текст:"
                     android:textSize="11sp" />
 
                 <TextView
