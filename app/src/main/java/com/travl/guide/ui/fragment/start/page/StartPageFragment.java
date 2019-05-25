@@ -2,6 +2,7 @@ package com.travl.guide.ui.fragment.start.page;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,8 +31,10 @@ import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.location.LocationReceiver;
 import com.travl.guide.mvp.presenter.start.page.StartPagePresenter;
 import com.travl.guide.mvp.view.start.page.StartPageView;
+import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.CoordinatesProvider;
+import com.travl.guide.ui.activity.OnMoveToNavigator;
 import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 
@@ -71,6 +74,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private ArrayAdapter<String> cityArrayAdapter;
     private ArticlesReceiver articlesReceiver;
     private double[] citySelectedCoordinates;
+    private OnMoveToNavigator moveToNavigator;
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -237,6 +241,23 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Timber.e("onViewStateRestored");
+        super.onViewStateRestored(savedInstanceState);
+        if (moveToNavigator != null) {
+            moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.start());
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMoveToNavigator) {
+            moveToNavigator = (OnMoveToNavigator) context;
+        }
+    }
 
     @Override
     public void setCityContentByCoordinates(CityContent cityContent) {

@@ -29,6 +29,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -43,7 +44,9 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.places.map.Place;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
+import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.OnMoveToNavigator;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -80,6 +83,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
     private GeoJsonSource geoJsonSource;
+    private OnMoveToNavigator moveToNavigator;
 
     public static MapsFragment getInstance(double[] coordinates) {
         MapsFragment instance = new MapsFragment();
@@ -90,12 +94,25 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     }
 
     @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Timber.e("onViewStateRestored");
+        super.onViewStateRestored(savedInstanceState);
+        if (moveToNavigator != null) {
+            moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.map());
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = (Activity) context;
         FloatingActionButton fab = activity.findViewById(R.id.app_bar_fab);
         if (fab != null) {
             fab.setOnClickListener(v -> fabClick());
+
+        }
+        if (context instanceof OnMoveToNavigator) {
+            moveToNavigator = (OnMoveToNavigator) context;
         }
     }
 
@@ -106,9 +123,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
-        Timber.e("mapView.onCreate");
         mapView.onCreate(savedInstanceState);
-        Timber.e("SetupViews");
         setupViews();
         return view;
     }
@@ -270,7 +285,7 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             if (mapBoxMap.getStyle() != null) {
                 locationComponent = mapBoxMap.getLocationComponent();
-                locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
+                locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(App.getInstance(), mapBoxMap.getStyle()).build());
                 locationComponent.setLocationComponentEnabled(true);
                 locationComponent.setCameraMode(CameraMode.TRACKING);
                 locationComponent.setRenderMode(RenderMode.NORMAL);
@@ -286,8 +301,8 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         if (PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             if (mapBoxMap.getStyle() != null) {
                 locationComponent = mapBoxMap.getLocationComponent();
+                locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(App.getInstance(), mapBoxMap.getStyle()).build());
                 locationComponent.setLocationComponentEnabled(true);
-                locationComponent.activateLocationComponent(App.getInstance(), mapBoxMap.getStyle());
             }
         } else if (!PermissionsManager.areLocationPermissionsGranted(App.getInstance())) {
             permissionsManager = new PermissionsManager(this);

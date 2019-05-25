@@ -7,6 +7,9 @@ import java.util.List;
 
 public class PlaceContainer {
 
+    @SerializedName("count")
+    private int count;
+
     @SerializedName("data")
     @Expose
     private List<PlaceLink> placeLinkList;
@@ -29,5 +32,13 @@ public class PlaceContainer {
 
     public void setPlaceLinkList(List<PlaceLink> placeLinkList) {
         this.placeLinkList = placeLinkList;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

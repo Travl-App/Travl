@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.place;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,8 +22,10 @@ import com.smarteist.autoimageslider.SliderView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
+import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.CoordinatesProvider;
+import com.travl.guide.ui.activity.OnMoveToNavigator;
 import com.travl.guide.ui.activity.SharedDataProvider;
 
 import java.util.List;
@@ -61,6 +64,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     String baseUrl;
 
     private double[] placeCoordinates;
+    private OnMoveToNavigator moveToNavigator;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -74,6 +78,23 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     public void onDestroyView() {
         super.onDestroyView();
         presenter.onDispose();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (moveToNavigator != null) {
+            moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.place());
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMoveToNavigator) {
+            moveToNavigator = (OnMoveToNavigator) context;
+
+        }
     }
 
     @ProvidePresenter
