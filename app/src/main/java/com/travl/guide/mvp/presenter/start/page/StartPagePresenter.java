@@ -63,7 +63,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     @SuppressLint("CheckResult")
     public void loadCityContentByCoordinates() {
-        Timber.e("loadCityContentByCoordinates");
         disposables.add(cityRepo.getCityContent(new CoordinatesRequest(locationRequester.getLastKnownCoordinates())).observeOn(scheduler).subscribe(cityContent -> {
             getViewState().setCityContentByCoordinates(cityContent);
         }, Timber::e));
@@ -73,7 +72,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     public void observeUserCoordinates() {
         disposables.add(locationRequester.getCoordinatesRequestPublishSubject()
                 .subscribe(coordinatesRequest -> {
-                    Timber.e("Coordinates received. Loading city content...");
                     loadCityContentByCoordinates();
                 }, Timber::e));
     }

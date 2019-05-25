@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 public class CityArticlesFragment extends MvpAppCompatFragment implements CityArticlesView, StartPageFragment.ArticlesReceiver {
 
@@ -75,7 +74,6 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
 
     @Override
     public void setArticles(List<ArticleLink> articleLinks) {
-        Timber.e("Setting CityArticles to " + articleLinks);
         if (presenter != null) {
             presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
             articlesNumber = articleLinks.size();

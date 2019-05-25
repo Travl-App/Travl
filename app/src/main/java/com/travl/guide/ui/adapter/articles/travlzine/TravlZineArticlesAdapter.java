@@ -25,7 +25,6 @@ import com.travl.guide.mvp.view.articles.list.TravlZineFooterItemView;
 import com.travl.guide.ui.App;
 
 import io.reactivex.subjects.PublishSubject;
-import timber.log.Timber;
 
 public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -60,7 +59,6 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Timber.e("position = " + position);
         if (holder instanceof TravlZineArticlesViewHolder) {
             TravlZineArticlesViewHolder travlZineArticlesViewHolder = (TravlZineArticlesViewHolder) holder;
             PublishSubject<TravlZineArticlesItemView> publishSubject = presenter.getClickSubject(position);
@@ -113,7 +111,6 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
             VectorDrawableCompat.VFullPath path1 = vector.findPathByName("path1");
             TextView categoryText = ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view));
             categoryText.setText(category);
-            Timber.e("Категория = " + category);
             int color = 0;
             category = category.toUpperCase();
             if (category.equals("АРХИТЕКТУРА")) {
@@ -163,13 +160,11 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
 
         FooterViewHolder(@NonNull View itemView) {
             super(itemView);
-            Timber.e("FooterViewHolder");
             loadMoreButton = itemView.findViewById(R.id.travlzine_articles_list_footer_button);
         }
 
         @Override
         public void loadMoreArticles() {
-            Timber.e("Loading more articles");
             Toast.makeText(App.getInstance(), "Loading more articles", Toast.LENGTH_SHORT).show();
             presenter.loadMoreArticles();
         }
