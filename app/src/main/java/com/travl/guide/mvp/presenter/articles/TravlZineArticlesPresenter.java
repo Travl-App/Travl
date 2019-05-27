@@ -54,7 +54,6 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
     @SuppressLint("CheckResult")
     public void loadArticles() {
-        Timber.e("Loading articles");
         disposables.add(repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()), Timber::e));
     }
 
@@ -79,7 +78,6 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         private List<ArticleLink> articleLinkList;
 
         private void createPublishSubjects() {
-            Timber.e("Creating publish subjects");
             int elementsToUpdate = 0;
             if (publishSubjectList == null) {
                 publishSubjectList = new ArrayList<>();
@@ -100,7 +98,6 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
-            Timber.e("BindView and set Description");
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
             disposables.add(publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getId())), Timber::e));
@@ -123,7 +120,6 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
         @Override
         public void bindFooterView() {
-            Timber.e("BindFooterView");
             if (!footerBinded) {
                 disposables.add(footerItemViewPublishSubject.subscribe(TravlZineFooterItemView::loadMoreArticles, Timber::e));
                 footerBinded = true;

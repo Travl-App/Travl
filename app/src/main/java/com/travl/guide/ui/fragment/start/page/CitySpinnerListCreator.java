@@ -13,8 +13,6 @@ import com.travl.guide.ui.App;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class CitySpinnerListCreator {
     private static final String COMMA = ", ";
 
@@ -59,7 +57,7 @@ public class CitySpinnerListCreator {
             boolean isPlaceAdded = false;
             for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
                 String name = cityArrayAdapter.getItem(i);
-                Timber.e("Name = " + name + " PlaceName = " + placeName);
+
                 if (name != null) {
                     //Remove blank "Choose city:"
                     if (name.equals(resources.getStringArray(R.array.cities)[0])) {
@@ -69,7 +67,7 @@ public class CitySpinnerListCreator {
                         startPagePresenter.removeFromCitySpinnerAdapter(name);
                     }
                     if (name.contains(placeName) || name.contains(userLocationMarker + " " + placeName)) {
-                        Timber.e("Place =" + name + " is added");
+
                         isPlaceAdded = true;
                     }
                 }

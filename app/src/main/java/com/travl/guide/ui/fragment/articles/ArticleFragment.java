@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.articles;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,9 @@ import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
 import com.travl.guide.mvp.presenter.articles.ArticlePresenter;
 import com.travl.guide.mvp.view.articles.ArticleView;
+import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.OnMoveToNavigator;
 
 import javax.inject.Inject;
 
@@ -34,6 +37,24 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @BindView(R.id.article_toolbar)
     Toolbar toolbar;
+    private OnMoveToNavigator moveToNavigator;
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (moveToNavigator != null) {
+            moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.article());
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMoveToNavigator) {
+            moveToNavigator = (OnMoveToNavigator) context;
+        }
+    }
+
     @BindView(R.id.article_content_layout)
     LinearLayout linearLayout;
 

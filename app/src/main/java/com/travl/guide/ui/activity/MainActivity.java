@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
+import android.support.design.bottomappbar.HideableBottomAppBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +21,8 @@ import com.travl.guide.mvp.view.main.MainView;
 import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerListener;
-import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
-import com.travl.guide.ui.fragment.map.MapsFragment;
-import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
 
 import javax.inject.Inject;
@@ -41,7 +37,7 @@ import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
 import timber.log.Timber;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView, BottomNavigationDrawerListener {
+public class MainActivity extends MvpAppCompatActivity implements MainView, BottomNavigationDrawerListener, OnMoveToNavigator {
 
     @Inject
     Router router;
@@ -52,7 +48,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     @BindView(R.id.app_bar_fab)
     FloatingActionButton fab;
     @BindView(R.id.bottom_app_bar)
-    BottomAppBar bar;
+    HideableBottomAppBar bar;
 
     private Fragment fragmentContainer;
     private CurrentScreen.Screen screen;
@@ -66,56 +62,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         }
 
         @Override
-        protected void fragmentBack() {
-            super.fragmentBack();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            String fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
-            Timber.e("Back to  " + fragmentName + " " + Screens.PlaceScreen.class.getCanonicalName());
-            if (fragmentName != null && fragmentName.equals(Screens.PlaceScreen.class.getCanonicalName())) {
-                Timber.e("ToPlace");
-                screen = CurrentScreen.INSTANCE.place();
-                presenter.onMoveToPlaceScreen();
-            } else if (fragmentName != null && fragmentName.equals(Screens.StartPageScreen.class.getCanonicalName())) {
-                Timber.e("ToStart");
-                screen = CurrentScreen.INSTANCE.start();
-                presenter.onMoveToStartPageScreen();
-            } else if (fragmentName != null && fragmentName.equals(Screens.MapScreen.class.getCanonicalName())) {
-                Timber.e("ToMap");
-                screen = CurrentScreen.INSTANCE.map();
-                presenter.onMoveToMapScreen();
-            } else if (fragmentName != null && fragmentName.equals(Screens.ArticleScreen.class.getCanonicalName())) {
-                Timber.e("ToArticle");
-                screen = CurrentScreen.INSTANCE.article();
-                presenter.onMoveToStartPageScreen();
-            }
-        }
-
-        @Override
         protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction);
             fragmentTransaction.addToBackStack(null);
             Timber.e("Транзакция фрагментов. Команда = " + command.toString() + " фрагмент = " + nextFragment.getClass());
-            if (nextFragment instanceof TravlZineArticlesFragment) {
-                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.travlzine();
-                presenter.onMoveToTravlZineScreen();
-            } else if (nextFragment instanceof MapsFragment) {
-                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.map();
-                presenter.onMoveToMapScreen();
-            } else if (nextFragment instanceof StartPageFragment) {
-                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.start();
-                presenter.onMoveToStartPageScreen();
-            } else if (nextFragment instanceof PlaceFragment) {
-                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.place();
-                presenter.onMoveToPlaceScreen();
-            } else if (nextFragment instanceof FavoriteFragment) {
-                Timber.e("Смена фрагмента на %s", nextFragment.getClass());
-                screen = CurrentScreen.INSTANCE.favorite();
-                presenter.onMoveToFavoriteScreen();
-            }
         }
     };
 
@@ -138,38 +88,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onBackPressed() {
         Timber.e("OnBackPressed");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        String fragmentName = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
-        Timber.e(fragmentName + " should equal to " + Screens.PlaceScreen.class.getCanonicalName());
-        if (fragmentName != null && fragmentName.equals(Screens.PlaceScreen.class.getCanonicalName())) {
-            defaultBackPressedBehaviour(fragment);
-            screen = CurrentScreen.INSTANCE.place();
-            presenter.onMoveToPlaceScreen();
-        } else if (fragmentName != null && fragmentName.equals(Screens.StartPageScreen.class.getCanonicalName())) {
-            defaultBackPressedBehaviour(fragment);
-            screen = CurrentScreen.INSTANCE.start();
-            presenter.onMoveToStartPageScreen();
-        } else if (fragmentName != null && fragmentName.equals(Screens.MapScreen.class.getCanonicalName())) {
-            presenter.toMapScreen();
-            screen = CurrentScreen.INSTANCE.map();
-            presenter.onMoveToMapScreen();
-        } else if (fragmentName != null && fragmentName.equals(Screens.ArticleScreen.class.getCanonicalName())) {
-            router.exit();
-            screen = CurrentScreen.INSTANCE.article();
-            presenter.onMoveToArticleScreen();
-        } else {
-            defaultBackPressedBehaviour(fragment);
-        }
+        defaultBackPressedBehaviour(fragment);
     }
 
     private void defaultBackPressedBehaviour(Fragment fragment) {
-        if (fragment instanceof FavoriteFragment) {
-            Timber.e("to place screen");
-            router.exit();
-        } else if (fragment instanceof PlaceFragment) {
-            Timber.e("to map screen");
-            presenter.toMapScreen();
-        } else if (!(fragment instanceof StartPageFragment)) {
+        if (!(fragment instanceof StartPageFragment)) {
             Timber.e("To start page");
             router.exit();
         } else {
@@ -214,6 +137,29 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     }
 
+    @Override
+    public void onMoveTo(CurrentScreen.Screen currentScreen) {
+        if (currentScreen == CurrentScreen.INSTANCE.article()) {
+            screen = currentScreen;
+            onMoveToArticleScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.map()) {
+            screen = currentScreen;
+            onMoveToMapScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.favorite()) {
+            screen = currentScreen;
+            onMoveToFavoriteScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.place()) {
+            screen = currentScreen;
+            onMoveToPlaceScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.start()) {
+            screen = currentScreen;
+            onMoveToStartPageScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.travlzine()) {
+            screen = currentScreen;
+            onMoveToTravlZineScreen();
+        }
+    }
+
     public void onMoveToTravlZineScreen() {
         Timber.d("onMoveToPlaceScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
@@ -225,6 +171,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
     public void onMoveToMapScreen() {
         Timber.d("onMoveToMapScreen");
         bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        bar.show();
         bar.getMenu().clear();
     }
 

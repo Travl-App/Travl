@@ -73,14 +73,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     PlaceContainer placeContainer = placesMap.getPlaces();
-                    if (placeContainer != null) {
-                        String nextUrl;
-                        if ((nextUrl = placeContainer.getNext()) != null) {
-                            Timber.e("Next url = " + nextUrl);
-                            loadNextPlaces(nextUrl);
-                        }
-                        addPlacesToMap(placeContainer);
-                    }
+                    recursivePlacesLoading(placeContainer);
                 }, Timber::e));
     }
 
@@ -90,14 +83,24 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     PlaceContainer placeContainer = placesMap.getPlaces();
-                    if (placeContainer != null) {
-                        String next;
-                        if ((next = placeContainer.getNext()) != null) {
-                            loadNextPlaces(next);
-                        }
-                        addPlacesToMap(placeContainer);
-                    }
+                    recursivePlacesLoading(placeContainer);
                 }, Timber::e));
+    }
+
+    private void recursivePlacesLoading(PlaceContainer placeContainer) {
+        if (placeContainer != null) {
+            String nextUrl;
+            int totalNumberOfItems = placeContainer.getCount();
+            List<PlaceLink> links = placeContainer.getPlaceLinkList();
+            if (links != null) {
+                int lastItemId = links.get(links.size() - 1).getId();
+                if ((nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems) {
+                    Timber.e("Next url = " + nextUrl);
+                    //  loadNextPlaces(nextUrl);
+                }
+                addPlacesToMap(placeContainer);
+            }
+        }
     }
 
     private void addPlacesToMap(PlaceContainer placeContainer) {
