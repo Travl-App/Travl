@@ -96,7 +96,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 int lastItemId = links.get(links.size() - 1).getId();
                 if ((nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems) {
                     Timber.e("Next url = " + nextUrl);
-                    //  loadNextPlaces(nextUrl);
+                    loadNextPlaces(nextUrl);
                 }
                 addPlacesToMap(placeContainer);
             }

@@ -8,4 +8,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface TravlZineArticlesView extends MvpView {
 
     void onChangedArticlesData();
+
+    void onNoMoreArticles();
 }

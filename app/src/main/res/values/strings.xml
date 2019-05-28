@@ -52,6 +52,7 @@
     <string name="category_color_urbex">#444444</string>
     <string name="category_color_view">#D780C0</string>
     <string name="category_color_default">#A5A5A5</string>
+    <string name="no_more_articles">Статей больше нет</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>

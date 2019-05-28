@@ -161,6 +161,8 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             if (nextUrl != null) {
                 disposables.add(repo.getMoreTravlZineArticles(baseUrl + nextUrl.substring(1)).observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.addArticles(articles.getArticleLinkList()), Timber::e));
                 nextUrl = null;
+            } else {
+                getViewState().onNoMoreArticles();
             }
         }
     }
