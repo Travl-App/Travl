@@ -37,7 +37,21 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @BindView(R.id.article_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.article_content_layout)
+    LinearLayout linearLayout;
+    @Inject
+    IImageLoader iImageLoader;
+    @InjectPresenter
+    ArticlePresenter presenter;
     private OnMoveToNavigator moveToNavigator;
+
+    public static ArticleFragment getInstance(int articleId) {
+        ArticleFragment articleFragment = new ArticleFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARTICLE_ID_KEY, articleId);
+        articleFragment.setArguments(args);
+        return articleFragment;
+    }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
@@ -53,23 +67,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         if (context instanceof OnMoveToNavigator) {
             moveToNavigator = (OnMoveToNavigator) context;
         }
-    }
-
-    @BindView(R.id.article_content_layout)
-    LinearLayout linearLayout;
-
-    @Inject
-    IImageLoader iImageLoader;
-
-    @InjectPresenter
-    ArticlePresenter presenter;
-
-    public static ArticleFragment getInstance(int articleId) {
-        ArticleFragment articleFragment = new ArticleFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARTICLE_ID_KEY, articleId);
-        articleFragment.setArguments(args);
-        return articleFragment;
     }
 
     @ProvidePresenter
@@ -95,11 +92,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @Override
     public void setTitle(String title) {
         Timber.e("Set title to = " + title);
-        TextView titleTextView = new TextView(getContext());
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View textLayout = layoutInflater.inflate(R.layout.article_title_text_view, null);
+        TextView titleTextView = textLayout.findViewById(R.id.article_title);
         titleTextView.setText(title);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        titleTextView.setPadding(0, 10, 0, 0);
         titleTextView.setLayoutParams(layoutParams);
         linearLayout.addView(titleTextView);
         linearLayout.invalidate();

@@ -144,12 +144,14 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         }
 
         public void addArticles(List<ArticleLink> articleLinks) {
-            //TODO: implement load of more TravlZine articles when API is ready
+            articleLinkList.addAll(articleLinks);
+            createPublishSubjects();
+            getViewState().onChangedArticlesData();
         }
 
         @Override
-        public void loadMoreArticles() {
-            //disposables.add(repo.getMoreTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.addArticles(articles.getArticleLinkList()), Timber::e));
+        public void loadMoreArticles(String url) {
+            disposables.add(repo.getMoreTravlZineArticles(baseUrl + url.substring(1)).observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.addArticles(articles.getArticleLinkList()), Timber::e));
         }
     }
 }

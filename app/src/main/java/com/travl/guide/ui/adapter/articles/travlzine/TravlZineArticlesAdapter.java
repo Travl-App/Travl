@@ -166,7 +166,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
         @Override
         public void loadMoreArticles() {
             Toast.makeText(App.getInstance(), "Loading more articles", Toast.LENGTH_SHORT).show();
-            presenter.loadMoreArticles();
+            // presenter.loadMoreArticles();
         }
     }
 }

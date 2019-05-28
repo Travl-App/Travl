@@ -32,9 +32,9 @@ public class ArticlesRepo {
         }
     }
 
-    public Single<ArticleLinksContainer> getMoreTravlZineArticles() {
+    public Single<ArticleLinksContainer> getMoreTravlZineArticles(String url) {
         if (NetworkStatus.isOnline()) {
-            return netService.loadMoreArticles(true).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+            return netService.loadMoreArticles(url).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
                 Timber.e(throwable);
                 return null;
             });

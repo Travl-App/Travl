@@ -26,8 +26,8 @@ public interface NetService {
     @GET("api/articles/")
     Single<ArticleLinksContainer> loadArticles(@Query("travlzine") boolean isTravlZine);
 
-    @GET("api/articles/")
-    Single<ArticleLinksContainer> loadMoreArticles(@Query("travlzine") boolean isTravlZine);
+    @GET
+    Single<ArticleLinksContainer> loadMoreArticles(@Url String url);
 
     @GET("api/articles/{id}")
     Single<ArticleContainer> loadArticle(@Path("id") int id);
