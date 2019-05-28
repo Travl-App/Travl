@@ -21,7 +21,9 @@ public interface TravlZineArticlesListPresenter {
 
     PublishSubject<TravlZineFooterItemView> getFooterClickSubject();
 
-    void loadMoreArticles(String url);
+    void loadMoreArticles();
 
     void addArticles(List<ArticleLink> articleLinkList);
+
+    void setNextUrl(String next);
 }

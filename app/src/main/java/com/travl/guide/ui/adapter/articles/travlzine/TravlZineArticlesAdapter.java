@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.devs.vectorchildfinder.VectorChildFinder;
 import com.devs.vectorchildfinder.VectorDrawableCompat;
@@ -165,8 +164,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void loadMoreArticles() {
-            Toast.makeText(App.getInstance(), "Loading more articles", Toast.LENGTH_SHORT).show();
-            // presenter.loadMoreArticles();
+            presenter.loadMoreArticles();
         }
     }
 }
