@@ -32,62 +32,65 @@
             android:showDividers="middle">
 
             <TextView
-                android:id="@+id/text_view_place_tag"
+                android:id="@+id/text_view_place_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/tag_background"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/category_background"
                 android:fontFamily="@font/montserrat_bold"
                 android:paddingStart="8dp"
-                android:paddingTop="4dp"
+                android:paddingTop="0dp"
                 android:paddingEnd="8dp"
-                android:paddingBottom="4dp"
-                android:text="TAG"
-                android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:paddingBottom="0dp"
+                android:text="@string/place_category"
+                android:textColor="#99c1a9"
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/text_view_place_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="11dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_slab_bold"
-                android:text="@string/title"
+                android:text="@string/place_title"
                 android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/text_view_place_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="17dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="@string/subtitle"
+                android:text="@string/place_subtitle"
                 android:textSize="18sp" />
 
             <com.smarteist.autoimageslider.SliderLayout
-                android:id="@+id/imageSlider"
+                android:id="@+id/imageSlider_place"
                 android:layout_width="match_parent"
-                android:layout_height="224dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="16dp"
                 android:scaleType="centerCrop" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="15dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="@color/colorTextDelimitersInsideText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="start"
                 android:orientation="horizontal">
 
@@ -96,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="АДРЕС:"
+                    android:text="@string/place_address"
                     android:textSize="14sp" />
 
                 <TextView
@@ -104,9 +107,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="4dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="адрес"
+                    android:text="@string/place_address_description"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -114,9 +117,37 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/place_route_to"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/text_view_place_route"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/place_route_to_description"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="start"
                 android:orientation="horizontal">
 
@@ -125,66 +156,61 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="КАК ДОБРАТЬСЯ:"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="@string/route_to_place_description"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="ПОПУЛЯРНОСТЬ:"
+                    android:text="@string/place_popularity"
                     android:textSize="14sp" />
 
                 <ImageView
+                    android:id="@+id/image_view_place_popularity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp" />
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/circle_popularity"
+                    android:contentDescription="@string/place_popularity" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="15dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="@color/colorTextDelimitersInsideText" />
 
             <TextView
-                android:id="@+id/text_view_place"
+                android:id="@+id/text_view_place_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="36dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/alice_regular"
                 android:text="@string/place_description"
                 android:textSize="16sp" />
 
+            <Button
+                android:id="@+id/button_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#c38611"
+                android:fontFamily="@font/montserrat_bold"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="4dp"
+                android:text="@string/place_button_text"
+                android:textColor="#ffffff"
+                android:textSize="11sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="start"
                 android:paddingBottom="50dp"
                 android:orientation="horizontal">
@@ -193,20 +219,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily=""
-                    android:scrollbarSize="16sp"
-                    android:text="Фото/текст:"
-                    android:textSize="11sp" />
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/place_author"
+                    android:textSize="11sp"
+                    android:textStyle="italic" />
 
                 <TextView
                     android:id="@+id/text_view_author_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_slab_regular"
-                    android:scrollbarSize="16sp"
-                    android:text="@string/author_name"
-                    android:textSize="11sp" />
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/place_author_name"
+                    android:textSize="11sp"
+                    android:textStyle="italic" />
 
             </LinearLayout>
 

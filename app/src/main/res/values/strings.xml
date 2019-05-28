@@ -16,12 +16,20 @@
     <string name="start_page_title">Главная</string>
     <string name="travl_zine_title">Travl Zine</string>
     <!--Place strings-->
-    <string name="author">Автор: </string>
-    <string name="author_name">Имя Автора</string>
-    <string name="address">Адрес: </string>
-    <string name="place_address"> адрес</string>
-    <string name="title"> Заголовок</string>
-    <string name="subtitle"> Подзаголовок: </string>
+    <string name="place_category">КАТЕГОРИЯ</string>
+    <string name="place_title">Заголовок</string>
+    <string name="place_subtitle">Подзаголовок</string>
+    <string name="place_address">АДРЕС:</string>
+    <string name="place_address_description">адрес</string>
+    <string name="place_route_to">КАК ДОБРАТЬСЯ:</string>
+    <string name="place_route_to_description">маршрут</string>
+    <string name="place_popularity">ПОПУЛЯРНОСТЬ:</string>
+
+    <string name="place_description">описание</string>
+    <string name="place_button_text">ЧИТАТЬ ДАЛЬШЕ</string>
+    <string name="place_author">Фото/текст:</string>
+    <string name="place_author_name">автор</string>
+
     <string name="image_view_content_description">image_view</string>
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
     <string name="favorite">Избранное</string>
@@ -33,11 +41,7 @@
     <string name="city_definition">Определение города</string>
     <string name="no_category_text">Нет категории</string>
     <string name="show_more">Показать еще</string>
-    <string name="route_to_place">Как добраться:</string>
-    <string name="route_to_place_description">маршрут</string>
-    <string name="place_popularity">Популярность:</string>
-    <string name="place_description">Описание:</string>
-    <string name="place_author">Автор:</string>
+
     <string name="category_color_architecture">#A5A5A5</string>
     <string name="category_color_goods">#C14040</string>
     <string name="category_color_food">#EEAE75</string>
