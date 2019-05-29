@@ -98,7 +98,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         titleTextView.setText(title);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        titleTextView.setLayoutParams(layoutParams);
         linearLayout.addView(titleTextView);
         linearLayout.invalidate();
     }
@@ -106,11 +105,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @Override
     public void setSubTitle(String subtitle) {
         Timber.e("Set subtitle to = " + subtitle);
-        TextView subtitleTextView = new TextView(getContext());
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View textLayout = layoutInflater.inflate(R.layout.article_subtitle_text_view, null);
+        TextView subtitleTextView = textLayout.findViewById(R.id.article_subtitle);
         subtitleTextView.setText(subtitle);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        subtitleTextView.setLayoutParams(layoutParams);
         linearLayout.addView(subtitleTextView);
         linearLayout.invalidate();
     }
@@ -118,11 +118,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @Override
     public void setDescription(String description) {
         Timber.e("Set description to = " + description);
-        TextView descriptionTextView = new TextView(getContext());
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View textLayout = layoutInflater.inflate(R.layout.article_description_text_view, null);
+        TextView descriptionTextView = textLayout.findViewById(R.id.article_description);
         descriptionTextView.setText(description);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        descriptionTextView.setLayoutParams(layoutParams);
         linearLayout.addView(descriptionTextView);
         linearLayout.invalidate();
     }
@@ -130,22 +131,21 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @Override
     public void setImageCover(String coverUrl) {
         Timber.e("Set coverUrl to = " + coverUrl);
-        ImageView coverImageView = new ImageView(getContext());
-        iImageLoader.loadInto(coverImageView, coverUrl);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        coverImageView.setLayoutParams(layoutParams);
-        linearLayout.addView(coverImageView);
-        linearLayout.invalidate();
+        View view = getView();
+        if (view != null) {
+            ImageView coverImageView = view.findViewById(R.id.article_cover);
+            iImageLoader.loadInto(coverImageView, coverUrl);
+        }
     }
 
     @Override
     public void setArticlePlaceCover(String placeImageUrl, int placeId) {
-        ImageView placeCoverImageView = new ImageView(getContext());
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View imageLayout = layoutInflater.inflate(R.layout.article_place_cover_image_view, null);
+        ImageView placeCoverImageView = imageLayout.findViewById(R.id.article_place_cover);
         iImageLoader.loadInto(placeCoverImageView, placeImageUrl);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        placeCoverImageView.setLayoutParams(layoutParams);
         placeCoverImageView.setOnClickListener(v -> presenter.showPlace(placeId));
         linearLayout.addView(placeCoverImageView);
         linearLayout.invalidate();
@@ -153,11 +153,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void setArticlePlaceDescription(String articleText) {
-        TextView descriptionTextView = new TextView(getContext());
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View textLayout = layoutInflater.inflate(R.layout.article_place_description_text_view, null);
+        TextView descriptionTextView = textLayout.findViewById(R.id.article_place_description);
         descriptionTextView.setText(articleText);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        descriptionTextView.setLayoutParams(layoutParams);
         linearLayout.addView(descriptionTextView);
         linearLayout.invalidate();
     }
