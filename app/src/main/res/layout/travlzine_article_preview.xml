@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/travlzine_article_preview_category_margin_top"
+            android:layout_marginStart="@dimen/travlzine_article_preview_category_margin_start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_image_view">
 
@@ -36,14 +37,13 @@
                 android:layout_alignTop="@id/travlzine_article_preview_category_text_view"
                 android:layout_alignEnd="@id/travlzine_article_preview_category_text_view"
                 android:layout_alignBottom="@id/travlzine_article_preview_category_text_view"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_category_rectangle" />
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/travlzine_article_preview_category_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_slab_bold"
+                android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
                 android:paddingStart="@dimen/travlzine_article_preview_category_text_view_padding_start"
                 android:paddingTop="@dimen/travlzine_article_preview_category_text_view_padding_top"
@@ -60,7 +60,7 @@
         <TextView
             android:id="@+id/travlzine_article_preview_description"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/travlzine_card_preview_description"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/travlzine_preview_description_margin_start"
             android:textColor="@android:color/black"
@@ -68,6 +68,7 @@
             android:fontFamily="@font/roboto_slab_bold"
             android:gravity="start"
             android:textSize="@dimen/travlzine_card_text_size"
+            android:maxLines="3"
             app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_category" />
 
         <android.support.design.chip.Chip

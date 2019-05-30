@@ -8,17 +8,23 @@ import java.util.List;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface PlaceView extends MvpView {
-    void setTitleTextView(String title);
+    void setPlaceCategory(String placeCategory);
 
-    void setSubtitleTextView(String subtitle);
+    void setPlaceTitle(String placeTitle);
 
-    void setImageSlider(List<String> imageUrls);
+    void setPlaceSubtitle(String placeSubtitle);
 
-    void setPlaceAddressTextView(String placeAddress);
+    void setPlaceImages(List<String> placeImageUrls);
 
-    void setPlaceAuthorNameTextView(String authorName);
+    void setPlaceAddress(String placeAddress);
 
-    void setTextView(String text);
+    void setPlaceRoute(String placeRoute);
 
-    void setCoordinates(double[] coordinates);
+    void setPlacePopularity(int placePopularity);
+
+    void setPlaceDescription(String placeDescription);
+
+    void setPlaceAuthorName(String placeAuthorName);
+
+    void setPlaceCoordinates(double[] placeCoordinates);
 }

@@ -63,4 +63,14 @@ public class CityRepo {
             };
         }
     }
+
+    private String cityName;
+
+    public void saveCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
 }

@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.place;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +23,10 @@ import com.smarteist.autoimageslider.SliderView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
 import com.travl.guide.mvp.view.place.PlaceView;
+import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.CoordinatesProvider;
+import com.travl.guide.ui.activity.OnMoveToNavigator;
 import com.travl.guide.ui.activity.SharedDataProvider;
 
 import java.util.List;
@@ -40,18 +44,26 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @BindView(R.id.post_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.text_view_place_category)
+    TextView placeCategoryTextView;
     @BindView(R.id.text_view_place_title)
     TextView placeTitleTextView;
     @BindView(R.id.text_view_place_subtitle)
     TextView placeSubtitleTextView;
-    @BindView(R.id.imageSlider)
+    @BindView(R.id.imageSlider_place)
     SliderLayout placeSliderLayout;
     @BindView(R.id.text_view_place_address)
     TextView placeAddressTextView;
+    @BindView(R.id.text_view_place_route)
+    TextView placeRouteTextView;
+    @BindView(R.id.image_view_place_popularity)
+    ImageView placePopularityImageView;
+    @BindView(R.id.text_view_place_description)
+    TextView placeDescriptionTextView;
+    @BindView(R.id.button_place)
+    Button placeButton;
     @BindView(R.id.text_view_author_name)
     TextView placeAuthorNameTextView;
-    @BindView(R.id.text_view_place)
-    TextView placeTextView;
 
     @InjectPresenter
     PlacePresenter presenter;
@@ -61,7 +73,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     String baseUrl;
 
     private double[] placeCoordinates;
-    private int placeId;
+    private OnMoveToNavigator moveToNavigator;
 
     public static PlaceFragment getInstance(int placeId) {
         PlaceFragment placeFragment = new PlaceFragment();
@@ -71,9 +83,36 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         return placeFragment;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDispose();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (moveToNavigator != null) {
+            moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.place());
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMoveToNavigator) {
+            moveToNavigator = (OnMoveToNavigator) context;
+
+        }
+    }
+
     @ProvidePresenter
     public PlacePresenter providePresenter() {
-        placeId = getArguments().getInt(PLACE_ID_KEY);
+        Bundle args = getArguments();
+        int placeId = 0;
+        if (args != null) {
+            placeId = args.getInt(PLACE_ID_KEY);
+        }
         return new PlacePresenter(AndroidSchedulers.mainThread(), placeId);
     }
 
@@ -99,40 +138,57 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     }
 
     @Override
-    public void setTitleTextView(String title) {
-        placeTitleTextView.setText(title);
+    public void setPlaceCategory(String placeCategory) {
+        placeCategoryTextView.setText(placeCategory);
     }
 
     @Override
-    public void setSubtitleTextView(String subtitle) {
-        placeSubtitleTextView.setText(subtitle);
+    public void setPlaceTitle(String placeTitle) {
+        placeTitleTextView.setText(placeTitle);
     }
 
     @Override
-    public void setImageSlider(List<String> imageUrls) {
-        for (String imageUrl : imageUrls) {
-            SliderView sliderView = new DefaultSliderView(getActivity());
-            sliderView.setImageUrl(baseUrl + imageUrl);
-            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
-//            sliderView.setDescription("setDescription");
-            sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
-            placeSliderLayout.addSliderView(sliderView);
+    public void setPlaceSubtitle(String placeSubtitle) {
+        placeSubtitleTextView.setText(placeSubtitle);
+    }
+
+    @Override
+    public void setPlaceImages(List<String> placeImageUrls) {
+        if (placeImageUrls != null) {
+            for (String imageUrl : placeImageUrls) {
+                SliderView sliderView = new DefaultSliderView(getActivity());
+                sliderView.setImageUrl(baseUrl + imageUrl);
+                sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
+//                sliderView.setDescription("setDescription");
+                sliderView.setOnSliderClickListener(sliderView1 -> Toast.makeText(getActivity(), "This is slider", Toast.LENGTH_SHORT).show());
+                placeSliderLayout.addSliderView(sliderView);
+            }
         }
     }
 
     @Override
-    public void setPlaceAddressTextView(String placeAddress) {
+    public void setPlaceAddress(String placeAddress) {
         placeAddressTextView.setText(placeAddress);
     }
 
     @Override
-    public void setPlaceAuthorNameTextView(String userName) {
-        placeAuthorNameTextView.setText(userName);
+    public void setPlaceRoute(String placeRoute) {
+        placeRouteTextView.setText(placeRoute);
     }
 
     @Override
-    public void setTextView(String text) {
-        placeTextView.setText(text);
+    public void setPlacePopularity(int placePopularity) {
+        placePopularityImageView.setBackgroundColor(placePopularity);
+    }
+
+    @Override
+    public void setPlaceDescription(String placeDescription) {
+        placeDescriptionTextView.setText(placeDescription);
+    }
+
+    @Override
+    public void setPlaceAuthorName(String placeAuthorName) {
+        placeAuthorNameTextView.setText(placeAuthorName);
     }
 
     public void onBackPressed() {
@@ -147,8 +203,8 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
     }
 
     @Override
-    public void setCoordinates(double[] coordinates) {
-        placeCoordinates = coordinates;
+    public void setPlaceCoordinates(double[] placeCoordinates) {
+        this.placeCoordinates = placeCoordinates;
     }
 
     @Override

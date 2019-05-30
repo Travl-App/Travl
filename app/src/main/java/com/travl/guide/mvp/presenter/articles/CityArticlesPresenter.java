@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
@@ -36,9 +37,11 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
     Router router;
     private CityArticlesListPresenterImpl cityArticlesListPresenter;
     private Scheduler scheduler;
+    private List<Disposable> disposables;
 
     public CityArticlesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
+        disposables = new ArrayList<>();
     }
 
     public void setArticlesList(List<ArticleLink> articlesList) {
@@ -51,18 +54,21 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
         return cityArticlesListPresenter;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (Disposable disposable : disposables) {
+            disposable.dispose();
+        }
+    }
+
     public class CityArticlesListPresenterImpl implements CityArticlesListPresenter {
         private List<ArticleLink> articleLinkList;
         private List<PublishSubject<CityArticlesItemView>> publishSubjectList;
 
         private void createPublishSubjects() {
-            int elementsToUpdate = 0;
-            if (publishSubjectList == null) {
-                publishSubjectList = new ArrayList<>();
-                elementsToUpdate = getListCount();
-            } else {
-                elementsToUpdate = getListCount() - publishSubjectList.size();
-            }
+            int elementsToUpdate = getListCount();
+            publishSubjectList = new ArrayList<>();
             for (int i = 0; i < elementsToUpdate; i++) {
                 publishSubjectList.add(PublishSubject.create());
             }
@@ -76,10 +82,11 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
         @SuppressLint("CheckResult")
         @Override
         public void bindView(CityArticlesItemView view) {
-            Timber.d("BindView and set Description");
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
-            publishSubjectList.get(position).subscribe(cityArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
+            disposables.add(publishSubjectList.get(position).subscribe(cityArticlesItemView -> {
+                router.navigateTo(new Screens.ArticleScreen(articleLink.getId()));
+            }, Timber::e));
             if (articleLink != null) {
                 view.setDescription(articleLink.getTitle());
                 String imageUrl = articleLink.getImageCoverUrl();
@@ -108,4 +115,5 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             getViewState().onChangedArticlesData();
         }
     }
+
 }

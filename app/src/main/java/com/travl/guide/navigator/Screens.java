@@ -68,15 +68,15 @@ public class Screens extends Screen {
 
     public static class ArticleScreen extends SupportAppScreen {
 
-        private String articleUrl;
+        private int articleId;
 
-        public ArticleScreen(String articleUrl) {
-            this.articleUrl = articleUrl;
+        public ArticleScreen(int articleId) {
+            this.articleId = articleId;
         }
 
         @Override
         public Fragment getFragment() {
-            return ArticleFragment.getInstance(articleUrl);
+            return ArticleFragment.getInstance(articleId);
         }
     }
 }

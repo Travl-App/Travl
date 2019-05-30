@@ -11,6 +11,7 @@ import com.travl.guide.mvp.model.repo.ArticlesRepo;
 import com.travl.guide.mvp.presenter.articles.list.TravlZineArticlesListPresenter;
 import com.travl.guide.mvp.view.articles.TravlZineArticlesView;
 import com.travl.guide.mvp.view.articles.list.TravlZineArticlesItemView;
+import com.travl.guide.mvp.view.articles.list.TravlZineFooterItemView;
 import com.travl.guide.navigator.Screens;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
@@ -35,11 +37,13 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
     @Inject
     @Named("baseUrl")
     String baseUrl;
+    private List<Disposable> disposables;
     private Scheduler scheduler;
 
     public TravlZineArticlesPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
         travlZineArticlesListPresenter = new TravlZineArticlesListPresenterImpl();
+        disposables = new ArrayList<>();
     }
 
     @Override
@@ -49,13 +53,31 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
     @SuppressLint("CheckResult")
     public void loadArticles() {
-        Timber.e("Loading articles");
-        repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList()), Timber::e);
+        disposables.add(repo.getTravlZineArticles().observeOn(scheduler).subscribe(articles ->
+        {
+            travlZineArticlesListPresenter.setArticleLinkList(articles.getArticleLinkList());
+            travlZineArticlesListPresenter.setNextUrl(articles.getNext());
+        }, Timber::e));
+    }
+
+    public void onDispose() {
+        for (Disposable disposable : disposables) {
+            disposable.dispose();
+        }
     }
 
     public class TravlZineArticlesListPresenterImpl implements TravlZineArticlesListPresenter {
+
         List<PublishSubject<TravlZineArticlesItemView>> publishSubjectList;
+        private boolean footerBinded = false;
+        private PublishSubject<TravlZineFooterItemView> footerItemViewPublishSubject = PublishSubject.create();
         private List<ArticleLink> articleLinkList;
+        private String nextUrl;
+
+        @Override
+        public PublishSubject<TravlZineFooterItemView> getFooterClickSubject() {
+            return footerItemViewPublishSubject;
+        }
 
         private void createPublishSubjects() {
             int elementsToUpdate = 0;
@@ -78,10 +100,9 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         @SuppressLint("CheckResult")
         @Override
         public void bindView(TravlZineArticlesItemView view) {
-            Timber.e("BindView and set Description");
             int position = view.getPos();
             ArticleLink articleLink = articleLinkList.get(position);
-            publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getLink())), Timber::e);
+            disposables.add(publishSubjectList.get(position).subscribe(travlZineArticlesItemView -> router.navigateTo(new Screens.ArticleScreen(articleLink.getId())), Timber::e));
             String title = articleLink.getTitle();
             String imageUrl = articleLink.getImageCoverUrl();
             List<Category> categories = articleLink.getCategories();
@@ -100,6 +121,15 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
         }
 
         @Override
+        public void bindFooterView() {
+            if (!footerBinded) {
+                disposables.add(footerItemViewPublishSubject.subscribe(TravlZineFooterItemView::loadMoreArticles, Timber::e));
+                footerBinded = true;
+            }
+        }
+
+
+        @Override
         public int getListCount() {
             return articleLinkList == null ? 0 : articleLinkList.size();
         }
@@ -113,6 +143,27 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
             }
             createPublishSubjects();
             getViewState().onChangedArticlesData();
+        }
+
+        public void addArticles(List<ArticleLink> articleLinks) {
+            articleLinkList.addAll(articleLinks);
+            createPublishSubjects();
+            getViewState().onChangedArticlesData();
+        }
+
+        @Override
+        public void setNextUrl(String next) {
+            this.nextUrl = next;
+        }
+
+        @Override
+        public void loadMoreArticles() {
+            if (nextUrl != null) {
+                disposables.add(repo.getMoreTravlZineArticles(baseUrl + nextUrl.substring(1)).observeOn(scheduler).subscribe(articles -> travlZineArticlesListPresenter.addArticles(articles.getArticleLinkList()), Timber::e));
+                nextUrl = null;
+            } else {
+                getViewState().onNoMoreArticles();
+            }
         }
     }
 }

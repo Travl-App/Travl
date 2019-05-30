@@ -27,6 +27,18 @@ public class ArticleLink {
     @Expose
     private Author author;
 
+    @SerializedName("id")
+    @Expose
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public ArticleLink(String title, String imageCoverUrl) {
         this.title = title;

@@ -12,17 +12,17 @@ import com.travl.guide.mvp.model.api.places.map.PlaceContainer;
 import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.PlacesRepo;
-import com.travl.guide.mvp.model.user.User;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.Screens;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
@@ -35,10 +35,12 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     PlacesRepo placesRepo;
     private MapsModel model;
     private Scheduler scheduler;
+    private List<Disposable> disposables;
 
     public MapsPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
         if (model == null) this.model = new MapsModel();
+        disposables = new ArrayList<>();
     }
 
     @Override
@@ -54,77 +56,51 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         getViewState().showUserLocation();
     }
 
-    public void toPlaceScreen(List<Place> listPlaces, double[] coordinates) {
-        Timber.d("Получены координаты: " + coordinates[0] + " " + coordinates[1]);
-        router.navigateTo(new Screens.PlaceScreen(getId(listPlaces, coordinates)));
-    }
-
-    private int getId(List<Place> listPlaces, double[] coordinates) {
-        for (int i = 0; i < listPlaces.size(); i++) {
-            double[] local = listPlaces.get(i).getCoordinates();
-            if (coarseEqualsCheck(coordinates[0], local[0]) && coarseEqualsCheck(coordinates[1], local[1])) {
-                Timber.d("Id маркера: %s", String.valueOf(listPlaces.get(i).getId()));
-                return listPlaces.get(i).getId();
-            }
-        }
-        Timber.d("Всё плохо, мы ничего не нашли и выводим рандомную статью");
-        return 1;
-    }
-
-    private boolean coarseEqualsCheck(double first, double second) {
-        DecimalFormat roundTo = new DecimalFormat("#.##");
-        int gap = 3;
-        double precision = 0.01;
-        for (int i = -gap; i < gap; i++) {
-            String firstNumber = roundTo.format(first + i * precision);
-            String secondNumber = roundTo.format(second);
-            Timber.e("First coordinate =" + firstNumber + "Second coordinate =" + secondNumber);
-            if (firstNumber.equals(secondNumber)) {
-                return true;
-            }
-        }
-        return false;
+    public void toPlaceScreen(int id) {
+        router.navigateTo(new Screens.PlaceScreen(id));
     }
 
     @SuppressLint("CheckResult")
-    public void makeRequestForPlaces() {
+    public void makeRequestForPlaces(double[] coordinates) {
         Timber.e("Make request");
         getViewState().showLoadInfo();
-        User user = User.getInstance();
-        double[] coordinates = user.getCoordinates();
+        Timber.e("Maps received coordinates = " + Arrays.toString(coordinates) + " from locationRequester");
         if (coordinates == null) return;
         double latitude = coordinates[0];
         double longitude = coordinates[1];
-        placesRepo.loadPlacesForMap(
+        disposables.add(placesRepo.loadPlacesForMap(
                 new CoordinatesRequest(latitude, longitude), 2000, 1)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     PlaceContainer placeContainer = placesMap.getPlaces();
-                    if (placeContainer != null) {
-                        String nextUrl;
-                        if ((nextUrl = placeContainer.getNext()) != null) {
-                            Timber.e("Next url = " + nextUrl);
-                            loadNextPlaces(nextUrl);
-                        }
-                        addPlacesToMap(placeContainer);
-                    }
-                }, Timber::e);
+                    recursivePlacesLoading(placeContainer);
+                }, Timber::e));
     }
 
     @SuppressLint("CheckResult")
     private void loadNextPlaces(String nextUrl) {
-        placesRepo.loadNextPlaces(nextUrl)
+        disposables.add(placesRepo.loadNextPlaces(nextUrl)
                 .observeOn(scheduler)
                 .subscribe(placesMap -> {
                     PlaceContainer placeContainer = placesMap.getPlaces();
-                    if (placeContainer != null) {
-                        String next;
-                        if ((next = placeContainer.getNext()) != null) {
-                            loadNextPlaces(next);
-                        }
-                        addPlacesToMap(placeContainer);
-                    }
-                }, Timber::e);
+                    recursivePlacesLoading(placeContainer);
+                }, Timber::e));
+    }
+
+    private void recursivePlacesLoading(PlaceContainer placeContainer) {
+        if (placeContainer != null) {
+            String nextUrl;
+            int totalNumberOfItems = placeContainer.getCount();
+            List<PlaceLink> links = placeContainer.getPlaceLinkList();
+            if (links != null) {
+                int lastItemId = links.get(links.size() - 1).getId();
+                if ((nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems) {
+                    Timber.e("Next url = " + nextUrl);
+                    loadNextPlaces(nextUrl);
+                }
+                addPlacesToMap(placeContainer);
+            }
+        }
     }
 
     private void addPlacesToMap(PlaceContainer placeContainer) {
@@ -142,7 +118,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             double[] coordinates = places.get(i).getCoordinates();
             double latitude = coordinates[0];
             double longitude = coordinates[1];
-            features.add(Feature.fromGeometry(Point.fromLngLat(longitude, latitude)));
+            Feature feature = Feature.fromGeometry(Point.fromLngLat(longitude, latitude));
+            feature.addNumberProperty("id", places.get(i).getId());
+            features.add(feature);
         }
 
         return features;
@@ -165,5 +143,11 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
 
     public void setupLocationFab() {
         getViewState().setupFab();
+    }
+
+    public void onDispose() {
+        for (Disposable disposable : disposables) {
+            disposable.dispose();
+        }
     }
 }

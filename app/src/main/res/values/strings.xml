@@ -16,12 +16,20 @@
     <string name="start_page_title">Главная</string>
     <string name="travl_zine_title">Travl Zine</string>
     <!--Place strings-->
-    <string name="author">Автор: </string>
-    <string name="author_name">Имя Автора</string>
-    <string name="address">Адрес: </string>
-    <string name="place_address"> Шуховская ул.5г.</string>
-    <string name="title"> Заголовок</string>
-    <string name="subtitle"> Тот самый гиперболоид инженера Гарина, который нужно увидеть.</string>
+    <string name="place_category">КАТЕГОРИЯ</string>
+    <string name="place_title">Заголовок</string>
+    <string name="place_subtitle">Подзаголовок</string>
+    <string name="place_address">АДРЕС:</string>
+    <string name="place_address_description">адрес</string>
+    <string name="place_route_to">КАК ДОБРАТЬСЯ:</string>
+    <string name="place_route_to_description">маршрут</string>
+    <string name="place_popularity">ПОПУЛЯРНОСТЬ:</string>
+
+    <string name="place_description">описание</string>
+    <string name="place_button_text">ЧИТАТЬ ДАЛЬШЕ</string>
+    <string name="place_author">Фото/текст:</string>
+    <string name="place_author_name">автор</string>
+
     <string name="image_view_content_description">image_view</string>
     <string name="mapbox_syle_link_minimo">mapbox://styles/pereved/cjt7ktyjz0hjf1fmi32rav0sx</string>
     <string name="favorite">Избранное</string>
@@ -32,6 +40,19 @@
     <string name="getting_articles">Получение статей</string>
     <string name="city_definition">Определение города</string>
     <string name="no_category_text">Нет категории</string>
+    <string name="show_more">Показать еще</string>
+
+    <string name="category_color_architecture">#A5A5A5</string>
+    <string name="category_color_goods">#C14040</string>
+    <string name="category_color_food">#EEAE75</string>
+    <string name="category_color_habitation">#82BCEE</string>
+    <string name="category_color_nature">#97C89A</string>
+    <string name="category_color_streetart">#E5CC4F</string>
+    <string name="category_color_trove">#A496D4</string>
+    <string name="category_color_urbex">#444444</string>
+    <string name="category_color_view">#D780C0</string>
+    <string name="category_color_default">#A5A5A5</string>
+    <string name="no_more_articles">Статей больше нет</string>
     <string-array name="cities">
         <item>Выберите город</item>
     </string-array>

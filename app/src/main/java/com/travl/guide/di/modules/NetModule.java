@@ -33,7 +33,6 @@ public class NetModule {
 
     @Provides
     public NetService getNetService(Gson gson, @Named("baseUrl") String baseUrl, OkHttpClient okHttpClient) {
-        Timber.e("getApiService");
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

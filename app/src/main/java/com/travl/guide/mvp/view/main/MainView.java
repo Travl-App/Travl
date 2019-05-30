@@ -32,4 +32,6 @@ public interface MainView extends MvpView {
     void onMoveToFavoriteScreen();
 
     void onMoveToTravlZineScreen();
+
+    void onMoveToArticleScreen();
 }
