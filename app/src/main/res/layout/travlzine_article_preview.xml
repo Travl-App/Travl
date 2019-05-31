@@ -20,41 +20,26 @@
             android:src="@null"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:id="@+id/travlzine_article_preview_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/travlzine_article_preview_category_margin_top"
-            android:layout_marginStart="@dimen/travlzine_article_preview_category_margin_start"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_image_view">
-
-            <ImageView
-                android:id="@+id/travlzine_article_preview_category_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignStart="@id/travlzine_article_preview_category_text_view"
-                android:layout_alignTop="@id/travlzine_article_preview_category_text_view"
-                android:layout_alignEnd="@id/travlzine_article_preview_category_text_view"
-                android:layout_alignBottom="@id/travlzine_article_preview_category_text_view"
-                android:scaleType="fitXY" />
-
             <TextView
                 android:id="@+id/travlzine_article_preview_category_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
+                android:layout_marginStart="@dimen/travlzine_article_preview_category_margin_start"
+                android:layout_marginTop="@dimen/travlzine_article_preview_category_margin_top"
                 android:paddingStart="@dimen/travlzine_article_preview_category_text_view_padding_start"
                 android:paddingTop="@dimen/travlzine_article_preview_category_text_view_padding_top"
                 android:paddingEnd="@dimen/travlzine_article_preview_category_text_view_padding_end"
                 android:paddingBottom="@dimen/travlzine_article_preview_category_text_view_padding_bottom"
+                android:background="@drawable/category_background"
                 android:singleLine="true"
                 android:text="@string/no_category_text"
                 android:textAllCaps="true"
                 android:textColor="@color/travlzine_preview_category_text_color"
-                android:textSize="@dimen/travlzine_preview_category_text_size" />
-        </RelativeLayout>
+                android:textSize="@dimen/travlzine_preview_category_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_image_view" />
 
 
         <TextView
@@ -69,7 +54,7 @@
             android:gravity="start"
             android:textSize="@dimen/travlzine_card_text_size"
             android:maxLines="3"
-            app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_category" />
+            app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_category_text_view" />
 
         <android.support.design.chip.Chip
             android:id="@+id/travlzine_article_preview_author_chip"
