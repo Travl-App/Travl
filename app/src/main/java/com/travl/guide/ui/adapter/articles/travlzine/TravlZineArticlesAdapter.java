@@ -2,6 +2,8 @@ package com.travl.guide.ui.adapter.articles.travlzine;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.design.chip.Chip;
@@ -10,11 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.devs.vectorchildfinder.VectorChildFinder;
-import com.devs.vectorchildfinder.VectorDrawableCompat;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;
@@ -24,6 +23,7 @@ import com.travl.guide.mvp.view.articles.list.TravlZineFooterItemView;
 import com.travl.guide.ui.App;
 
 import io.reactivex.subjects.PublishSubject;
+import timber.log.Timber;
 
 public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -99,16 +99,7 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
         @Override
         public void setCategory(String category) {
             Resources resources = App.getInstance().getResources();
-            int categoryDrawable = R.drawable.ic_category_11;
-            if (category.length() < 4) {
-                categoryDrawable = R.drawable.ic_category_3;
-            } else if (category.length() < 8) {
-                categoryDrawable = R.drawable.ic_category_7;
-            }
-            ImageView categoryView = cardView.findViewById(R.id.travlzine_article_preview_category_image_view);
-            VectorChildFinder vector = new VectorChildFinder(App.getInstance(), categoryDrawable, categoryView);
-            VectorDrawableCompat.VFullPath path1 = vector.findPathByName("path1");
-            TextView categoryText = ((TextView) cardView.findViewById(R.id.travlzine_article_preview_category_text_view));
+            TextView categoryText = cardView.findViewById(R.id.travlzine_article_preview_category_text_view);
             categoryText.setText(category);
             int color = 0;
             category = category.toUpperCase();
@@ -133,9 +124,13 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 color = Color.parseColor(resources.getString(R.string.category_color_default));
             }
-            path1.setStrokeColor(color);
+            Drawable background = categoryText.getBackground();
+            if (background instanceof GradientDrawable) {
+                Timber.e("GradientDrawable");
+                GradientDrawable gradientDrawable = (GradientDrawable) background;
+                gradientDrawable.setStroke(2, color);
+            }
             categoryText.setTextColor(color);
-            categoryView.invalidate();
         }
 
         @Override
