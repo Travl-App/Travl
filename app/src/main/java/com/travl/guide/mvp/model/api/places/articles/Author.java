@@ -12,14 +12,18 @@ public class Author {
     @Expose
     private boolean is_active;
 
+    @Expose
+    private String image;
+
     public Author() {
     }
 
-    public Author(String username, String modified, String link, boolean is_active) {
+    public Author(String username, String modified, String link, boolean is_active, String image) {
         this.username = username;
         this.modified = modified;
         this.link = link;
         this.is_active = is_active;
+        this.image = image;
     }
 
     public String getUsername() {
@@ -52,5 +56,13 @@ public class Author {
 
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

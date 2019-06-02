@@ -25,7 +25,7 @@
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
-            android:id="@+id/place_root_layout"
+            android:id="@+id/layout_place_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -59,16 +59,16 @@
                 android:text="@string/place_title"
                 android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/text_view_place_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/place_subtitle"
-                android:textSize="18sp" />
+            <!--<TextView-->
+            <!--android:id="@+id/text_view_place_subtitle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:fontFamily="@font/montserrat_regular"-->
+            <!--android:text="@string/place_subtitle"-->
+            <!--android:textSize="18sp" />-->
 
             <com.smarteist.autoimageslider.SliderLayout
                 android:id="@+id/imageSlider_place"
@@ -86,6 +86,7 @@
                 android:background="@color/colorTextDelimitersInsideText" />
 
             <LinearLayout
+                android:id="@+id/layout_place_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -115,6 +116,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_place_route"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -143,6 +145,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_place_popularity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -160,12 +163,48 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/image_view_place_popularity"
+                    android:id="@+id/image_view_place_popularity_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/circle_popularity"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/circle_popularity_empty"
+                    android:contentDescription="@string/place_popularity" />
+
+                <ImageView
+                    android:id="@+id/image_view_place_popularity_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/circle_popularity_empty"
+                    android:contentDescription="@string/place_popularity" />
+
+                <ImageView
+                    android:id="@+id/image_view_place_popularity_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/circle_popularity_empty"
+                    android:contentDescription="@string/place_popularity" />
+
+                <ImageView
+                    android:id="@+id/image_view_place_popularity_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/circle_popularity_empty"
+                    android:contentDescription="@string/place_popularity" />
+
+                <ImageView
+                    android:id="@+id/image_view_place_popularity_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/circle_popularity_empty"
                     android:contentDescription="@string/place_popularity" />
 
             </LinearLayout>
@@ -189,23 +228,24 @@
                 android:text="@string/place_description"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/button_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#c38611"
-                android:fontFamily="@font/montserrat_bold"
-                android:paddingStart="16dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="4dp"
-                android:text="@string/place_button_text"
-                android:textColor="#ffffff"
-                android:textSize="11sp" />
+            <!--<Button-->
+            <!--android:id="@+id/button_place"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:backgroundTint="#c38611"-->
+            <!--android:fontFamily="@font/montserrat_bold"-->
+            <!--android:paddingStart="16dp"-->
+            <!--android:paddingTop="4dp"-->
+            <!--android:paddingEnd="16dp"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:text="@string/place_button_text"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="11sp" />-->
 
             <LinearLayout
+                android:id="@+id/layout_author_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

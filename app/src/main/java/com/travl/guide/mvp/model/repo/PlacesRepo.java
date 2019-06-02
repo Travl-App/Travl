@@ -35,10 +35,10 @@ public class PlacesRepo {
         }
     }
 
-    public Single<Root> loadNewPlace(int id) {
+    public Single<Root> loadPlace(int id) {
         Timber.e("loading place with id = %s", id);
         if (NetworkStatus.isOnline()) {
-            return netService.loadNewPlace(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+            return netService.loadPlace(id).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
                 Timber.e(throwable);
                 return null;
             });
