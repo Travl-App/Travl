@@ -12,7 +12,7 @@ public interface PlaceView extends MvpView {
 
     void setPlaceTitle(String placeTitle);
 
-    void setPlaceSubtitle(String placeSubtitle);
+//    void setPlaceSubtitle(String placeSubtitle);
 
     void setPlaceImages(List<String> placeImageUrls);
 

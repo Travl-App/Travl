@@ -26,10 +26,17 @@ public class Place {
     @Expose
     private String description;
 
+    @Expose
+    private int traffic;
+    @Expose
+    private String address;
+    @Expose
+    private String route;
+
     public Place() {
     }
 
-    public Place(int id, Author author, List<String> images, List<Double> coordinates, String link, List<Articles> articles, String title, String modified, List<Categories> categories, String description) {
+    public Place(int id, Author author, List<String> images, List<Double> coordinates, String link, List<Articles> articles, String title, String modified, List<Categories> categories, String description, int traffic, String address, String route) {
         this.id = id;
         this.author = author;
         this.images = images;
@@ -40,6 +47,9 @@ public class Place {
         this.modified = modified;
         this.categories = categories;
         this.description = description;
+        this.traffic = traffic;
+        this.address = address;
+        this.route = route;
     }
 
     public int getId() {
@@ -120,5 +130,29 @@ public class Place {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getTraffic() {
+        return traffic;
+    }
+
+    public void setTraffic(int traffic) {
+        this.traffic = traffic;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 }

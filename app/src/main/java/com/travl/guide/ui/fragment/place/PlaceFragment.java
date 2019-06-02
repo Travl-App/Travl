@@ -8,8 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,24 +44,41 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @BindView(R.id.post_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.layout_place_root)
+    LinearLayout placeRootLayout;
     @BindView(R.id.text_view_place_category)
     TextView placeCategoryTextView;
     @BindView(R.id.text_view_place_title)
     TextView placeTitleTextView;
-    @BindView(R.id.text_view_place_subtitle)
-    TextView placeSubtitleTextView;
+    //    @BindView(R.id.text_view_place_subtitle)
+//    TextView placeSubtitleTextView;
     @BindView(R.id.imageSlider_place)
     SliderLayout placeSliderLayout;
+    @BindView(R.id.layout_place_address)
+    LinearLayout placeAddressLayout;
     @BindView(R.id.text_view_place_address)
     TextView placeAddressTextView;
+    @BindView(R.id.layout_place_route)
+    LinearLayout placeRouteLayout;
     @BindView(R.id.text_view_place_route)
     TextView placeRouteTextView;
-    @BindView(R.id.image_view_place_popularity)
-    ImageView placePopularityImageView;
+    @BindView(R.id.image_view_place_popularity_1)
+    ImageView placePopularityImageView1;
+    @BindView(R.id.image_view_place_popularity_2)
+    ImageView placePopularityImageView2;
+    @BindView(R.id.image_view_place_popularity_3)
+    ImageView placePopularityImageView3;
+    @BindView(R.id.image_view_place_popularity_4)
+    ImageView placePopularityImageView4;
+    @BindView(R.id.image_view_place_popularity_5)
+    ImageView placePopularityImageView5;
+    ImageView[] placePopularityImageViews;
     @BindView(R.id.text_view_place_description)
     TextView placeDescriptionTextView;
-    @BindView(R.id.button_place)
-    Button placeButton;
+    //    @BindView(R.id.button_place)
+//    Button placeButton;
+    @BindView(R.id.layout_author_name)
+    LinearLayout placeAuthorNameLayout;
     @BindView(R.id.text_view_author_name)
     TextView placeAuthorNameTextView;
 
@@ -122,6 +139,7 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         View view = inflater.inflate(R.layout.place_fragment, container, false);
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this, view);
+        placePopularityImageViews = new ImageView[]{placePopularityImageView1, placePopularityImageView2, placePopularityImageView3, placePopularityImageView4, placePopularityImageView5};
         setupToolbar();
         setupSliderLayout();
         return view;
@@ -139,7 +157,11 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @Override
     public void setPlaceCategory(String placeCategory) {
-        placeCategoryTextView.setText(placeCategory);
+        if (placeCategory == null) {
+            placeRootLayout.removeView(placeCategoryTextView);
+        } else {
+            placeCategoryTextView.setText(placeCategory);
+        }
     }
 
     @Override
@@ -147,10 +169,10 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         placeTitleTextView.setText(placeTitle);
     }
 
-    @Override
-    public void setPlaceSubtitle(String placeSubtitle) {
-        placeSubtitleTextView.setText(placeSubtitle);
-    }
+//    @Override
+//    public void setPlaceSubtitle(String placeSubtitle) {
+//        placeSubtitleTextView.setText(placeSubtitle);
+//    }
 
     @Override
     public void setPlaceImages(List<String> placeImageUrls) {
@@ -168,27 +190,45 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
 
     @Override
     public void setPlaceAddress(String placeAddress) {
-        placeAddressTextView.setText(placeAddress);
+        if (placeAddress == null) {
+            placeRootLayout.removeView(placeAddressLayout);
+        } else {
+            placeAddressTextView.setText(placeAddress);
+        }
     }
 
     @Override
     public void setPlaceRoute(String placeRoute) {
-        placeRouteTextView.setText(placeRoute);
+        if (placeRoute == null) {
+            placeRootLayout.removeView(placeRouteLayout);
+        } else {
+            placeRouteTextView.setText(placeRoute);
+        }
     }
 
     @Override
     public void setPlacePopularity(int placePopularity) {
-        placePopularityImageView.setBackgroundColor(placePopularity);
+        for (int i = 0; i < placePopularity; i++) {
+            placePopularityImageViews[i].setBackground(getResources().getDrawable(R.drawable.circle_popularity_full));
+        }
     }
 
     @Override
     public void setPlaceDescription(String placeDescription) {
-        placeDescriptionTextView.setText(placeDescription);
+        if (placeDescription == null) {
+            placeRootLayout.removeView(placeDescriptionTextView);
+        } else {
+            placeDescriptionTextView.setText(placeDescription);
+        }
     }
 
     @Override
     public void setPlaceAuthorName(String placeAuthorName) {
-        placeAuthorNameTextView.setText(placeAuthorName);
+        if (placeAuthorName == null) {
+            placeRootLayout.removeView(placeAuthorNameLayout);
+        } else {
+            placeAuthorNameTextView.setText(placeAuthorName);
+        }
     }
 
     public void onBackPressed() {

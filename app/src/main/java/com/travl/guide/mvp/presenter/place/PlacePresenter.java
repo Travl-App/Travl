@@ -51,15 +51,34 @@ public class PlacePresenter extends MvpPresenter<PlaceView> {
 
     @SuppressLint("CheckResult")
     private void loadPlaceCardInfo() {
-        disposables.add(placesRepo.loadNewPlace(placeId).observeOn(scheduler).subscribe(root -> {
+        disposables.add(placesRepo.loadPlace(placeId).observeOn(scheduler).subscribe(root -> {
             Place place = root.getPlace();
             if (place != null) {
-                List<Double> coordinates = place.getCoordinates();
-                getViewState().setPlaceCoordinates(new double[]{coordinates.get(0), coordinates.get(1)});
+                if (place.getCategories() == null) {
+                    getViewState().setPlaceCategory(null);
+                } else {
+                    getViewState().setPlaceCategory(place.getCategories().get(0).getName());
+                }
                 getViewState().setPlaceTitle(place.getTitle());
                 getViewState().setPlaceImages(place.getImages());
-                getViewState().setPlaceAuthorName(place.getAuthor().getUsername());
+                getViewState().setPlaceAddress(place.getAddress());
+                getViewState().setPlaceRoute(place.getRoute());
+                getViewState().setPlacePopularity(place.getTraffic());
                 getViewState().setPlaceDescription(place.getDescription());
+                getViewState().setPlaceAuthorName(place.getAuthor().getUsername());
+
+//                Timber.e("place %s", place.getLink());
+//                Timber.e("категория %s", place.getCategories());
+//                Timber.e("заголовок %s", place.getTitle());
+//                Timber.e("картинка %s", place.getImages());
+//                Timber.e("адресс %s", place.getAddress());
+//                Timber.e("как добраться %s", place.getRoute());
+//                Timber.e("популярность %s", place.getTraffic());
+//                Timber.e("описание %s", place.getDescription());
+//                Timber.e("автор %s", place.getAuthor().getUsername());
+
+                List<Double> coordinates = place.getCoordinates();
+                getViewState().setPlaceCoordinates(new double[]{coordinates.get(0), coordinates.get(1)});
             }
         }, Timber::e));
     }

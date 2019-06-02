@@ -39,7 +39,7 @@ public interface NetService {
     Single<CityContent> loadCity(@Path("id") int id);
 
     @GET("api/places/{id}/")
-    Single<Root> loadNewPlace(@Path("id") int id);
+    Single<Root> loadPlace(@Path("id") int id);
 
     @GET
     Single<ManyPlacesContainer> loadNextPlaces(@Url String url);
