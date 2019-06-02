@@ -22,6 +22,24 @@
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
+            <TextView
+                android:id="@+id/start_page_city_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="@dimen/user_city_spinner_margin_end"
+                android:layout_marginBottom="22dp"
+                android:elevation="@dimen/user_city_spinner_elevation"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/start_page_city_loading"
+
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/city_spinner_item_text_size"
+                android:translationZ="@dimen/user_city_spinner_translation_z" />
+
             <Spinner
                 android:id="@+id/user_city_spinner"
                 android:layout_width="wrap_content"
@@ -32,6 +50,7 @@
                 android:layout_marginBottom="@dimen/user_city_spinner_margin_bottom"
                 android:elevation="@dimen/user_city_spinner_elevation"
                 android:translationZ="@dimen/user_city_spinner_translation_z"
+                android:visibility="gone"
                 app:layout_collapseMode="pin" />
 
             <ImageView
@@ -48,7 +67,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/start_page_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/start_page_toolbar_height"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -63,48 +82,60 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/start_page_city_articles_container_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="@dimen/start_page_city_articles_container_title_margin_top"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/interesting_nearby"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:visibility="gone"
+                android:textSize="@dimen/start_page_titles_text_size"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/start_page_city_articles_container_title_margin_top"
-                android:textSize="@dimen/start_page_titles_text_size" />
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/start_page_city_articles_container"
-                android:layout_marginTop="@dimen/start_page_city_articles_container_margin_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/start_page_city_articles_container_margin_top"
+                android:layout_marginBottom="@dimen/start_page_city_articles_container_margin_bottom"
+                android:visibility="gone" />
 
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/start_page_lists_separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:src="@drawable/start_page_lists_separator"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/start_page_travl_zine_container_title"
-                android:layout_marginStart="@dimen/start_page_travl_zine_container_title_margin_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
+                android:layout_marginStart="@dimen/start_page_travl_zine_container_title_margin_start"
                 android:layout_marginTop="@dimen/start_page_travl_zine_container_title_margin_top"
-                android:textAllCaps="true"
-                android:textColor="@android:color/black"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/travl_zine_title"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:visibility="gone"
                 android:textSize="@dimen/start_page_titles_text_size" />
 
             <FrameLayout
                 android:id="@+id/start_page_travl_zine_container"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/start_page_travl_zine_container_margin_top"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/start_page_travl_zine_container_margin_top"
                 android:layout_marginBottom="150dp"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.NestedCoordinatorLayout>

@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,6 +46,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
@@ -60,6 +63,8 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     Spinner userCitySpinner;
     @BindView(R.id.start_page_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.start_page_city_loading)
+    TextView cityLoadingTextView;
     private City currentCity;
     private String selectedCity;
     private CityContent cityContent;
@@ -228,7 +233,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
-
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -236,7 +240,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         presenter.requestCoordinates(this);
         initCitySpinner();
         presenter.loadCitiesList();
-        decideCityFragmentContainerTitleVisibility();
         if (moveToNavigator != null) {
             moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.start());
         }
@@ -260,6 +263,12 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         setCitySelectedName(cityName);
         presenter.setCityName(cityName);
         presenter.setCityArcticles();
+        showCitiesList();
+    }
+
+    private void showCitiesList() {
+        cityLoadingTextView.setVisibility(View.GONE);
+        userCitySpinner.setVisibility(View.VISIBLE);
     }
 
     private void hideCityArticlesFragment() {
@@ -278,7 +287,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (fragment != null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.show(fragment).commit();
-            setContainerTitleVisibility(View.VISIBLE);
         }
     }
 
@@ -363,7 +371,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 && currentCity.getArticleLinksContainer() != null) {
             articlesReceiver.setArticles(currentCity.getArticleLinksContainer().getArticleLinkList());
             showCityArticlesFragment();
-            decideCityFragmentContainerTitleVisibility();
         }
     }
 
@@ -372,33 +379,22 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         presenter.onLocationPermissionResult(granted);
     }
 
-    public void decideCityFragmentContainerTitleVisibility() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.start_page_city_articles_container);
-        if (fragment != null) {
-            setContainerTitleVisibility(View.VISIBLE);
-        } else {
-            if (articlesReceiver != null) {
-                if (articlesReceiver.getArticlesNumber() > 0) {
-                    setContainerTitleVisibility(View.VISIBLE);
-                } else {
-                    setContainerTitleVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        decideCityFragmentContainerTitleVisibility();
-    }
 
     private void setContainerTitleVisibility(int visibility) {
+        Timber.e("set visibility to " + visibility);
         Activity activity = getActivity();
         if (activity != null) {
             TextView titleTextView = activity.findViewById(R.id.start_page_city_articles_container_title);
             if (titleTextView != null) {
                 titleTextView.setVisibility(visibility);
+            }
+            ImageView listsSeparator = activity.findViewById(R.id.start_page_lists_separator);
+            if (listsSeparator != null) {
+                listsSeparator.setVisibility(visibility);
+            }
+            FrameLayout cityArticlesContainer = activity.findViewById(R.id.start_page_city_articles_container);
+            if (cityArticlesContainer != null) {
+                cityArticlesContainer.setVisibility(visibility);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.articles.travlzine;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -41,6 +44,21 @@ public class TravlZineArticlesFragment extends MvpAppCompatFragment implements T
     @BindView(R.id.travlzine_articles_preview_recycler)
     RecyclerView travzineArticlesPreviewRecycler;
     private OnMoveToNavigator moveToNavigator;
+
+    @Override
+    public void showContainer() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            FrameLayout container = activity.findViewById(R.id.start_page_travl_zine_container);
+            TextView title = activity.findViewById(R.id.start_page_travl_zine_container_title);
+            if (container != null) {
+                container.setVisibility(View.VISIBLE);
+                if (title != null) {
+                    title.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
 
     @Nullable
     @Override

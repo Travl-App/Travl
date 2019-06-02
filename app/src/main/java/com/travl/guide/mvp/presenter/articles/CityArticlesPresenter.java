@@ -110,6 +110,8 @@ public class CityArticlesPresenter extends MvpPresenter<CityArticlesView> {
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 this.articleLinkList = new ArrayList<>();
+            } else {
+                getViewState().showContainer();
             }
             createPublishSubjects();
             getViewState().onChangedArticlesData();

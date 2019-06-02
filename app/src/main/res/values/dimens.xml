@@ -9,12 +9,12 @@
 
     <!-- CityArticlesPreview dimens -->
     <dimen name="city_articles_card_margin">8dp</dimen>
-    <dimen name="city_articles_card_height">280dp</dimen>
+    <dimen name="city_articles_card_height">296dp</dimen>
     <dimen name="city_articles_card_text_size">14sp</dimen>
     <dimen name="city_articles_card_corner_radius">8dp</dimen>
-    <dimen name="city_articles_card_image_view_height">160dp</dimen>
+    <dimen name="city_articles_card_image_view_height">136dp</dimen>
     <dimen name="city_articles_card_preview_description">20dp</dimen>
-    <dimen name="city_article_card_width">250dp</dimen>
+    <dimen name="city_article_card_width">216dp</dimen>
     <dimen name="city_article_preview_chip_margin_bottom">10dp</dimen>
     <dimen name="city_article_preview_chip_margin_start">10dp</dimen>
     <dimen name="city_article_preview_description_margin_start">5dp</dimen>
@@ -52,7 +52,7 @@
     <dimen name="small_margin">5dp</dimen>
     <dimen name="cloud_width">70dp</dimen>
     <dimen name="start_page_image_view_height">200dp</dimen>
-    <dimen name="start_page_titles_text_size">15sp</dimen>
+    <dimen name="start_page_titles_text_size">14sp</dimen>
     <!--Place dimens-->
     <dimen name="place_margin">5dp</dimen>
     <dimen name="place_padding">5dp</dimen>
@@ -63,16 +63,21 @@
     <dimen name="city_spinner_item_padding_end">10dp</dimen>
     <dimen name="city_spinner_item_margin_end">5dp</dimen>
     <dimen name="city_spinner_item_margin_start">10dp</dimen>
-    <dimen name="start_page_city_articles_container_title_margin_top">10dp</dimen>
-    <dimen name="start_page_city_articles_container_margin_top">10dp</dimen>
+    <dimen name="start_page_city_articles_container_title_margin_top">22dp</dimen>
+    <dimen name="start_page_city_articles_container_margin_top">22dp</dimen>
     <dimen name="start_page_travl_zine_container_title_margin_top">10dp</dimen>
-    <dimen name="start_page_travl_zine_container_title_margin_start">10dp</dimen>
+    <dimen name="start_page_travl_zine_container_title_margin_start">16dp</dimen>
     <dimen name="start_page_travl_zine_container_margin_top">10dp</dimen>
     <dimen name="user_city_spinner_margin_start">5dp</dimen>
     <dimen name="user_city_spinner_margin_end">5dp</dimen>
     <dimen name="user_city_spinner_elevation">4dp</dimen>
     <dimen name="user_city_spinner_translation_z">4dp</dimen>
     <dimen name="user_city_spinner_margin_bottom">10dp</dimen>
+    <dimen name="start_page_toolbar_height">56dp</dimen>
+    <dimen name="start_page_city_articles_container_margin_bottom">24dp</dimen>
+    <dimen name="city_articles_card_margin_start">8dp</dimen>
+    <dimen name="city_articles_card_margin_end">8dp</dimen>
+    <dimen name="start_page_lists_separator_height">4dp</dimen>
 
 
 </resources>

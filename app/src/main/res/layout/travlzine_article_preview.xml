@@ -32,7 +32,7 @@
                 android:paddingTop="@dimen/travlzine_article_preview_category_text_view_padding_top"
                 android:paddingEnd="@dimen/travlzine_article_preview_category_text_view_padding_end"
                 android:paddingBottom="@dimen/travlzine_article_preview_category_text_view_padding_bottom"
-                android:background="@drawable/category_background"
+                android:background="@drawable/travlzine_category_background"
                 android:singleLine="true"
                 android:text="@string/no_category_text"
                 android:textAllCaps="true"

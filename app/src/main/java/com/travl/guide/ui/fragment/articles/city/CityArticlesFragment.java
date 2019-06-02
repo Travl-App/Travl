@@ -1,5 +1,6 @@
 package com.travl.guide.ui.fragment.articles.city;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -28,6 +31,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 public class CityArticlesFragment extends MvpAppCompatFragment implements CityArticlesView, StartPageFragment.ArticlesReceiver {
 
@@ -69,6 +73,40 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     public void onChangedArticlesData() {
         if (cityArticlesPreviewRecycler != null && cityArticlesPreviewRecycler.getAdapter() != null) {
             cityArticlesPreviewRecycler.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void showContainer() {
+        Timber.e("showing.........");
+        setContainerVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        hideContainer();
+    }
+
+    @Override
+    public void hideContainer() {
+        Timber.e("hiding.........");
+        setContainerVisibility(View.GONE);
+    }
+
+
+    private void setContainerVisibility(int visibility) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            FrameLayout container = activity.findViewById(R.id.start_page_city_articles_container);
+            TextView title = activity.findViewById(R.id.start_page_city_articles_container_title);
+            if (container != null) {
+                container.setVisibility(visibility);
+                if (title != null) {
+                    title.setVisibility(visibility);
+                    Timber.e("All set to " + visibility);
+                }
+            }
         }
     }
 

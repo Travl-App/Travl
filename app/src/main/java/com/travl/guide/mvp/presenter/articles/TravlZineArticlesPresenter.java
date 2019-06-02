@@ -136,10 +136,13 @@ public class TravlZineArticlesPresenter extends MvpPresenter<TravlZineArticlesVi
 
         @Override
         public void setArticleLinkList(List<ArticleLink> articleLinks) {
+            Timber.e("list = " + articleLinks);
             this.articleLinkList = articleLinks;
             if (articleLinkList == null || articleLinkList.size() == 0) {
                 articleLinkList = new ArrayList<>();
                 articleLinkList.add(new ArticleLink("Проверьте соединение", null));
+            } else {
+                getViewState().showContainer();
             }
             createPublishSubjects();
             getViewState().onChangedArticlesData();

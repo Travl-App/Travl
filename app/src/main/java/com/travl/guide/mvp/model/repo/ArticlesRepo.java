@@ -27,6 +27,7 @@ public class ArticlesRepo {
             return new Single<ArticleLinksContainer>() {
                 @Override
                 protected void subscribeActual(SingleObserver<? super ArticleLinksContainer> observer) {
+                    Timber.e("We do not register observer here");
                 }
             };
         }

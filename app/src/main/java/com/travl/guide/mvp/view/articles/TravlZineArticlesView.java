@@ -10,4 +10,6 @@ public interface TravlZineArticlesView extends MvpView {
     void onChangedArticlesData();
 
     void onNoMoreArticles();
+
+    void showContainer();
 }

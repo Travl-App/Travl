@@ -23,7 +23,6 @@ import com.travl.guide.mvp.view.articles.list.TravlZineFooterItemView;
 import com.travl.guide.ui.App;
 
 import io.reactivex.subjects.PublishSubject;
-import timber.log.Timber;
 
 public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -126,7 +125,6 @@ public class TravlZineArticlesAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             Drawable background = categoryText.getBackground();
             if (background instanceof GradientDrawable) {
-                Timber.e("GradientDrawable");
                 GradientDrawable gradientDrawable = (GradientDrawable) background;
                 gradientDrawable.setStroke(2, color);
             }

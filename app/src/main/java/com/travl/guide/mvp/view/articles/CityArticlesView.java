@@ -7,4 +7,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface CityArticlesView extends MvpView {
     void onChangedArticlesData();
+
+    void showContainer();
+
+    void hideContainer();
 }
