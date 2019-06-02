@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -100,12 +101,17 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
         if (activity != null) {
             FrameLayout container = activity.findViewById(R.id.start_page_city_articles_container);
             TextView title = activity.findViewById(R.id.start_page_city_articles_container_title);
+            ImageView imageView = activity.findViewById(R.id.start_page_lists_separator);
             if (container != null) {
                 container.setVisibility(visibility);
                 if (title != null) {
                     title.setVisibility(visibility);
                     Timber.e("All set to " + visibility);
                 }
+                if (imageView != null) {
+                    imageView.setVisibility(visibility);
+                }
+
             }
         }
     }
