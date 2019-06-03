@@ -120,7 +120,7 @@ public class CityArticlesFragment extends MvpAppCompatFragment implements CityAr
     public void setArticles(List<ArticleLink> articleLinks) {
         if (presenter != null) {
             presenter.getCityArticlesListPresenter().setArticleLinkList(articleLinks);
-            articlesNumber = articleLinks.size();
+            if (articleLinks != null) articlesNumber = articleLinks.size();
         }
     }
 
