@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <!-- Кастомная AppTheme.Launcher, устанавливает в качестве фона нашу drawable -->

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,8 +95,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         View textLayout = layoutInflater.inflate(R.layout.article_title_text_view, null);
         TextView titleTextView = textLayout.findViewById(R.id.article_title);
         titleTextView.setText(title);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         linearLayout.addView(titleTextView);
         linearLayout.invalidate();
     }
@@ -109,8 +106,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         View textLayout = layoutInflater.inflate(R.layout.article_subtitle_text_view, null);
         TextView subtitleTextView = textLayout.findViewById(R.id.article_subtitle);
         subtitleTextView.setText(subtitle);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         linearLayout.addView(subtitleTextView);
         linearLayout.invalidate();
     }
@@ -122,8 +117,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         View textLayout = layoutInflater.inflate(R.layout.article_description_text_view, null);
         TextView descriptionTextView = textLayout.findViewById(R.id.article_description);
         descriptionTextView.setText(description);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         linearLayout.addView(descriptionTextView);
         linearLayout.invalidate();
     }
@@ -140,12 +133,11 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void setArticlePlaceCover(String placeImageUrl, int placeId) {
+        Timber.e("Set placeImageUrl to = " + placeImageUrl);
         LayoutInflater layoutInflater = getLayoutInflater();
         View imageLayout = layoutInflater.inflate(R.layout.article_place_cover_image_view, null);
         ImageView placeCoverImageView = imageLayout.findViewById(R.id.article_place_cover);
         iImageLoader.loadInto(placeCoverImageView, placeImageUrl);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         placeCoverImageView.setOnClickListener(v -> presenter.showPlace(placeId));
         linearLayout.addView(placeCoverImageView);
         linearLayout.invalidate();
@@ -153,14 +145,28 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void setArticlePlaceDescription(String articleText) {
+        Timber.e("Set articleText to = " + articleText);
         LayoutInflater layoutInflater = getLayoutInflater();
         View textLayout = layoutInflater.inflate(R.layout.article_place_description_text_view, null);
         TextView descriptionTextView = textLayout.findViewById(R.id.article_place_description);
         descriptionTextView.setText(articleText);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         linearLayout.addView(descriptionTextView);
         linearLayout.invalidate();
+    }
+
+    @Override
+    public void setAuthorImage(String authorImageUrl) {
+
+    }
+
+    @Override
+    public void setCategory(String category) {
+
+    }
+
+    @Override
+    public void setDate(String date) {
+
     }
 
     private void setupToolbar() {

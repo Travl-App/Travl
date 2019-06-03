@@ -25,4 +25,10 @@ public interface ArticleView extends MvpView {
 
     @StateStrategyType(value = SkipStrategy.class)
     void setArticlePlaceDescription(String articleText);
+
+    void setAuthorImage(String authorImageUrl);
+
+    void setCategory(String category);
+
+    void setDate(String date);
 }
