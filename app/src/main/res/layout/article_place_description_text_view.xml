@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:fontFamily="@font/alice_regular"
     android:paddingStart="16dp"
-    android:paddingTop="16dp"
+    android:paddingTop="8dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="16dp"
     android:textColor="@android:color/black"
     android:textSize="15sp" />
