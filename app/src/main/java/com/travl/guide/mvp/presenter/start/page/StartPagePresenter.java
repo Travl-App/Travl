@@ -21,11 +21,14 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
+import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
 public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter {
 
+    @Inject
+    Router router;
     @Inject
     CityRepo cityRepo;
     private Scheduler scheduler;
@@ -142,5 +145,10 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     public void setCityName(String cityName) {
         cityRepo.saveCityName(cityName);
+    }
+
+    public void OnCityInfoButtonClick(int selectedCityId) {
+        //TODO: Go to CityInfo Screen Here
+        //router.navigateTo(new Screens.CityInfoScreen());
     }
 }

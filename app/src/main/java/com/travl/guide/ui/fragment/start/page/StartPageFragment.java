@@ -78,6 +78,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     private ArticlesReceiver articlesReceiver;
     private double[] citySelectedCoordinates;
     private OnMoveToNavigator moveToNavigator;
+    private int selectedCityId;
 
     @ProvidePresenter
     public StartPagePresenter providePresenter() {
@@ -100,6 +101,19 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void initCitySpinner() {
         initCitySpinnerList();
         initCitySpinnerClickListener();
+        initCityInfoButton();
+    }
+
+    private void initCityInfoButton() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            ImageView imageView = activity.findViewById(R.id.start_page_city_info_button);
+            if (imageView != null) {
+                imageView.setOnClickListener(v -> {
+                    presenter.OnCityInfoButtonClick(selectedCityId);
+                });
+            }
+        }
     }
 
     private void setCitySelectedName(String citySelected) {
@@ -134,6 +148,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
                 for (CitiesList.CityLink link : cityObjectList.getCities()) {
                     String formattedLink = listCreator.formatCityLink(link);
                     if (selectedCity.equals(formattedLink) || (getString(R.string.user_location_marker) + " " + selectedCity).equals(formattedLink)) {
+                        selectedCityId = link.getId();
                         presenter.loadCityContentByLinkId(link.getId());
                         return;
                     }
