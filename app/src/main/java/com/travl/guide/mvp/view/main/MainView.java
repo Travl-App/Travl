@@ -34,4 +34,6 @@ public interface MainView extends MvpView {
     void onMoveToTravlZineScreen();
 
     void onMoveToArticleScreen();
+	@StateStrategyType(value = SkipStrategy.class)
+    void onMoveToInfoCityScreen();
 }

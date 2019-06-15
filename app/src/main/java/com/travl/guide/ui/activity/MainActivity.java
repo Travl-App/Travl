@@ -157,6 +157,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         } else if (currentScreen == CurrentScreen.INSTANCE.travlzine()) {
             screen = currentScreen;
             onMoveToTravlZineScreen();
+        } else if (currentScreen == CurrentScreen.INSTANCE.info()){
+	        screen = currentScreen;
+	        onMoveToInfoCityScreen();
         }
     }
 
@@ -198,7 +201,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
         });
     }
 
-    @Override
+	@Override
+	public void onMoveToInfoCityScreen() {
+		bar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+		fab.setOnClickListener(view -> {
+			presenter.toMapScreen();
+		});
+	}
+
+	@Override
     public void onMoveToArticleScreen() {
 
     }

@@ -12,6 +12,7 @@ import com.travl.guide.mvp.model.location.LocationRequester;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
+import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
@@ -148,7 +149,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     public void OnCityInfoButtonClick(int selectedCityId) {
-        //TODO: Go to CityInfo Screen Here
-        //router.navigateTo(new Screens.CityInfoScreen());
+	    router.navigateTo(new Screens.InfoCityScreen(selectedCityId));
     }
 }
