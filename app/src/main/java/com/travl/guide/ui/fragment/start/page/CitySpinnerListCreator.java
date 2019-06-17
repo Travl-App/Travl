@@ -13,6 +13,8 @@ import com.travl.guide.ui.App;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class CitySpinnerListCreator {
     private static final String COMMA = ", ";
 
@@ -34,14 +36,25 @@ public class CitySpinnerListCreator {
     public String formatCityLink(CitiesList.CityLink cityLink) {
         String title = null;
         String area = cityLink.getArea();
+        String place = cityLink.getPlace();
         String region = cityLink.getRegion();
         String country = cityLink.getCountry();
-        if (!area.equals(region)) {
-            title = area + COMMA + region + COMMA + country;
-        } else {
-            title = area + COMMA + country;
+        Timber.e("format area = " + area + " place = " + place + " region " + region + " country " + country);
+        area = formatPlaceName(area);
+        place = formatPlaceName(place);
+        region = formatPlaceName(region);
+        country = formatPlaceName(country);
+        if (area != null && !area.isEmpty()) {
+            title = area;
+        } else if (place != null && !place.isEmpty()) {
+            title = place;
+        } else if (region != null && !region.isEmpty()) {
+            title = region;
+        } else if (country != null && !country.isEmpty()) {
+            title = country;
         }
         title = formatPlaceName(title);
+        Timber.e("title = " + title);
         return title;
     }
 
@@ -91,19 +104,21 @@ public class CitySpinnerListCreator {
             String place = city.getPlaceName();
             String region = city.getRegion();
             String country = city.getCountry();
-            if (area != null) {
-                if (!area.equals(region)) {
-                    placeName = area + COMMA + region + COMMA + country;
-                } else {
-                    placeName = area + COMMA + country;
-                }
-            } else if (place != null) {
-                if (!place.equals(region)) {
-                    placeName = place + COMMA + region + COMMA + country;
-                } else {
-                    placeName = place + COMMA + country;
-                }
+            Timber.e("area = " + area + " place = " + place + " region " + region + " country " + country);
+            area = formatPlaceName(area);
+            place = formatPlaceName(place);
+            region = formatPlaceName(region);
+            country = formatPlaceName(country);
+            if (area != null && !area.isEmpty()) {
+                placeName = area;
+            } else if (place != null && !place.isEmpty()) {
+                placeName = place;
+            } else if (region != null && !region.isEmpty()) {
+                placeName = region;
+            } else if (country != null && !country.isEmpty()) {
+                placeName = country;
             }
+            Timber.e("placeName = " + placeName);
         }
         return placeName;
     }

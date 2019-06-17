@@ -54,4 +54,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void onMoveToArticleScreen() {
         getViewState().onMoveToArticleScreen();
     }
+
+	public void onMoveToInfoCityScreen() {
+		getViewState().onMoveToInfoCityScreen();
+	}
 }

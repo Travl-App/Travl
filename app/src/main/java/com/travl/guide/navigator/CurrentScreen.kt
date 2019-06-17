@@ -9,7 +9,7 @@ object CurrentScreen {
         get() = selectedScreen
 
     enum class Screen {
-        StartPage, TravlzinePage, FavoritePage, MapPage, PostPage, ArticlePage
+        StartPage, TravlzinePage, FavoritePage, MapPage, PostPage, ArticlePage, InfoCityPage
     }
 
     fun travlzine(): Screen {
@@ -39,6 +39,11 @@ object CurrentScreen {
 
     fun article(): Screen {
         selectedScreen = Screen.ArticlePage
+        return selectedScreen
+    }
+
+    fun info(): Screen {
+        selectedScreen = Screen.InfoCityPage
         return selectedScreen
     }
 }

@@ -68,11 +68,13 @@
     <dimen name="start_page_travl_zine_container_title_margin_top">10dp</dimen>
     <dimen name="start_page_travl_zine_container_title_margin_start">16dp</dimen>
     <dimen name="start_page_travl_zine_container_margin_top">10dp</dimen>
-    <dimen name="user_city_spinner_margin_start">5dp</dimen>
-    <dimen name="user_city_spinner_margin_end">5dp</dimen>
+    <dimen name="user_city_spinner_margin_start">18dp</dimen>
+    <dimen name="user_city_spinner_margin_end">58dp</dimen>
     <dimen name="user_city_spinner_elevation">4dp</dimen>
     <dimen name="user_city_spinner_translation_z">4dp</dimen>
-    <dimen name="user_city_spinner_margin_bottom">10dp</dimen>
+    <dimen name="user_city_spinner_margin_bottom">18dp</dimen>
+    <dimen name="user_city_spinner_width">300dp</dimen>
+    <dimen name="user_city_spinner_margin_top">22dp</dimen>
     <dimen name="start_page_toolbar_height">56dp</dimen>
     <dimen name="start_page_city_articles_container_margin_bottom">24dp</dimen>
     <dimen name="city_articles_card_margin_start">8dp</dimen>

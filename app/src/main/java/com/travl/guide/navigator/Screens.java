@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import com.travl.guide.ui.fragment.articles.ArticleFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
+import com.travl.guide.ui.fragment.info.InfoCityFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
 import com.travl.guide.ui.fragment.start.page.StartPageFragment;
@@ -79,4 +80,18 @@ public class Screens extends Screen {
             return ArticleFragment.getInstance(articleId);
         }
     }
+
+	public static class InfoCityScreen extends SupportAppScreen {
+
+		private int cityId;
+
+		public InfoCityScreen(int cityId) {
+			this.cityId = cityId;
+		}
+
+		@Override
+		public Fragment getFragment() {
+			return InfoCityFragment.newInstance(cityId);
+		}
+	}
 }

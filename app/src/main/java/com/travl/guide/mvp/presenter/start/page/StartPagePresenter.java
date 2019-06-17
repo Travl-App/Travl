@@ -12,6 +12,7 @@ import com.travl.guide.mvp.model.location.LocationRequester;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
+import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
 
 import java.util.ArrayList;
@@ -21,11 +22,14 @@ import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
+import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
 public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter {
 
+    @Inject
+    Router router;
     @Inject
     CityRepo cityRepo;
     private Scheduler scheduler;
@@ -142,5 +146,9 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     public void setCityName(String cityName) {
         cityRepo.saveCityName(cityName);
+    }
+
+    public void OnCityInfoButtonClick(int selectedCityId) {
+	    router.navigateTo(new Screens.InfoCityScreen(selectedCityId));
     }
 }

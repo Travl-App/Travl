@@ -34,7 +34,6 @@
                 android:elevation="@dimen/user_city_spinner_elevation"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/start_page_city_loading"
-
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/city_spinner_item_text_size"
@@ -42,15 +41,19 @@
 
             <Spinner
                 android:id="@+id/user_city_spinner"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/user_city_spinner_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
+                android:layout_marginTop="@dimen/user_city_spinner_margin_top"
+                android:background="@null"
                 android:layout_marginStart="@dimen/user_city_spinner_margin_start"
                 android:layout_marginEnd="@dimen/user_city_spinner_margin_end"
                 android:layout_marginBottom="@dimen/user_city_spinner_margin_bottom"
+                android:fitsSystemWindows="true"
                 android:elevation="@dimen/user_city_spinner_elevation"
                 android:translationZ="@dimen/user_city_spinner_translation_z"
                 android:visibility="gone"
+                tools:listitem="@layout/start_page_cities_spinner_item"
                 app:layout_collapseMode="pin" />
 
             <ImageView
@@ -63,6 +66,19 @@
                 android:minHeight="100dp"
                 app:layout_collapseMode="parallax"
                 tools:text="ImageView" />
+
+            <ImageView
+                android:id="@+id/start_page_city_info_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="18dp"
+                android:elevation="@dimen/user_city_spinner_elevation"
+                android:src="@drawable/ic_info_outline_24dp"
+                android:translationZ="@dimen/user_city_spinner_translation_z" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/start_page_toolbar"
