@@ -24,10 +24,12 @@ import butterknife.Unbinder;
 
 public class InfoCityFragment extends MvpAppCompatFragment implements InfoCityView {
 
+	public static final String KEY_CITY_ID = "key city id";
+
 	public static InfoCityFragment newInstance(int cityId){
 		InfoCityFragment fragment = new InfoCityFragment();
 		Bundle args = new Bundle();
-		args.putInt("key city id", cityId);
+		args.putInt(KEY_CITY_ID, cityId);
 		fragment.setArguments(args);
 		return fragment;
 	}
