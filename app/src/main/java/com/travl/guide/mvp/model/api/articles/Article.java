@@ -26,6 +26,15 @@ public class Article {
     @SerializedName("article_places")
     private List<ArticlePlace> articlePlaces;
 
+    @Expose
+    private String modified;
+    @Expose
+    private List<Category> categories;
+    @Expose
+    private Author author;
+    @Expose
+    private String link;
+
     public List<ArticlePlace> getArticlePlaces() {
         return articlePlaces;
     }
@@ -72,5 +81,37 @@ public class Article {
 
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
+    }
+
+    public String getModified() {
+        return modified;
+    }
+
+    public void setModified(String modified) {
+        this.modified = modified;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

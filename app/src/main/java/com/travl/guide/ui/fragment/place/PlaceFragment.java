@@ -1,6 +1,10 @@
 package com.travl.guide.ui.fragment.place;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -160,6 +164,50 @@ public class PlaceFragment extends MvpAppCompatFragment implements PlaceView, Co
         if (placeCategory == null) {
             placeRootLayout.removeView(placeCategoryTextView);
         } else {
+            placeCategory = placeCategory.toUpperCase();
+            Resources resources = App.getInstance().getResources();
+            int color = 0;
+            switch (placeCategory) {
+                case "АРХИТЕКТУРА":
+                    color = Color.parseColor(resources.getString(R.string.category_color_architecture));
+                    break;
+                case "ПОКУПКИ":
+                    color = Color.parseColor(resources.getString(R.string.category_color_goods));
+                    break;
+                case "ЕДА":
+                    color = Color.parseColor(resources.getString(R.string.category_color_food));
+                    break;
+                case "ЖИЛЬЕ":
+                    color = Color.parseColor(resources.getString(R.string.category_color_habitation));
+                    break;
+                case "ОТЕЛЬ":
+                    color = Color.parseColor(resources.getString(R.string.category_color_habitation));
+                    break;
+                case "ПРИРОДА":
+                    color = Color.parseColor(resources.getString(R.string.category_color_nature));
+                    break;
+                case "STREETART":
+                    color = Color.parseColor(resources.getString(R.string.category_color_streetart));
+                    break;
+                case "НАХОДКА":
+                    color = Color.parseColor(resources.getString(R.string.category_color_trove));
+                    break;
+                case "URBEX":
+                    color = Color.parseColor(resources.getString(R.string.category_color_urbex));
+                    break;
+                case "ВИД":
+                    color = Color.parseColor(resources.getString(R.string.category_color_view));
+                    break;
+                default:
+                    color = Color.parseColor(resources.getString(R.string.category_color_default));
+                    break;
+            }
+            Drawable background = placeCategoryTextView.getBackground();
+            if (background instanceof GradientDrawable) {
+                GradientDrawable gradientDrawable = (GradientDrawable) background;
+                gradientDrawable.setStroke(2, color);
+            }
+            placeCategoryTextView.setTextColor(color);
             placeCategoryTextView.setText(placeCategory);
         }
     }

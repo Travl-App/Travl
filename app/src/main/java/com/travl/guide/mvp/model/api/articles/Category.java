@@ -11,6 +11,11 @@ public class Category {
     @Expose
     private String name;
 
+    @Expose
+    private int id;
+    @Expose
+    private String modified;
+
     public String getLink() {
         return link;
     }
@@ -25,5 +30,21 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getModified() {
+        return modified;
+    }
+
+    public void setModified(String modified) {
+        this.modified = modified;
     }
 }
