@@ -18,13 +18,13 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
-                android:id="@+id/article_cover"
+                android:id="@+id/image_view_article_cover"
                 android:layout_width="match_parent"
                 android:layout_height="176dp"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
-                app:layout_collapseParallaxMultiplier="0.9"
                 app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9"
                 tools:text="ImageView" />
 
             <android.support.v7.widget.Toolbar
@@ -45,6 +45,64 @@
             android:id="@+id/article_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_article_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/category_background"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center_horizontal"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:text="КАТЕГОРИЯ"
+                android:textColor="#99c1a9"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/text_view_article_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/roboto_slab_bold"
+                android:gravity="center_horizontal"
+                android:text="ЗАГОЛОВОК"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/text_view_article_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center_horizontal"
+                android:text="ПОДЗАГОЛОВОК"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/text_view_article_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/alice_regular"
+                android:text="ОПИСАНИЕ"
+                android:textSize="18sp" />
+
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.NestedCoordinatorLayout>

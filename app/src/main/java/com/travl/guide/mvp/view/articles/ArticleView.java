@@ -9,16 +9,22 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface ArticleView extends MvpView {
 
     @StateStrategyType(value = SkipStrategy.class)
+    void setImageCover(String coverUrl);
+
+    void setAuthorImage(String authorImageUrl);
+
+    void setCategory(String category);
+
+    @StateStrategyType(value = SkipStrategy.class)
     void setTitle(String title);
 
     @StateStrategyType(value = SkipStrategy.class)
     void setSubTitle(String subtitle);
 
-    @StateStrategyType(value = SkipStrategy.class)
-    void setDescription(String description);
+    void setDate(String date);
 
     @StateStrategyType(value = SkipStrategy.class)
-    void setImageCover(String coverUrl);
+    void setDescription(String description);
 
     @StateStrategyType(value = SkipStrategy.class)
     void setArticlePlaceCover(String placeImageUrl, int placeId);
@@ -26,9 +32,4 @@ public interface ArticleView extends MvpView {
     @StateStrategyType(value = SkipStrategy.class)
     void setArticlePlaceDescription(String articleText);
 
-    void setAuthorImage(String authorImageUrl);
-
-    void setCategory(String category);
-
-    void setDate(String date);
 }
