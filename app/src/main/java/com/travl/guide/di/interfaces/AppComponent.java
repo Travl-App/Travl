@@ -12,6 +12,7 @@ import com.travl.guide.mvp.presenter.articles.ArticlePresenter;
 import com.travl.guide.mvp.presenter.articles.CityArticlesPresenter;
 import com.travl.guide.mvp.presenter.articles.TravlZineArticlesPresenter;
 import com.travl.guide.mvp.presenter.favourite.FavoritePresenter;
+import com.travl.guide.mvp.presenter.info.InfoCityPresenter;
 import com.travl.guide.mvp.presenter.main.MainPresenter;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.presenter.place.PlacePresenter;
@@ -22,6 +23,7 @@ import com.travl.guide.ui.fragment.articles.city.CityArticlesFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;
 import com.travl.guide.ui.fragment.drawer.BottomNavigationDrawerBehavior;
 import com.travl.guide.ui.fragment.favorite.FavoriteFragment;
+import com.travl.guide.ui.fragment.info.InfoCityFragment;
 import com.travl.guide.ui.fragment.map.MapsFragment;
 import com.travl.guide.ui.fragment.place.PlaceFragment;
 
@@ -73,4 +75,8 @@ public interface AppComponent {
     void inject(ArticlePresenter presenter);
 
     void inject(ArticleFragment fragment);
+
+    void inject(InfoCityPresenter presenter);
+
+	void inject(InfoCityFragment fragment);
 }

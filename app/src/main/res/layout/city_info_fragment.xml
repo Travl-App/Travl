@@ -65,7 +65,7 @@
                 android:id="@+id/city_article"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_slab_regular"
+                android:fontFamily="@font/alice_regular"
                 android:textSize="18sp"
                 android:lineSpacingExtra="6sp"
                 android:textColor="@android:color/black"
