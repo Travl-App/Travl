@@ -5,6 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import com.travl.guide.mvp.model.api.articles.CityArticleLinksContainer;
 
 public class City {
+	@SerializedName("title")
+	@Expose
+	private String title;
+	@SerializedName("description")
+	@Expose
+	private String description;
+	@SerializedName("image")
+	@Expose
+	private String image;
     @SerializedName("area")
     @Expose
     private String area;
@@ -33,7 +42,31 @@ public class City {
     @Expose
     private double[] coordinates;
 
-    public String getPlaceName() {
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getPlaceName() {
         return placeName;
     }
 
