@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import com.travl.guide.mvp.model.api.articles.CityArticleLinksContainer;
 
 public class City {
+	@SerializedName("id")
+	@Expose
+	private int idCity;
 	@SerializedName("title")
 	@Expose
 	private String title;
@@ -41,6 +44,14 @@ public class City {
     @SerializedName("coordinates")
     @Expose
     private double[] coordinates;
+
+	public int getIdCity() {
+		return idCity;
+	}
+
+	public void setIdCity(int idCity) {
+		this.idCity = idCity;
+	}
 
 	public String getTitle() {
 		return title;

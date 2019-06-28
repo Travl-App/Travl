@@ -86,6 +86,11 @@ dependencies {
 
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.9'
+
+    //    Room
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
