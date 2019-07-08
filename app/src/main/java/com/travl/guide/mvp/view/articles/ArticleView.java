@@ -5,6 +5,8 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import java.util.List;
+
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface ArticleView extends MvpView {
 
@@ -26,8 +28,7 @@ public interface ArticleView extends MvpView {
     @StateStrategyType(value = SkipStrategy.class)
     void setDescription(String description);
 
-    @StateStrategyType(value = SkipStrategy.class)
-    void setArticlePlaceCover(String placeImageUrl, int placeId);
+    void setArticlePlaceCardView(String articlePlaceTitle, List<String> placeImageUrls, int placeId);
 
     @StateStrategyType(value = SkipStrategy.class)
     void setArticlePlaceDescription(String articleText);

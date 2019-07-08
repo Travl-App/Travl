@@ -54,13 +54,13 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
                     getViewState().setCategory(article.getCategories().get(0).getName());
                     getViewState().setTitle(article.getTitle());
                     getViewState().setSubTitle(article.getSubtitle());
-
+                    getViewState().setDate(article.getModified());
                     getViewState().setDescription(article.getDescription());
                     List<ArticlePlace> articlePlaceList = article.getArticlePlaces();
                     for (ArticlePlace articlePlace : articlePlaceList) {
                         String placeCoverUrl = articlePlace.getPlaceImageUrl();
                         if (placeCoverUrl != null) {
-                            getViewState().setArticlePlaceCover(baseUrl + placeCoverUrl.substring(1), articlePlace.getId());
+                            getViewState().setArticlePlaceCardView(articlePlace.getTitle(), articlePlace.getOther_images(), articlePlace.getId());
                         }
                         getViewState().setArticlePlaceDescription(articlePlace.getArticleText());
                     }
