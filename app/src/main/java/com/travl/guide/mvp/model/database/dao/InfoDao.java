@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import com.travl.guide.mvp.model.api.city.info.InfoCity;
+import com.travl.guide.mvp.model.database.models.InfoCity;
 
 import io.reactivex.Maybe;
 
@@ -12,7 +12,7 @@ import io.reactivex.Maybe;
 public interface InfoDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	long insertCity(InfoCity city);
+	void insertCity(InfoCity city);
 
 	@Query("SELECT * FROM infoCity WHERE idCity = :idCity")
 	Maybe<InfoCity> getInfoCity(int idCity);

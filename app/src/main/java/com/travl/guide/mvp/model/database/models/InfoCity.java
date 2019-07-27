@@ -1,4 +1,4 @@
-package com.travl.guide.mvp.model.api.city.info;
+package com.travl.guide.mvp.model.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

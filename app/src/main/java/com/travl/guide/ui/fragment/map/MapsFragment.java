@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
@@ -34,22 +33,25 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.places.map.Place;
+import com.travl.guide.mvp.model.api.places.map.PlaceLink;
 import com.travl.guide.mvp.presenter.maps.MapsPresenter;
 import com.travl.guide.mvp.view.maps.MapsView;
 import com.travl.guide.navigator.CurrentScreen;
 import com.travl.guide.ui.App;
 import com.travl.guide.ui.activity.OnMoveToNavigator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,26 +65,26 @@ import static com.travl.guide.ui.utils.MapUtils.MARKER_LAYER;
 import static com.travl.guide.ui.utils.MapUtils.PLACES_GEO_SOURCE;
 import static com.travl.guide.ui.utils.MapUtils.PLACE_IMAGE;
 import static com.travl.guide.ui.utils.MapUtils.REQUEST_CODE_AUTOCOMPLETE;
-import static com.travl.guide.ui.utils.MapUtils.SymbolGenerator;
 import static com.travl.guide.ui.utils.MapUtils.convertToLatLng;
 
-public class MapsFragment extends MvpAppCompatFragment implements MapsView, PermissionsListener {
+public class MapsFragment extends MvpAppCompatFragment implements
+	MapsView,
+	OnMapReadyCallback,
+	PermissionsListener {
 
     public static final String COORDS = "coords";
-    @BindView(R.id.mapView)
-    MapView mapView;
-    @BindView(R.id.map_location_fab)
-    FloatingActionButton locationFab;
-    @InjectPresenter
-    MapsPresenter presenter;
 
+    @BindView(R.id.mapView) MapView mapView;
+    @BindView(R.id.map_location_fab) FloatingActionButton locationFab;
+
+    @InjectPresenter  MapsPresenter presenter;
 
     private MapboxMap mapBoxMap;
-    private List<Place> listPlaces;
-    private List<Feature> markerCoordinates;
+//    private List<Place> listPlaces;
+	private List<Feature> markerCoordinates;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
-    private GeoJsonSource geoJsonSource;
+//    private GeoJsonSource geoJsonSource;
     private OnMoveToNavigator moveToNavigator;
 
     public static MapsFragment getInstance(double[] coordinates) {
@@ -93,9 +95,15 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         return instance;
     }
 
+	@ProvidePresenter
+	public MapsPresenter providePresenter() {
+		MapsPresenter presenter = new MapsPresenter(AndroidSchedulers.mainThread());
+		App.getInstance().getAppComponent().inject(presenter);
+		return presenter;
+	}
+
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        Timber.e("onViewStateRestored");
         super.onViewStateRestored(savedInstanceState);
         if (moveToNavigator != null) {
             moveToNavigator.onMoveTo(CurrentScreen.INSTANCE.map());
@@ -119,21 +127,42 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Timber.e("OnCreateView MapsFragment");
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
         App.getInstance().getAppComponent().inject(this);
         mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
         setupViews();
         return view;
     }
 
+	/**
+	 *  кэлбэк загрузки карты
+	 * @param mapBox
+	 */
+	@Override
+	public void onMapReady(@NonNull MapboxMap mapBox) {
+		mapBoxMap = mapBox;
+		mapBoxMap.setStyle(createStyle(), style -> {
+			LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
+			localizationPlugin.matchMapLanguageWithDeviceDefault();
+			mapBoxMap.getUiSettings().setCompassEnabled(false);
+			mapBoxMap.getUiSettings().setLogoEnabled(false);
+			mapBoxMap.getUiSettings().setAttributionEnabled(false);
+			activateLocationComponent();
+			presenter.showUserLocation();
+			presenter.makeRequestForPlaces(getCoordinates());
+			setupOnMapViewClickListener();
+		});
+	}
+
     private void setupViews() {
-        presenter.setupMapView();
-        presenter.setupLocationFab();
+//        presenter.setupMapView();
+//        presenter.setupLocationFab();
+	    setupFab();
     }
 
-    @Override
+//    @Override
     public void setupFab() {
         locationFab.setOnClickListener(view -> findUser());
     }
@@ -159,59 +188,95 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
         startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
     }
 
-    @Override
-    public void setupMapBox() {
-        Timber.e("Setup MapBox");
-        if (mapView != null) {
-            mapView.getMapAsync(mapBoxMap -> {
-                Timber.e("getMapAsync");
-                this.mapBoxMap = mapBoxMap;
-                mapBoxMap.setStyle(new Style.Builder().fromUrl(getString(R.string.mapbox_syle_link_minimo)), style -> {
-                    Timber.e("Set Map style");
-                    LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapBoxMap, style);
-                    localizationPlugin.matchMapLanguageWithDeviceDefault();
-                    mapBoxMap.getUiSettings().setCompassEnabled(false);
-                    mapBoxMap.getUiSettings().setLogoEnabled(false);
-                    mapBoxMap.getUiSettings().setAttributionEnabled(false);
-                    activateLocationComponent();
-                    Timber.e("RequestForPlaces");
-                    presenter.showUserLocation();
-                    Bundle args = getArguments();
-                    double[] coordinates = null;
-                    if (args != null) {
-                        coordinates = args.getDoubleArray(COORDS);
-                    } else {
-                        if (locationComponent != null) {
-                            @SuppressLint("MissingPermission") Location location = locationComponent.getLastKnownLocation();
-                            if (location != null) {
-                                coordinates = new double[2];
-                                coordinates[0] = location.getLatitude();
-                                coordinates[1] = location.getLongitude();
-                            }
-                        }
-                    }
-                    presenter.makeRequestForPlaces(coordinates);
-                });
-            });
-        }
+	/**
+	 * Метод создания стиля карты
+	 * @return Style.Builder
+	 */
+	private Style.Builder createStyle(){
+	    return new Style.Builder()
+		    .fromUrl(getString(R.string.mapbox_syle_link_minimo))
+		    .withImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black))
+		    .withSource(new GeoJsonSource(PLACES_GEO_SOURCE));
     }
 
+	/**
+	 * Метод перевода List<PlaceLink> links -> FeatureCollection
+	 * @param places
+	 * @return FeatureCollection
+	 */
+	private FeatureCollection createFeatureCollection(List<PlaceLink> places){
+		if (markerCoordinates == null) markerCoordinates = new ArrayList<>();
+	    for (int i = 0; i < places.size(); i++) {
+		    double[] coordinates = places.get(i).getCoordinates();
+		    double latitude = coordinates[0];
+		    double longitude = coordinates[1];
+		    Feature feature = Feature.fromGeometry(Point.fromLngLat(longitude, latitude));
+            feature.addNumberProperty("id", places.get(i).getId());
+		    markerCoordinates.add(feature);
+	    }
+	    return FeatureCollection.fromFeatures(markerCoordinates);
+    }
+
+	/**
+	 * Изменял этот метод, для устранения бага
+	 * метод загрузки маркеров в стиль карты
+	 */
+	@Override
+	public void onPlacesLoaded(List<PlaceLink> places, boolean isLast) {
+		Style style = mapBoxMap.getStyle();
+		if (style != null) {
+			FeatureCollection featureCollection = createFeatureCollection(places);
+			GeoJsonSource source = (GeoJsonSource) style.getSource(PLACES_GEO_SOURCE);
+			if (source != null) {
+				source.setGeoJson(featureCollection);
+			}
+			if (isLast){
+				SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE);
+				layer.withProperties(iconImage(PLACE_IMAGE), iconOffset(new Float[]{0f, -9f}),
+					PropertyFactory.iconIgnorePlacement(true));
+				style.addLayer(layer);
+			}
+		}
+	}
+
+	/**
+	 * Метод получения координат местоположения пользователя
+	 * @return double[] или null
+	 */
+	private double[] getCoordinates(){
+	    Bundle args = getArguments();
+	    if (args != null) {
+		    return args.getDoubleArray(COORDS);
+	    }
+	    if (locationComponent != null) {
+		    @SuppressLint("MissingPermission") Location location = locationComponent.getLastKnownLocation();
+		    if (location != null) {
+			    double[] coordinates = new double[2];
+			    coordinates[0] = location.getLatitude();
+			    coordinates[1] = location.getLongitude();
+			    return coordinates;
+		    }
+	    }
+	    return null;
+    }
+
+	//TODO вот этот метод зачем? onRequestCompleted
     @SuppressLint("UseSparseArrays")
     @Override
     public void onRequestCompleted(List<Place> listPlaces) {
-        HashMap<Integer, View> viewMap = new HashMap<>();
-        HashMap<String, Bitmap> bitmapMap = new HashMap<>();
-        if (this.listPlaces == null) {
-            this.listPlaces = listPlaces;
-        } else {
-            this.listPlaces.addAll(listPlaces);
-        }
-
-        for (int i = 0; i < listPlaces.size(); i++) {
-            View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);
-            bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
-            viewMap.put(listPlaces.get(i).getId(), view);
-        }
+//        HashMap<Integer, View> viewMap = new HashMap<>();
+//        HashMap<String, Bitmap> bitmapMap = new HashMap<>();
+//        if (this.listPlaces == null) {
+//            this.listPlaces = listPlaces;
+//        } else {
+//            this.listPlaces.addAll(listPlaces);
+//        }
+//
+//        for (int i = 0; i < listPlaces.size(); i++) {
+//            View view = getLayoutInflater().inflate(R.layout.map_mapillary_layout_callout, null);
+//            bitmapMap.put(listPlaces.get(i).getDescription(), SymbolGenerator(view));
+//            viewMap.put(listPlaces.get(i).getId(), view);
+//        }
 
         // if(mapBoxMap != null) mapBoxMap.getStyle().addImages(bitmapMap);
     }
@@ -240,43 +305,17 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     }
 
     @Override
-    public void onPlacesLoaded(List<Feature> markerCoordinates) {
-        if (mapBoxMap != null) {
-            Style style = mapBoxMap.getStyle();
-            if (style != null) {
-                SymbolLayer layer = new SymbolLayer(MARKER_LAYER, PLACES_GEO_SOURCE)
-                        .withProperties(iconImage(PLACE_IMAGE),
-                                iconOffset(new Float[]{0f, -9f}));
-                if (this.markerCoordinates == null) {
-                    this.markerCoordinates = markerCoordinates;
-                } else {
-                    this.markerCoordinates.addAll(markerCoordinates);
-                }
-                if (geoJsonSource == null) {
-                    geoJsonSource = new GeoJsonSource(PLACES_GEO_SOURCE, FeatureCollection.fromFeatures(this.markerCoordinates));
-                    style.addSource(geoJsonSource);
-                    style.addImage(PLACE_IMAGE, getResources().getDrawable(R.drawable.ic_place_black));
-                    style.addLayer(layer);
-                    setupOnMapViewClickListener();
-                } else {
-                    geoJsonSource.setGeoJson(FeatureCollection.fromFeatures(this.markerCoordinates));
-                }
-            }
-        }
-    }
-
-    @Override
     public void showUserLocation() {
         Bundle args = getArguments();
         if (args != null) {
             double[] coordinates = args.getDoubleArray(COORDS);
             if (coordinates != null) {
-                Timber.e("Moving camera to coordinates " + Arrays.toString(coordinates));
+                Timber.i("Moving camera to coordinates %s", Arrays.toString(coordinates));
                 moveCameraToCoordinates(coordinates);
                 return;
             }
         }
-        Timber.e("Args = " + args);
+        Timber.i("Args = %s", args);
         findUser();
     }
 
@@ -363,13 +402,6 @@ public class MapsFragment extends MvpAppCompatFragment implements MapsView, Perm
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @ProvidePresenter
-    public MapsPresenter providePresenter() {
-        MapsPresenter presenter = new MapsPresenter(AndroidSchedulers.mainThread());
-        App.getInstance().getAppComponent().inject(presenter);
-        return presenter;
     }
 
     @Override

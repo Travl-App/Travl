@@ -4,7 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.travl.guide.mvp.model.database.AppDatabase;
-import com.travl.guide.mvp.model.database.RoomHelper;
+import com.travl.guide.mvp.model.database.RoomCache;
 import com.travl.guide.mvp.model.database.dao.InfoDao;
 import com.travl.guide.ui.App;
 
@@ -20,9 +20,9 @@ public class DataBaseModule {
 		this.context = App.getInstance().getApplicationContext();
 	}
 
-	@Provides //здесь наверное можно инжектировать и через сеттеры, не знаю какие запросы будут в базу
-	RoomHelper provideRoomHelper(){
-		return new RoomHelper(getCityDao());
+	@Provides
+	RoomCache provideRoomCache(InfoDao infoDao){
+		return new RoomCache(infoDao);
 	}
 
 	@Provides
