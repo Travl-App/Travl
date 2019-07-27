@@ -93,7 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Bott
 
     private void defaultBackPressedBehaviour(Fragment fragment) {
         if (!(fragment instanceof StartPageFragment)) {
-            Timber.e("To start page");
+            Timber.e("Exit");
             router.exit();
         } else {
             Timber.e("Finish");

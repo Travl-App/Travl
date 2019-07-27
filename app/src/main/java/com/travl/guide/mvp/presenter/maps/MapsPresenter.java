@@ -43,28 +43,16 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         disposables = new ArrayList<>();
     }
 
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-    }
-
-    public void setupMapView() {
-        getViewState().setupMapBox();
-    }
-
-    public void showUserLocation() {
+    public void onLocationComponentActivated() {
         getViewState().showUserLocation();
     }
 
-    public void toPlaceScreen(int id) {
+    public void onPlaceMarkerClick(int id) {
         router.navigateTo(new Screens.PlaceScreen(id));
     }
 
     @SuppressLint("CheckResult")
-    public void makeRequestForPlaces(double[] coordinates) {
-        Timber.e("Make request");
-        getViewState().showLoadInfo();
-        Timber.e("Maps received coordinates = " + Arrays.toString(coordinates) + " from locationRequester");
+    public void onMapBoxSetup(double[] coordinates) {
         if (coordinates == null) return;
         double latitude = coordinates[0];
         double longitude = coordinates[1];
@@ -95,7 +83,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
             if (links != null) {
                 int lastItemId = links.get(links.size() - 1).getId();
                 if ((nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems) {
-                    Timber.e("Next url = " + nextUrl);
                     loadNextPlaces(nextUrl);
                 }
                 addPlacesToMap(placeContainer);
@@ -106,8 +93,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     private void addPlacesToMap(PlaceContainer placeContainer) {
         List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
         getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
-        getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
-        getViewState().hideLoadInfo();
     }
 
 
@@ -126,22 +111,8 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         return features;
     }
 
-    private List<Place> creatingPlacesList(List<PlaceLink> places) {
-        Timber.d("Creating places list");
-        List<Place> placesMap = new ArrayList<>();
-        for (int i = 0; i < places.size(); i++) {
-            Place place = new Place();
-            place.setId(places.get(i).getId());
-            place.setImageUrls(places.get(i).getImageUrls());
-            place.setDescription(places.get(i).getDescription());
-            place.setCoordinates(places.get(i).getCoordinates());
-            placesMap.add(place);
-        }
-
-        return placesMap;
-    }
-
-    public void setupLocationFab() {
+    public void onCreate() {
+        getViewState().setupMapBox();
         getViewState().setupFab();
     }
 
@@ -149,5 +120,9 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
+    }
+
+    public void onLocationPermissionsGranted() {
+        getViewState().showUserLocation();
     }
 }

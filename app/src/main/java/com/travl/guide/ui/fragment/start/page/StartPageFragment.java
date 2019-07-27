@@ -339,7 +339,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     public void onExplanationNeeded(List<String> permissionsToExplain) {
         Activity activity = getActivity();
         if (activity != null) {
-            Snackbar.make(activity.findViewById(R.id.fragment_container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(activity.findViewById(R.id.container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
         }
     }
 
