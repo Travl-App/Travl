@@ -1,11 +1,7 @@
 package com.travl.guide.mvp.presenter.maps;
 
-import android.annotation.SuppressLint;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
 import com.travl.guide.mvp.model.MapsModel;
 import com.travl.guide.mvp.model.api.places.map.Place;
 import com.travl.guide.mvp.model.api.places.map.PlaceContainer;
@@ -26,14 +22,14 @@ import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
+
 @InjectViewState
 public class MapsPresenter extends MvpPresenter<MapsView> {
 
-    @Inject
-    Router router;
-    @Inject
-    PlacesRepo placesRepo;
-    private MapsModel model;
+    @Inject Router router;
+    @Inject PlacesRepo placesRepo;
+
+    private MapsModel model; //Todo зачем?
     private Scheduler scheduler;
     private List<Disposable> disposables;
 
@@ -43,28 +39,30 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
         disposables = new ArrayList<>();
     }
 
+    //ToDo зачем здесь метод?
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
     }
 
+	//ToDo зачем здесь метод?
     public void setupMapView() {
-        getViewState().setupMapBox();
+//        getViewState().setupMapBox();
     }
 
+	//ToDo зачем здесь метод?
     public void showUserLocation() {
         getViewState().showUserLocation();
     }
 
+	//ToDo зачем здесь метод?
     public void toPlaceScreen(int id) {
         router.navigateTo(new Screens.PlaceScreen(id));
     }
 
-    @SuppressLint("CheckResult")
     public void makeRequestForPlaces(double[] coordinates) {
-        Timber.e("Make request");
         getViewState().showLoadInfo();
-        Timber.e("Maps received coordinates = " + Arrays.toString(coordinates) + " from locationRequester");
+        Timber.i("Maps received coordinates = " + Arrays.toString(coordinates) + " from locationRequester");
         if (coordinates == null) return;
         double latitude = coordinates[0];
         double longitude = coordinates[1];
@@ -77,7 +75,6 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
                 }, Timber::e));
     }
 
-    @SuppressLint("CheckResult")
     private void loadNextPlaces(String nextUrl) {
         disposables.add(placesRepo.loadNextPlaces(nextUrl)
                 .observeOn(scheduler)
@@ -88,42 +85,25 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     private void recursivePlacesLoading(PlaceContainer placeContainer) {
-        if (placeContainer != null) {
-            String nextUrl;
-            int totalNumberOfItems = placeContainer.getCount();
-            List<PlaceLink> links = placeContainer.getPlaceLinkList();
-            if (links != null) {
-                int lastItemId = links.get(links.size() - 1).getId();
-                if ((nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems) {
-                    Timber.e("Next url = " + nextUrl);
-                    loadNextPlaces(nextUrl);
-                }
-                addPlacesToMap(placeContainer);
-            }
+        if (placeContainer == null) return;
+        String nextUrl;
+        int totalNumberOfItems = placeContainer.getCount();
+        List<PlaceLink> links = placeContainer.getPlaceLinkList();
+        if (links != null) {
+	        int lastItemId = links.get(links.size() - 1).getId();
+	        boolean next = (nextUrl = placeContainer.getNext()) != null && lastItemId < totalNumberOfItems;
+	        if (next) {
+		        loadNextPlaces(nextUrl);
+	        }
+	        addPlacesToMap(placeContainer, !next);
         }
     }
 
-    private void addPlacesToMap(PlaceContainer placeContainer) {
+    private void addPlacesToMap(PlaceContainer placeContainer, boolean isLast) {
         List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
-        getViewState().onPlacesLoaded(parsePlaceLinksListToFeatures(placeLinks));
-        getViewState().onRequestCompleted(creatingPlacesList(placeLinks));
+        getViewState().onPlacesLoaded(placeLinks, isLast);
+//        getViewState().onRequestCompleted(creatingPlacesList(placeLinks)); //Todo зачем?
         getViewState().hideLoadInfo();
-    }
-
-
-    private List<Feature> parsePlaceLinksListToFeatures(List<PlaceLink> places) {
-        Timber.d("Parsing coordinates");
-        List<Feature> features = new ArrayList<>();
-        for (int i = 0; i < places.size(); i++) {
-            double[] coordinates = places.get(i).getCoordinates();
-            double latitude = coordinates[0];
-            double longitude = coordinates[1];
-            Feature feature = Feature.fromGeometry(Point.fromLngLat(longitude, latitude));
-            feature.addNumberProperty("id", places.get(i).getId());
-            features.add(feature);
-        }
-
-        return features;
     }
 
     private List<Place> creatingPlacesList(List<PlaceLink> places) {
@@ -142,7 +122,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     }
 
     public void setupLocationFab() {
-        getViewState().setupFab();
+//        getViewState().setupFab();
     }
 
     public void onDispose() {
