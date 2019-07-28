@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.location.LocationPresenter;
@@ -14,6 +15,7 @@ import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.fragment.start.page.CitySpinnerListCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,12 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     LocationRequester locationRequester;
     private List<Disposable> disposables;
 
+    private List<String> cityStringNames;
+    private CitiesList cityObjectList;
+    private int selectedCityId;
+    private CitySpinnerListCreator listCreator;
+    private City currentCity;
+
     public StartPagePresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
         App.getInstance().getAppComponent().inject(this);
@@ -47,15 +55,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     public void loadCitiesList() {
         disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList ->
                 {
-                    getViewState().setCityObjectList(citiesList);
-                    getViewState().transformCityObjectsToCityStrings();
-                    getViewState().addNamesToCitySpinner();
+                    //setCityObjectList(citiesList);
+                    // transformCityObjectsToCityStrings();
+                    getViewState().addNamesToCitySpinner(cityStringNames);
                 },
                 Timber::e));
-    }
-
-    public void addNamesToCitySpinner() {
-        getViewState().addNamesToCitySpinner();
     }
 
     @Override
@@ -68,8 +72,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     @SuppressLint("CheckResult")
     public void loadCityContentByCoordinates() {
         disposables.add(cityRepo.getCityContent(new CoordinatesRequest(locationRequester.getLastKnownCoordinates())).observeOn(scheduler).subscribe(cityContent -> {
-            getViewState().setCityContentByCoordinates(cityContent);
+            setCityContentByCoordinates(cityContent);
         }, Timber::e));
+    }
+
+    private void setCityContentByCoordinates(CityContent cityContent) {
     }
 
     @Override
@@ -82,20 +89,41 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     @SuppressLint("CheckResult")
     public void loadCityContentByLinkId(int id) {
-        disposables.add(cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent -> getViewState().setCityContentByLinkId(cityContent), Timber::e));
+        disposables.add(cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent ->
+                setCityContentByLinkId(cityContent), Timber::e));
 
+    }
+
+    private void setCityContentByLinkId(CityContent cityContent) {
     }
 
     public void setCurrentCity(CityContent cityContent) {
-        getViewState().setCurrentCity(cityContent);
+
     }
 
-    public void onSpinnerItemClick(String selectedCity) {
-        getViewState().onSpinnerItemClick(selectedCity);
+    public void onSpinnerItemClick(String selectedCity, String... filterStrings) {
+        if (cityStringNames != null && cityObjectList != null) {
+            if (cityStringNames.contains(selectedCity)) {
+                for (CitiesList.CityLink link : cityObjectList.getCities()) {
+                    String formattedLink = listCreator.formatCityLink(link);
+                    if (selectedCity.equals(formattedLink) || (filterStrings[0] + " " + selectedCity).equals(formattedLink)) {
+                        selectedCityId = link.getId();
+                        loadCityContentByLinkId(link.getId());
+                        return;
+                    }
+                }
+            } else {
+                String userCityName = getCityName();
+                if (userCityName != null) {
+                    if (selectedCity.contains(userCityName)) {
+                        loadCityContentByCoordinates();
+                    }
+                }
+            }
+        }
     }
 
     public void addToCityList(City city, boolean isUserCity) {
-        getViewState().addToCityList(city, isUserCity);
     }
 
     public void setSpinnerPositionSelected(int position) {
@@ -110,8 +138,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         getViewState().removePlaceIfIsAdded(placeName);
     }
 
-    public void setCityArcticles() {
-        getViewState().setCityArticles();
+    public void setCityArticles() {
+        getViewState().setCityArticles(currentCity);
     }
 
     public void initLocationListener() {
@@ -148,7 +176,24 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         cityRepo.saveCityName(cityName);
     }
 
-    public void OnCityInfoButtonClick(int selectedCityId) {
+    public void OnCityInfoButtonClick() {
 	    router.navigateTo(new Screens.InfoCityScreen(selectedCityId));
+    }
+
+    public double[] getCoordinates() {
+        return null;
+    }
+
+    public void onCreateView() {
+        getViewState().initCityArticlesFragment();
+        getViewState().initTravlZineFragment();
+    }
+
+    public void onViewStateRestored() {
+        initLocationListener();
+        requestCoordinates(getViewState());
+        getViewState().initCitySpinner();
+        loadCitiesList();
+        getViewState().initMoveToNavigator();
     }
 }
