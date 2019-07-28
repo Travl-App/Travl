@@ -2,7 +2,6 @@ package com.travl.guide.ui.fragment.start.page;
 
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
-import android.widget.ArrayAdapter;
 
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
@@ -17,6 +16,11 @@ import timber.log.Timber;
 
 public class CitySpinnerListCreator {
     private static final String COMMA = ", ";
+    private StartPagePresenter startPagePresenter;
+
+    public CitySpinnerListCreator(StartPagePresenter startPagePresenter) {
+        this.startPagePresenter = startPagePresenter;
+    }
 
     public ArrayList<String> citiesListToCitiesNameList(CitiesList citiesList) {
         List<CitiesList.CityLink> cityLinks;
@@ -59,25 +63,25 @@ public class CitySpinnerListCreator {
     }
 
     @Nullable
-    public void addToCityList(City city, ArrayAdapter<String> cityArrayAdapter, StartPagePresenter startPagePresenter, boolean isUserCity) {
+    public void addToCityList(City city, boolean isUserCity,List<String> cityStringNames) {
         startPagePresenter.addNamesToCitySpinner();
         Resources resources = App.getInstance().getResources();
         String placeName = cityToString(city);
         placeName = formatPlaceName(placeName);
         String userLocationMarker = resources.getString(R.string.user_location_marker);
         //Check for duplicates and blank
-        if (cityArrayAdapter != null && city != null && placeName != null) {
+        if (cityStringNames != null && city != null && placeName != null) {
             boolean isPlaceAdded = false;
-            for (int i = 0; i < cityArrayAdapter.getCount(); i++) {
-                String name = cityArrayAdapter.getItem(i);
+            for (int i = 0; i < cityStringNames.size(); i++) {
+                String name = cityStringNames.get(i);
 
                 if (name != null) {
                     //Remove blank "Choose city:"
                     if (name.equals(resources.getStringArray(R.array.cities)[0])) {
-                        startPagePresenter.removeFromCitySpinnerAdapter(name);
+                        startPagePresenter.removeCityFromList(name);
                     }
                     if (name.startsWith(userLocationMarker)) {
-                        startPagePresenter.removeFromCitySpinnerAdapter(name);
+                        startPagePresenter.removeCityFromList(name);
                     }
                     if (name.contains(placeName) || name.contains(userLocationMarker + " " + placeName)) {
 
@@ -87,7 +91,7 @@ public class CitySpinnerListCreator {
             }
             //Remove duplicates
             if (isPlaceAdded) {
-                startPagePresenter.removeFromCitySpinnerAdapter(placeName);
+                startPagePresenter.removeCityFromList(placeName);
             }
             //Add "You are here:" if it is User's city
             if (isUserCity && placeName != null) {

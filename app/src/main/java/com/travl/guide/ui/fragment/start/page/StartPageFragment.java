@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,7 +41,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 import static com.travl.guide.util.UtilVariables.COARSE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
@@ -51,8 +49,6 @@ import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CO
 public class StartPageFragment extends MvpAppCompatFragment implements StartPageView, CoordinatesProvider {
 
     public static final String CITY_ARTICLES_FRAGMENT_TAG = "ArticlesFragment";
-    public static final int CODE_OK = 200;
-    public static final int CODE_ERROR = 404;
     @InjectPresenter
     StartPagePresenter presenter;
     @BindView(R.id.user_city_spinner)
@@ -133,30 +129,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     @Override
-    public void removePlaceIfIsAdded(String placeName) {
-        cityArrayAdapter.remove(placeName);
-        cityArrayAdapter.remove(getString(R.string.user_location_marker) + " " + placeName);
-        cityArrayAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setSpinnerPositionSelected(int position) {
-        userCitySpinner.setSelection(position, false);
-    }
-
-    @Override
-    public void placeSelectedCityOnTop(String placeName) {
-        if (userCitySpinner != null && cityArrayAdapter != null && userCitySpinner.getCount() > 0) {
-            if (!userCitySpinner.getItemAtPosition(0).equals(placeName)) {
-                cityArrayAdapter.insert(placeName, 0);
-                presenter.setSpinnerPositionSelected(0);
-                cityArrayAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-
-    @Override
     public void initTravlZineFragment() {
         Fragment travlZineArticlesFragment = new TravlZineArticlesFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -173,14 +145,15 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
 
     @Override
     public void addNamesToCitySpinner(List<String> cityStringNames) {
-            if (cityArrayAdapter != null) {
-                cityArrayAdapter.clear();
-                for (int i = 0; i < cityStringNames.size(); i++) {
-                    cityArrayAdapter.add(cityStringNames.get(i));
-                }
-                cityArrayAdapter.notifyDataSetChanged();
+        if (cityArrayAdapter != null && cityStringNames != null) {
+            cityArrayAdapter.clear();
+            for (int i = 0; i < cityStringNames.size(); i++) {
+                cityArrayAdapter.add(cityStringNames.get(i));
             }
+            cityArrayAdapter.notifyDataSetChanged();
+        }
     }
+
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -202,12 +175,14 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         }
     }
 
-    private void showCitiesList() {
+    @Override
+    public void showCitiesList() {
         cityLoadingTextView.setVisibility(View.GONE);
         userCitySpinner.setVisibility(View.VISIBLE);
     }
 
-    private void hideCityArticlesFragment() {
+    @Override
+    public void hideCityArticlesFragment() {
         FragmentManager fragmentManager = getChildFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.start_page_city_articles_container);
         if (fragment != null) {
@@ -242,19 +217,6 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     }
 
     @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Activity activity = getActivity();
-        if (activity != null) {
-            Snackbar.make(activity.findViewById(R.id.container), "We need GPS to show your city specific content", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onLocationPermissionRequestGranted() {
-        presenter.requestCoordinates(this);
-    }
-
-    @Override
     public double[] getCoordinates() {
         return presenter.getCoordinates();
     }
@@ -266,7 +228,7 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
         if (tag != null && tag.equals(CITY_ARTICLES_FRAGMENT_TAG)) {
             articlesReceiver = (ArticlesReceiver) childFragment;
             if (presenter != null) {
-                presenter.setCityArticles();
+                presenter.onAttachCityArticlesFragment();
             }
         }
     }
@@ -274,19 +236,15 @@ public class StartPageFragment extends MvpAppCompatFragment implements StartPage
     @Override
     public void setCityArticles(City currentCity) {
         if (articlesReceiver != null) {
-            articlesReceiver.setArticles(currentCity.getArticleLinksContainer().getArticleLinkList());
-            showCityArticlesFragment();
+            if (currentCity != null) {
+                articlesReceiver.setArticles(currentCity.getArticleLinksContainer().getArticleLinkList());
+                showCityArticlesFragment();
+            }
         }
-    }
-
-    @Override
-    public void onLocationPermissionResult(boolean granted) {
-        presenter.onLocationPermissionResult(granted);
     }
 
 
     private void setContainerTitleVisibility(int visibility) {
-        Timber.e("set visibility to " + visibility);
         Activity activity = getActivity();
         if (activity != null) {
             TextView titleTextView = activity.findViewById(R.id.start_page_city_articles_container_title);

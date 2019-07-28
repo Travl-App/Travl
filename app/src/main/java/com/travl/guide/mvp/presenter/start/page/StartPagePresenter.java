@@ -15,6 +15,7 @@ import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
+import com.travl.guide.ui.activity.CoordinatesProvider;
 import com.travl.guide.ui.fragment.start.page.CitySpinnerListCreator;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
-public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter {
+public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter, LocationReceiver {
 
     @Inject
     Router router;
@@ -38,12 +39,16 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     @Inject
     LocationRequester locationRequester;
     private List<Disposable> disposables;
-
+    public static final int CODE_OK = 200;
+    public static final int CODE_ERROR = 404;
     private List<String> cityStringNames;
     private CitiesList cityObjectList;
     private int selectedCityId;
     private CitySpinnerListCreator listCreator;
     private City currentCity;
+    private double[] citySelectedCoordinates;
+    private CityContent cityContent;
+    private String selectedCity;
 
     public StartPagePresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -62,11 +67,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
                 Timber::e));
     }
 
-    @Override
-    public void setUserCoordinates(double[] coordinates) {
-        if (coordinates != null) {
-            locationRequester.setCoordinates(coordinates);
-        }
+    public void addNamesToCitySpinner() {
+        getViewState().addNamesToCitySpinner(cityStringNames);
     }
 
     @SuppressLint("CheckResult")
@@ -77,6 +79,15 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     private void setCityContentByCoordinates(CityContent cityContent) {
+        this.cityContent = cityContent;
+        getViewState().hideCityArticlesFragment();
+        setCurrentCity(cityContent);
+        addToCityList(currentCity, true);
+        String cityName = listCreator.formatPlaceName(listCreator.cityToString(currentCity));
+        this.selectedCity = cityName;
+        setCityName(cityName);
+        getViewState().setCityArticles(currentCity);
+        getViewState().showCitiesList();
     }
 
     @Override
@@ -95,10 +106,16 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     private void setCityContentByLinkId(CityContent cityContent) {
-    }
-
-    public void setCurrentCity(CityContent cityContent) {
-
+        String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
+        //If no city is selected or loaded and if the info is related to the city selected
+        if (selectedCity == null || cityName != null && (cityName.equals(selectedCity)
+                || cityName.equals("" + " " + selectedCity))) {
+            this.cityContent = cityContent;
+            getViewState().hideCityArticlesFragment();
+            setCurrentCity(cityContent);
+            placeSelectedCityOnTop(cityName);
+            getViewState().setCityArticles(currentCity);
+        }
     }
 
     public void onSpinnerItemClick(String selectedCity, String... filterStrings) {
@@ -124,21 +141,23 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     public void addToCityList(City city, boolean isUserCity) {
-    }
+        listCreator.addToCityList(city, isUserCity, cityStringNames);
+        getViewState().addNamesToCitySpinner(cityStringNames);
 
-    public void setSpinnerPositionSelected(int position) {
-        getViewState().setSpinnerPositionSelected(position);
     }
 
     public void placeSelectedCityOnTop(String placeName) {
-        getViewState().placeSelectedCityOnTop(placeName);
+        cityStringNames.remove(placeName);
+        cityStringNames.add(0,placeName);
+        getViewState().addNamesToCitySpinner(cityStringNames);
     }
 
-    public void removeFromCitySpinnerAdapter(String placeName) {
-        getViewState().removePlaceIfIsAdded(placeName);
+    public void removeCityFromList(String placeName) {
+        cityStringNames.remove(placeName);
+        getViewState().addNamesToCitySpinner(cityStringNames);
     }
 
-    public void setCityArticles() {
+    public void onAttachCityArticlesFragment() {
         getViewState().setCityArticles(currentCity);
     }
 
@@ -151,12 +170,13 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     public void onLocationPermissionResultGranted() {
-        getViewState().onLocationPermissionRequestGranted();
+        requestCoordinates(this);
     }
 
     public void requestCoordinates(LocationReceiver locationReceiver) {
         locationRequester.requestCoordinates(locationReceiver);
     }
+
 
     public void onLocationPermissionResult(boolean granted) {
         locationRequester.onPermissionResult(this, granted);
@@ -177,11 +197,11 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     public void OnCityInfoButtonClick() {
-	    router.navigateTo(new Screens.InfoCityScreen(selectedCityId));
+        router.navigateTo(new Screens.InfoCityScreen(selectedCityId));
     }
 
     public double[] getCoordinates() {
-        return null;
+        return citySelectedCoordinates;
     }
 
     public void onCreateView() {
@@ -191,9 +211,32 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     public void onViewStateRestored() {
         initLocationListener();
-        requestCoordinates(getViewState());
+        requestCoordinates(this);
         getViewState().initCitySpinner();
         loadCitiesList();
         getViewState().initMoveToNavigator();
+    }
+
+    public void setCurrentCity(CityContent cityContent) {
+        if (cityContent != null) {
+            int status = cityContent.getStatus();
+            if (status == CODE_OK) {
+                currentCity = cityContent.getCity();
+                citySelectedCoordinates = currentCity.getCoordinates();
+            } else if (status == CODE_ERROR) {
+                currentCity = cityContent.getContext();
+                citySelectedCoordinates = new double[]{currentCity.getLatitude(), currentCity.getLongitude()};
+            }
+        }
+    }
+
+    @Override
+    public void requestLocationPermissions() {
+        getViewState().requestLocationPermissions();
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+
     }
 }

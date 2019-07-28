@@ -10,23 +10,12 @@ import com.travl.guide.mvp.model.location.LocationReceiver;
 import java.util.List;
 
 @StateStrategyType(value = AddToEndSingleStrategy.class)
-public interface StartPageView extends MvpView, LocationReceiver {
+public interface StartPageView extends MvpView{
 
     void requestLocationPermissions();
 
     @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void setSpinnerPositionSelected(int position);
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void placeSelectedCityOnTop(String placeName);
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
-    void removePlaceIfIsAdded(String placeName);
-
-    @StateStrategyType(value = OneExecutionStateStrategy.class)
     void setCityArticles(City currentCity);
-
-    void onLocationPermissionRequestGranted();
 
     void addNamesToCitySpinner(List<String> names);
 
@@ -39,4 +28,8 @@ public interface StartPageView extends MvpView, LocationReceiver {
     void initCitySpinner();
 
     void initMoveToNavigator();
+
+    void hideCityArticlesFragment();
+
+    void showCitiesList();
 }

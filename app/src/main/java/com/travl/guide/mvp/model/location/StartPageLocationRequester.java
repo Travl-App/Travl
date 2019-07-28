@@ -17,6 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import timber.log.Timber;
 
 import static com.travl.guide.util.UtilVariables.FINE_LOCATION_PERMISSION;
 import static com.travl.guide.util.UtilVariables.LOCATION_PERMISSIONS_REQUEST_CODE;
@@ -33,8 +34,8 @@ public class StartPageLocationRequester implements LocationRequester {
     }
 
     public void setCoordinates(double[] coordinates) {
-            this.coordinates = coordinates;
-            coordinatesRequestPublishSubject.onNext(new CoordinatesRequest(coordinates));
+        this.coordinates = coordinates;
+        coordinatesRequestPublishSubject.onNext(new CoordinatesRequest(coordinates));
     }
 
     @Override
@@ -51,7 +52,10 @@ public class StartPageLocationRequester implements LocationRequester {
         mListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                presenter.setUserCoordinates(new double[]{location.getLatitude(), location.getLongitude()});
+                Timber.e("onLocationChanged");
+                if (location != null) {
+                    setCoordinates(new double[]{location.getLatitude(), location.getLongitude()});
+                }
             }
 
             @Override
@@ -106,13 +110,18 @@ public class StartPageLocationRequester implements LocationRequester {
         String gpsProvider = LocationManager.GPS_PROVIDER;
         String passiveProvider = LocationManager.PASSIVE_PROVIDER;
         if (locationManager.isProviderEnabled(passiveProvider)) {
+            Timber.e("passive");
             locationManager.requestLocationUpdates(passiveProvider,
                     minutes * secondsInMinutes * millisInSecond, meters, mListener);
         }
         if (locationManager.isProviderEnabled(networkProvider)) {
+            Timber.e("networkProvider");
             locationManager.requestLocationUpdates(networkProvider,
                     minutes * secondsInMinutes * millisInSecond, meters, mListener);
-        } else {
+        }
+
+        if (locationManager.isProviderEnabled(gpsProvider)) {
+            Timber.e("gpsProvider");
             locationManager.requestLocationUpdates(gpsProvider,
                     minutes * secondsInMinutes * millisInSecond, meters, mListener);
         }
