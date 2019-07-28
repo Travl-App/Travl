@@ -54,6 +54,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         this.scheduler = scheduler;
         App.getInstance().getAppComponent().inject(this);
         disposables = new ArrayList<>();
+        listCreator = new CitySpinnerListCreator(this);
     }
 
     @Override
