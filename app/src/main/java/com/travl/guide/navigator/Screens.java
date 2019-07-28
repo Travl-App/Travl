@@ -1,6 +1,6 @@
 package com.travl.guide.navigator;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.travl.guide.ui.fragment.articles.ArticleFragment;
 import com.travl.guide.ui.fragment.articles.travlzine.TravlZineArticlesFragment;

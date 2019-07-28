@@ -1,13 +1,14 @@
 package com.travl.guide.ui.adapter.articles.city;
 
-import android.support.annotation.NonNull;
-import android.support.design.card.MaterialCardView;
-import android.support.design.chip.Chip;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.image.IImageLoader;

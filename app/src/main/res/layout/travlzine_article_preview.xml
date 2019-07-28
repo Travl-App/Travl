@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/travlzine_card_height"
@@ -8,7 +9,7 @@
     android:layout_marginEnd="@dimen/travlzine_card_margin_horizontal"
     android:layout_marginBottom="@dimen/travlzine_card_margin_vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -56,7 +57,7 @@
             android:maxLines="3"
             app:layout_constraintTop_toBottomOf="@id/travlzine_article_preview_category_text_view" />
 
-        <android.support.design.chip.Chip
+        <com.google.android.material.chip.Chip
             android:id="@+id/travlzine_article_preview_author_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,5 +68,5 @@
             app:chipIconSize="@dimen/travlzine_preview_chip_icon_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-</android.support.design.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

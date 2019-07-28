@@ -1,8 +1,8 @@
-package android.support.design.bottomappbar
+package com.google.android.material.bottomappbar
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 
 class HideableBottomAppBar : BottomAppBar {
     private val compatBehavior by lazyFast { CompatBehavior() }

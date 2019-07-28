@@ -1,7 +1,7 @@
 package com.travl.guide.mvp.model.database;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 import com.travl.guide.mvp.model.api.city.info.InfoCity;
 import com.travl.guide.mvp.model.database.dao.InfoDao;

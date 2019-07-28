@@ -2,15 +2,17 @@ package com.travl.guide.ui.fragment.info;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.Toolbar;
+
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -40,11 +42,14 @@ public class InfoCityFragment extends MvpAppCompatFragment implements InfoCityVi
 	}
 
 	private Unbinder unbinder;
-	@BindView(R.id.city_toolbar) Toolbar toolbar;
-	@BindView(R.id.city_image) AppCompatImageView imageView;
+	@BindView(R.id.city_toolbar)
+	Toolbar toolbar;
+	@BindView(R.id.city_image)
+	AppCompatImageView imageView;
 	@BindView(R.id.city_name) TextView nameView;
 	@BindView(R.id.city_article) TextView articleView;
-	@BindView(R.id.city_wikipedia) AppCompatButton button;
+	@BindView(R.id.city_wikipedia)
+	AppCompatButton button;
 	@BindDrawable(R.drawable.ic_back) Drawable back;
 
 	@Inject	IImageLoader imageLoader;;

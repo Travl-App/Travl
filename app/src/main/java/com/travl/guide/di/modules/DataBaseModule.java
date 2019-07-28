@@ -1,7 +1,8 @@
 package com.travl.guide.di.modules;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
+
+import androidx.room.Room;
 
 import com.travl.guide.mvp.model.database.AppDatabase;
 import com.travl.guide.mvp.model.database.RoomHelper;

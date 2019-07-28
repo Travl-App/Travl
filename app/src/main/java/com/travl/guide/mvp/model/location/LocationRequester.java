@@ -1,6 +1,6 @@
 package com.travl.guide.mvp.model.location;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 

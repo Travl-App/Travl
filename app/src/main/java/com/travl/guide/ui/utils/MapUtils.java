@@ -3,8 +3,9 @@ package com.travl.guide.ui.utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;

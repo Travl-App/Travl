@@ -2,19 +2,20 @@ package com.travl.guide.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.bottomappbar.BottomAppBar;
-import android.support.design.bottomappbar.HideableBottomAppBar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import com.google.android.material.bottomappbar.HideableBottomAppBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.travl.guide.R;
 import com.travl.guide.mvp.presenter.main.MainPresenter;
 import com.travl.guide.mvp.view.main.MainView;

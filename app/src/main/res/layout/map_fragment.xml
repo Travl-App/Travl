@@ -10,7 +10,7 @@
     mapbox:mapbox_cameraZoom="12"
     mapbox:mapbox_uiRotateGestures="false">
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/map_location_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

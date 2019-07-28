@@ -1,7 +1,8 @@
 package com.travl.guide.ui.fragment.start.page;
 
 import android.content.res.Resources;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.travl.guide.R;
 import com.travl.guide.mvp.model.api.city.content.CitiesList;
