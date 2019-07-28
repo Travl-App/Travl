@@ -39,8 +39,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     @Inject
     LocationRequester locationRequester;
     private List<Disposable> disposables;
-    public static final int CODE_OK = 200;
-    public static final int CODE_ERROR = 404;
+    private static final int CODE_OK = 200;
+    private static final int CODE_ERROR = 404;
     private List<String> cityStringNames;
     private CitiesList cityObjectList;
     private int selectedCityId;
@@ -56,38 +56,18 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         disposables = new ArrayList<>();
     }
 
-    @SuppressLint("CheckResult")
-    public void loadCitiesList() {
-        disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList ->
-                {
-                    //setCityObjectList(citiesList);
-                    // transformCityObjectsToCityStrings();
-                    getViewState().addNamesToCitySpinner(cityStringNames);
-                },
-                Timber::e));
+    @Override
+    public void requestLocationPermissions() {
+        getViewState().requestLocationPermissions();
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+
     }
 
     public void addNamesToCitySpinner() {
         getViewState().addNamesToCitySpinner(cityStringNames);
-    }
-
-    @SuppressLint("CheckResult")
-    public void loadCityContentByCoordinates() {
-        disposables.add(cityRepo.getCityContent(new CoordinatesRequest(locationRequester.getLastKnownCoordinates())).observeOn(scheduler).subscribe(cityContent -> {
-            setCityContentByCoordinates(cityContent);
-        }, Timber::e));
-    }
-
-    private void setCityContentByCoordinates(CityContent cityContent) {
-        this.cityContent = cityContent;
-        getViewState().hideCityArticlesFragment();
-        setCurrentCity(cityContent);
-        addToCityList(currentCity, true);
-        String cityName = listCreator.formatPlaceName(listCreator.cityToString(currentCity));
-        this.selectedCity = cityName;
-        setCityName(cityName);
-        getViewState().setCityArticles(currentCity);
-        getViewState().showCitiesList();
     }
 
     @Override
@@ -96,26 +76,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
                 .subscribe(coordinatesRequest -> {
                     loadCityContentByCoordinates();
                 }, Timber::e));
-    }
-
-    @SuppressLint("CheckResult")
-    public void loadCityContentByLinkId(int id) {
-        disposables.add(cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent ->
-                setCityContentByLinkId(cityContent), Timber::e));
-
-    }
-
-    private void setCityContentByLinkId(CityContent cityContent) {
-        String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
-        //If no city is selected or loaded and if the info is related to the city selected
-        if (selectedCity == null || cityName != null && (cityName.equals(selectedCity)
-                || cityName.equals("" + " " + selectedCity))) {
-            this.cityContent = cityContent;
-            getViewState().hideCityArticlesFragment();
-            setCurrentCity(cityContent);
-            placeSelectedCityOnTop(cityName);
-            getViewState().setCityArticles(currentCity);
-        }
     }
 
     public void onSpinnerItemClick(String selectedCity, String... filterStrings) {
@@ -140,12 +100,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         }
     }
 
-    public void addToCityList(City city, boolean isUserCity) {
-        listCreator.addToCityList(city, isUserCity, cityStringNames);
-        getViewState().addNamesToCitySpinner(cityStringNames);
-
-    }
-
     public void placeSelectedCityOnTop(String placeName) {
         cityStringNames.remove(placeName);
         cityStringNames.add(0,placeName);
@@ -161,10 +115,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         getViewState().setCityArticles(currentCity);
     }
 
-    public void initLocationListener() {
-        locationRequester.initLocationListener(this);
-    }
-
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         locationRequester.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
@@ -172,11 +122,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     public void onLocationPermissionResultGranted() {
         requestCoordinates(this);
     }
-
-    public void requestCoordinates(LocationReceiver locationReceiver) {
-        locationRequester.requestCoordinates(locationReceiver);
-    }
-
 
     public void onLocationPermissionResult(boolean granted) {
         locationRequester.onPermissionResult(this, granted);
@@ -186,14 +131,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
-    }
-
-    public String getCityName() {
-        return cityRepo.getCityName();
-    }
-
-    public void setCityName(String cityName) {
-        cityRepo.saveCityName(cityName);
     }
 
     public void OnCityInfoButtonClick() {
@@ -217,7 +154,80 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         getViewState().initMoveToNavigator();
     }
 
-    public void setCurrentCity(CityContent cityContent) {
+    @SuppressLint("CheckResult")
+    private void loadCitiesList() {
+        disposables.add(cityRepo.getCitiesList().observeOn(scheduler).subscribe(citiesList ->
+                {
+                    cityObjectList = citiesList;
+                    cityStringNames = listCreator.citiesListToCitiesNameList(cityObjectList);
+                    getViewState().addNamesToCitySpinner(cityStringNames);
+                },
+                Timber::e));
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadCityContentByCoordinates() {
+        disposables.add(cityRepo.getCityContent(new CoordinatesRequest(locationRequester.getLastKnownCoordinates())).observeOn(scheduler).subscribe(cityContent -> {
+            setCityContentByCoordinates(cityContent);
+        }, Timber::e));
+    }
+
+    private void setCityContentByCoordinates(CityContent cityContent) {
+        this.cityContent = cityContent;
+        getViewState().hideCityArticlesFragment();
+        setCurrentCity(cityContent);
+        addToCityList(currentCity, true);
+        String cityName = listCreator.formatPlaceName(listCreator.cityToString(currentCity));
+        this.selectedCity = cityName;
+        setCityName(cityName);
+        getViewState().setCityArticles(currentCity);
+        getViewState().showCitiesList();
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadCityContentByLinkId(int id) {
+        disposables.add(cityRepo.loadCity(id).observeOn(scheduler).subscribe(cityContent ->
+                setCityContentByLinkId(cityContent), Timber::e));
+
+    }
+
+    private void setCityContentByLinkId(CityContent cityContent) {
+        String cityName = listCreator.formatPlaceName(listCreator.cityToString(cityContent.getCity()));
+        //If no city is selected or loaded and if the info is related to the city selected
+        if (selectedCity == null || cityName != null && (cityName.equals(selectedCity)
+                || cityName.equals("" + " " + selectedCity))) {
+            this.cityContent = cityContent;
+            getViewState().hideCityArticlesFragment();
+            setCurrentCity(cityContent);
+            placeSelectedCityOnTop(cityName);
+            getViewState().setCityArticles(currentCity);
+        }
+    }
+
+    private void addToCityList(City city, boolean isUserCity) {
+        listCreator.addToCityList(city, isUserCity, cityStringNames);
+        getViewState().addNamesToCitySpinner(cityStringNames);
+
+    }
+
+    private void initLocationListener() {
+        locationRequester.initLocationListener(this);
+    }
+
+    private void requestCoordinates(LocationReceiver locationReceiver) {
+        locationRequester.requestCoordinates(locationReceiver);
+    }
+
+
+    private String getCityName() {
+        return cityRepo.getCityName();
+    }
+
+    private void setCityName(String cityName) {
+        cityRepo.saveCityName(cityName);
+    }
+
+    private void setCurrentCity(CityContent cityContent) {
         if (cityContent != null) {
             int status = cityContent.getStatus();
             if (status == CODE_OK) {
@@ -228,15 +238,5 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
                 citySelectedCoordinates = new double[]{currentCity.getLatitude(), currentCity.getLongitude()};
             }
         }
-    }
-
-    @Override
-    public void requestLocationPermissions() {
-        getViewState().requestLocationPermissions();
-    }
-
-    @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-
     }
 }
