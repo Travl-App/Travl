@@ -14,7 +14,7 @@ public interface LocationRequester {
     void onRequestPermissionsResult(LocationPresenter presenter, int requestCode,
                                     @NonNull String[] permissions, @NonNull int[] grantResults);
 
-    void requestCoordinates(LocationReceiver locationReceiver);
+    void requestCoordinates(LocationPresenter locationPresenter);
 
     double[] getLastKnownCoordinates();
 

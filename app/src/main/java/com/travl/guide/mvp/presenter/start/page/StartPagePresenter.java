@@ -8,14 +8,12 @@ import com.travl.guide.mvp.model.api.city.content.CitiesList;
 import com.travl.guide.mvp.model.api.city.content.City;
 import com.travl.guide.mvp.model.api.city.content.CityContent;
 import com.travl.guide.mvp.model.location.LocationPresenter;
-import com.travl.guide.mvp.model.location.LocationReceiver;
 import com.travl.guide.mvp.model.location.LocationRequester;
 import com.travl.guide.mvp.model.network.CoordinatesRequest;
 import com.travl.guide.mvp.model.repo.CityRepo;
 import com.travl.guide.mvp.view.start.page.StartPageView;
 import com.travl.guide.navigator.Screens;
 import com.travl.guide.ui.App;
-import com.travl.guide.ui.activity.CoordinatesProvider;
 import com.travl.guide.ui.fragment.start.page.CitySpinnerListCreator;
 
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ import ru.terrakok.cicerone.Router;
 import timber.log.Timber;
 
 @InjectViewState
-public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter, LocationReceiver {
+public class StartPagePresenter extends MvpPresenter<StartPageView> implements LocationPresenter {
 
     @Inject
     Router router;
@@ -47,7 +45,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     private CitySpinnerListCreator listCreator;
     private City currentCity;
     private double[] citySelectedCoordinates;
-    private CityContent cityContent;
     private String selectedCity;
 
     public StartPagePresenter(Scheduler scheduler) {
@@ -60,11 +57,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     @Override
     public void requestLocationPermissions() {
         getViewState().requestLocationPermissions();
-    }
-
-    @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-
     }
 
     public void addNamesToCitySpinner() {
@@ -124,10 +116,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         requestCoordinates(this);
     }
 
-    public void onLocationPermissionResult(boolean granted) {
-        locationRequester.onPermissionResult(this, granted);
-    }
-
     public void onDispose() {
         for (Disposable disposable : disposables) {
             disposable.dispose();
@@ -174,7 +162,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     private void setCityContentByCoordinates(CityContent cityContent) {
-        this.cityContent = cityContent;
         getViewState().hideCityArticlesFragment();
         setCurrentCity(cityContent);
         addToCityList(currentCity, true);
@@ -197,7 +184,6 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         //If no city is selected or loaded and if the info is related to the city selected
         if (selectedCity == null || cityName != null && (cityName.equals(selectedCity)
                 || cityName.equals("" + " " + selectedCity))) {
-            this.cityContent = cityContent;
             getViewState().hideCityArticlesFragment();
             setCurrentCity(cityContent);
             placeSelectedCityOnTop(cityName);
@@ -215,10 +201,9 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         locationRequester.initLocationListener(this);
     }
 
-    private void requestCoordinates(LocationReceiver locationReceiver) {
-        locationRequester.requestCoordinates(locationReceiver);
+    private void requestCoordinates(LocationPresenter locationPresenter) {
+        locationRequester.requestCoordinates(locationPresenter);
     }
-
 
     private String getCityName() {
         return cityRepo.getCityName();

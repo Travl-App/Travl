@@ -82,14 +82,13 @@ public class StartPageLocationRequester implements LocationRequester {
 
 
     @SuppressLint("MissingPermission")
-    public void requestCoordinates(LocationReceiver locationReceiver) {
+    public void requestCoordinates(LocationPresenter locationPresenter) {
         boolean locationPermissionGranted = ContextCompat.checkSelfPermission(App.getInstance(), FINE_LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
         if (locationPermissionGranted) {
             requestLocation();
         } else if (!locationPermissionGranted) {
-            if (locationReceiver != null) {
-                locationReceiver.requestLocationPermissions();
-
+            if (locationPresenter != null) {
+                locationPresenter.requestLocationPermissions();
             }
         }
     }
@@ -104,26 +103,27 @@ public class StartPageLocationRequester implements LocationRequester {
     private void requestLocation() {
         int millisInSecond = 1000;
         int minutes = 1;
-        int secondsInMinutes = 30;
-        int meters = 100;
+        int secondsInMinutes = 60;
+        int amplifier = 10;
+        int meters = 10;
         String networkProvider = LocationManager.NETWORK_PROVIDER;
         String gpsProvider = LocationManager.GPS_PROVIDER;
         String passiveProvider = LocationManager.PASSIVE_PROVIDER;
         if (locationManager.isProviderEnabled(passiveProvider)) {
             Timber.e("passive");
             locationManager.requestLocationUpdates(passiveProvider,
-                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                    minutes * secondsInMinutes * millisInSecond / amplifier, meters, mListener);
         }
         if (locationManager.isProviderEnabled(networkProvider)) {
             Timber.e("networkProvider");
             locationManager.requestLocationUpdates(networkProvider,
-                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                    minutes * secondsInMinutes * millisInSecond / amplifier, meters, mListener);
         }
 
         if (locationManager.isProviderEnabled(gpsProvider)) {
             Timber.e("gpsProvider");
             locationManager.requestLocationUpdates(gpsProvider,
-                    minutes * secondsInMinutes * millisInSecond, meters, mListener);
+                    minutes * secondsInMinutes * millisInSecond / amplifier, meters, mListener);
         }
 
     }

@@ -5,7 +5,6 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.travl.guide.mvp.model.api.city.content.City;
-import com.travl.guide.mvp.model.location.LocationReceiver;
 
 import java.util.List;
 
