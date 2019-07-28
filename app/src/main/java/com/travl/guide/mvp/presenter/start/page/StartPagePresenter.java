@@ -113,7 +113,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
     }
 
     public void onLocationPermissionResultGranted() {
-        requestCoordinates(this);
+        requestCoordinates();
     }
 
     public void onDispose() {
@@ -137,7 +137,7 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
 
     public void onViewStateRestored() {
         initLocationListener();
-        requestCoordinates(this);
+        requestCoordinates();
         getViewState().initCitySpinner();
         loadCitiesList();
         getViewState().initMoveToNavigator();
@@ -201,8 +201,8 @@ public class StartPagePresenter extends MvpPresenter<StartPageView> implements L
         locationRequester.initLocationListener(this);
     }
 
-    private void requestCoordinates(LocationPresenter locationPresenter) {
-        locationRequester.requestCoordinates(locationPresenter);
+    private void requestCoordinates() {
+        locationRequester.requestCoordinates(this);
     }
 
     private String getCityName() {
