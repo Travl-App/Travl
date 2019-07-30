@@ -78,10 +78,11 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="64dp"
                 android:layout_marginBottom="256dp"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.Button"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
                 />
 
         </LinearLayout>
