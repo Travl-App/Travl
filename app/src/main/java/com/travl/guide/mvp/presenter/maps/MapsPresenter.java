@@ -102,7 +102,7 @@ public class MapsPresenter extends MvpPresenter<MapsView> {
     private void addPlacesToMap(PlaceContainer placeContainer, boolean isLast) {
         List<PlaceLink> placeLinks = placeContainer.getPlaceLinkList();
         getViewState().onPlacesLoaded(placeLinks, isLast);
-//        getViewState().onRequestCompleted(creatingPlacesList(placeLinks)); //Todo зачем?
+        getViewState().onRequestCompleted(creatingPlacesList(placeLinks)); //Todo зачем?
         getViewState().hideLoadInfo();
     }
 
